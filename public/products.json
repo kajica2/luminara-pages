@@ -29,7 +29,21 @@
       ],
       "gumroad_listing_url": null,
       "shipped": true,
-      "notes": "Currently served as a free public page. No purchase required."
+      "notes": "Currently served as a free public page. No purchase required.",
+      "publish_checklist": [
+        "Decide if the page should be sold at all — it is currently free on luminara-pages.vercel.app",
+        "If yes: pick a price tier (typical Gumroad digital: $9 / $19 / $47)",
+        "On gumroad.com → New Product → Digital Product",
+        "Title: LUMINARA — Main",
+        "Description: copy the `description` field from this catalog entry",
+        "Cover image: upload /public/products/luminara-main/hero.svg (or a PNG export of it)",
+        "File: bundle the .html source as a zip alongside any linked assets",
+        "Set a custom URL slug on Gumroad matching the luminara-main",
+        "Add a 'Requires a browser' requirement line in the description",
+        "Publish"
+      ],
+      "hero_art_url": "https://luminara-pages.vercel.app/public/products/luminara-main/hero.svg",
+      "thumbnail_url": "https://luminara-pages.vercel.app/public/thumbnails/luminara-main.svg"
     },
     {
       "slug": "luminara-creator",
@@ -48,7 +62,20 @@
       ],
       "gumroad_listing_url": null,
       "shipped": true,
-      "notes": null
+      "notes": null,
+      "publish_checklist": [
+        "Confirm the page has a clean self-contained .html file (no missing local assets)",
+        "Bundle the HTML + linked assets into a zip (no minification needed)",
+        "On gumroad.com → New Product → Digital Product",
+        "Title: LUMINARA — Creator",
+        "Description: copy the `description` field from this catalog entry",
+        "Cover image: upload /public/products/luminara-creator/hero.svg",
+        "Set suggested price (typical: $9 - $47 for a single-page web asset)",
+        "Add a 'What you get' section listing the included files",
+        "Publish"
+      ],
+      "hero_art_url": "https://luminara-pages.vercel.app/public/products/luminara-creator/hero.svg",
+      "thumbnail_url": "https://luminara-pages.vercel.app/public/thumbnails/luminara-creator.svg"
     },
     {
       "slug": "luminara-light-spectrum",
@@ -68,7 +95,20 @@
       ],
       "gumroad_listing_url": null,
       "shipped": true,
-      "notes": null
+      "notes": null,
+      "publish_checklist": [
+        "Confirm the page has a clean self-contained .html file (no missing local assets)",
+        "Bundle the HTML + linked assets into a zip (no minification needed)",
+        "On gumroad.com → New Product → Digital Product",
+        "Title: LUMINARA — Light Spectrum",
+        "Description: copy the `description` field from this catalog entry",
+        "Cover image: upload /public/products/luminara-light-spectrum/hero.svg",
+        "Set suggested price (typical: $9 - $47 for a single-page web asset)",
+        "Add a 'What you get' section listing the included files",
+        "Publish"
+      ],
+      "hero_art_url": "https://luminara-pages.vercel.app/public/products/luminara-light-spectrum/hero.svg",
+      "thumbnail_url": "https://luminara-pages.vercel.app/public/thumbnails/luminara-light-spectrum.svg"
     },
     {
       "slug": "luminara-studio",
@@ -87,7 +127,20 @@
       ],
       "gumroad_listing_url": null,
       "shipped": true,
-      "notes": null
+      "notes": null,
+      "publish_checklist": [
+        "Confirm the page has a clean self-contained .html file (no missing local assets)",
+        "Bundle the HTML + linked assets into a zip (no minification needed)",
+        "On gumroad.com → New Product → Digital Product",
+        "Title: LUMINARA — Studio",
+        "Description: copy the `description` field from this catalog entry",
+        "Cover image: upload /public/products/luminara-studio/hero.svg",
+        "Set suggested price (typical: $9 - $47 for a single-page web asset)",
+        "Add a 'What you get' section listing the included files",
+        "Publish"
+      ],
+      "hero_art_url": "https://luminara-pages.vercel.app/public/products/luminara-studio/hero.svg",
+      "thumbnail_url": "https://luminara-pages.vercel.app/public/thumbnails/luminara-studio.svg"
     },
     {
       "slug": "luminara-vj",
@@ -107,7 +160,20 @@
       ],
       "gumroad_listing_url": null,
       "shipped": true,
-      "notes": null
+      "notes": null,
+      "publish_checklist": [
+        "Confirm the page has a clean self-contained .html file (no missing local assets)",
+        "Bundle the HTML + linked assets into a zip (no minification needed)",
+        "On gumroad.com → New Product → Digital Product",
+        "Title: LUMINARA — VJ",
+        "Description: copy the `description` field from this catalog entry",
+        "Cover image: upload /public/products/luminara-vj/hero.svg",
+        "Set suggested price (typical: $9 - $47 for a single-page web asset)",
+        "Add a 'What you get' section listing the included files",
+        "Publish"
+      ],
+      "hero_art_url": "https://luminara-pages.vercel.app/public/products/luminara-vj/hero.svg",
+      "thumbnail_url": "https://luminara-pages.vercel.app/public/thumbnails/luminara-vj.svg"
     },
     {
       "slug": "luminara-vysio",
@@ -128,7 +194,20 @@
       ],
       "gumroad_listing_url": null,
       "shipped": true,
-      "notes": "Vysio-offline.webm is 2.9 MB, served as a static asset."
+      "notes": "Vysio-offline.webm is 2.9 MB, served as a static asset.",
+      "publish_checklist": [
+        "Confirm the page has a clean self-contained .html file (no missing local assets)",
+        "Bundle the HTML + linked assets into a zip (no minification needed)",
+        "On gumroad.com → New Product → Digital Product",
+        "Title: LUMINARA — VYSIO (offline demo)",
+        "Description: copy the `description` field from this catalog entry",
+        "Cover image: upload /public/products/luminara-vysio/hero.svg",
+        "Set suggested price (typical: $9 - $47 for a single-page web asset)",
+        "Add a 'What you get' section listing the included files",
+        "Publish"
+      ],
+      "hero_art_url": "https://luminara-pages.vercel.app/public/products/luminara-vysio/hero.svg",
+      "thumbnail_url": "https://luminara-pages.vercel.app/public/thumbnails/luminara-vysio.svg"
     },
     {
       "slug": "luminara-monolith",
@@ -148,7 +227,20 @@
       ],
       "gumroad_listing_url": null,
       "shipped": true,
-      "notes": "Good candidate for a downloadable .html product on Gumroad once priced."
+      "notes": "Good candidate for a downloadable .html product on Gumroad once priced.",
+      "publish_checklist": [
+        "Confirm the page has a clean self-contained .html file (no missing local assets)",
+        "Bundle the HTML + linked assets into a zip (no minification needed)",
+        "On gumroad.com → New Product → Digital Product",
+        "Title: LUMINARA — Monolith (single bundle)",
+        "Description: copy the `description` field from this catalog entry",
+        "Cover image: upload /public/products/luminara-monolith/hero.svg",
+        "Set suggested price (typical: $9 - $47 for a single-page web asset)",
+        "Add a 'What you get' section listing the included files",
+        "Publish"
+      ],
+      "hero_art_url": "https://luminara-pages.vercel.app/public/products/luminara-monolith/hero.svg",
+      "thumbnail_url": "https://luminara-pages.vercel.app/public/thumbnails/luminara-monolith.svg"
     },
     {
       "slug": "luminara-brand-kit-arcana",
@@ -170,7 +262,21 @@
       ],
       "gumroad_listing_url": null,
       "shipped": false,
-      "notes": "Counts in arcana/ dir on disk: 12 SVGs (not 22). '22 Major Arcana' is the canonical codex; only 12 SVGs are present on disk under arcana/. Reconcile before listing."
+      "notes": "Counts in arcana/ dir on disk: 12 SVGs (not 22). '22 Major Arcana' is the canonical codex; only 12 SVGs are present on disk under arcana/. Reconcile before listing.",
+      "publish_checklist": [
+        "Bundle the SVG files into a single zip (e.g. zip luminara-brand-kit-arcana *.svg)",
+        "Add a LICENSE.txt (CC0 / CC-BY / commercial — your call)",
+        "On gumroad.com → New Product → Digital Product",
+        "Title: LUMINARA — 22 Arcana Icons (SVG)",
+        "Description: copy the `description` field from this catalog entry",
+        "Cover image: upload /public/products/luminara-brand-kit-arcana/hero.svg",
+        "File: upload the zip",
+        "Recommended price tier: $7 (single set) to $27 (full mega-pack) — your call",
+        "Add a 'Commercial use allowed?' line to the description",
+        "Publish"
+      ],
+      "hero_art_url": "https://luminara-pages.vercel.app/public/products/luminara-brand-kit-arcana/hero.svg",
+      "thumbnail_url": "https://luminara-pages.vercel.app/public/thumbnails/luminara-brand-kit-arcana.svg"
     },
     {
       "slug": "luminara-brand-kit-mega-symbols",
@@ -191,7 +297,21 @@
       ],
       "gumroad_listing_url": null,
       "shipped": false,
-      "notes": "12 SVGs verified on disk."
+      "notes": "12 SVGs verified on disk.",
+      "publish_checklist": [
+        "Bundle the SVG files into a single zip (e.g. zip luminara-brand-kit-arcana *.svg)",
+        "Add a LICENSE.txt (CC0 / CC-BY / commercial — your call)",
+        "On gumroad.com → New Product → Digital Product",
+        "Title: LUMINARA — Mega Symbols (SVG)",
+        "Description: copy the `description` field from this catalog entry",
+        "Cover image: upload /public/products/luminara-brand-kit-mega-symbols/hero.svg",
+        "File: upload the zip",
+        "Recommended price tier: $7 (single set) to $27 (full mega-pack) — your call",
+        "Add a 'Commercial use allowed?' line to the description",
+        "Publish"
+      ],
+      "hero_art_url": "https://luminara-pages.vercel.app/public/products/luminara-brand-kit-mega-symbols/hero.svg",
+      "thumbnail_url": "https://luminara-pages.vercel.app/public/thumbnails/luminara-brand-kit-mega-symbols.svg"
     },
     {
       "slug": "luminara-brand-kit-dimensions",
@@ -211,7 +331,21 @@
       ],
       "gumroad_listing_url": null,
       "shipped": false,
-      "notes": "10 SVGs verified."
+      "notes": "10 SVGs verified.",
+      "publish_checklist": [
+        "Bundle the SVG files into a single zip (e.g. zip luminara-brand-kit-arcana *.svg)",
+        "Add a LICENSE.txt (CC0 / CC-BY / commercial — your call)",
+        "On gumroad.com → New Product → Digital Product",
+        "Title: LUMINARA — Dimensions (SVG)",
+        "Description: copy the `description` field from this catalog entry",
+        "Cover image: upload /public/products/luminara-brand-kit-dimensions/hero.svg",
+        "File: upload the zip",
+        "Recommended price tier: $7 (single set) to $27 (full mega-pack) — your call",
+        "Add a 'Commercial use allowed?' line to the description",
+        "Publish"
+      ],
+      "hero_art_url": "https://luminara-pages.vercel.app/public/products/luminara-brand-kit-dimensions/hero.svg",
+      "thumbnail_url": "https://luminara-pages.vercel.app/public/thumbnails/luminara-brand-kit-dimensions.svg"
     },
     {
       "slug": "luminara-brand-kit-personas",
@@ -231,7 +365,21 @@
       ],
       "gumroad_listing_url": null,
       "shipped": false,
-      "notes": "26 SVGs verified on disk. Codex claims 26 Persona Currents — match."
+      "notes": "26 SVGs verified on disk. Codex claims 26 Persona Currents — match.",
+      "publish_checklist": [
+        "Bundle the SVG files into a single zip (e.g. zip luminara-brand-kit-arcana *.svg)",
+        "Add a LICENSE.txt (CC0 / CC-BY / commercial — your call)",
+        "On gumroad.com → New Product → Digital Product",
+        "Title: LUMINARA — Personas (SVG)",
+        "Description: copy the `description` field from this catalog entry",
+        "Cover image: upload /public/products/luminara-brand-kit-personas/hero.svg",
+        "File: upload the zip",
+        "Recommended price tier: $7 (single set) to $27 (full mega-pack) — your call",
+        "Add a 'Commercial use allowed?' line to the description",
+        "Publish"
+      ],
+      "hero_art_url": "https://luminara-pages.vercel.app/public/products/luminara-brand-kit-personas/hero.svg",
+      "thumbnail_url": "https://luminara-pages.vercel.app/public/thumbnails/luminara-brand-kit-personas.svg"
     },
     {
       "slug": "luminara-brand-kit-spread",
@@ -251,7 +399,21 @@
       ],
       "gumroad_listing_url": null,
       "shipped": false,
-      "notes": "7 SVGs verified."
+      "notes": "7 SVGs verified.",
+      "publish_checklist": [
+        "Bundle the SVG files into a single zip (e.g. zip luminara-brand-kit-arcana *.svg)",
+        "Add a LICENSE.txt (CC0 / CC-BY / commercial — your call)",
+        "On gumroad.com → New Product → Digital Product",
+        "Title: LUMINARA — Spread positions (SVG)",
+        "Description: copy the `description` field from this catalog entry",
+        "Cover image: upload /public/products/luminara-brand-kit-spread/hero.svg",
+        "File: upload the zip",
+        "Recommended price tier: $7 (single set) to $27 (full mega-pack) — your call",
+        "Add a 'Commercial use allowed?' line to the description",
+        "Publish"
+      ],
+      "hero_art_url": "https://luminara-pages.vercel.app/public/products/luminara-brand-kit-spread/hero.svg",
+      "thumbnail_url": "https://luminara-pages.vercel.app/public/thumbnails/luminara-brand-kit-spread.svg"
     },
     {
       "slug": "luminara-brand-kit-suits",
@@ -271,7 +433,21 @@
       ],
       "gumroad_listing_url": null,
       "shipped": false,
-      "notes": "4 SVGs verified."
+      "notes": "4 SVGs verified.",
+      "publish_checklist": [
+        "Bundle the SVG files into a single zip (e.g. zip luminara-brand-kit-arcana *.svg)",
+        "Add a LICENSE.txt (CC0 / CC-BY / commercial — your call)",
+        "On gumroad.com → New Product → Digital Product",
+        "Title: LUMINARA — Suits (SVG)",
+        "Description: copy the `description` field from this catalog entry",
+        "Cover image: upload /public/products/luminara-brand-kit-suits/hero.svg",
+        "File: upload the zip",
+        "Recommended price tier: $7 (single set) to $27 (full mega-pack) — your call",
+        "Add a 'Commercial use allowed?' line to the description",
+        "Publish"
+      ],
+      "hero_art_url": "https://luminara-pages.vercel.app/public/products/luminara-brand-kit-suits/hero.svg",
+      "thumbnail_url": "https://luminara-pages.vercel.app/public/thumbnails/luminara-brand-kit-suits.svg"
     },
     {
       "slug": "luminara-fonts-glif",
@@ -291,7 +467,21 @@
       ],
       "gumroad_listing_url": null,
       "shipped": false,
-      "notes": "8 TTF files verified. NOTE: your export memory lists 'GLIF Display (7-weight family)'. Disk has 7 weights + 1 dingbats = 8 files. Reconcile: bundle as 7 or 8?"
+      "notes": "8 TTF files verified. NOTE: your export memory lists 'GLIF Display (7-weight family)'. Disk has 7 weights + 1 dingbats = 8 files. Reconcile: bundle as 7 or 8?",
+      "publish_checklist": [
+        "Bundle all TTFs into a single zip (e.g. zip fonts/*)",
+        "Include a one-page usage/specimen PDF (Open Font License if applicable)",
+        "On gumroad.com → New Product → Digital Product",
+        "Title: LUMINARA — GLIF Display family (TTF)",
+        "Description: copy the `description` field from this catalog entry",
+        "Cover image: upload /public/products/luminara-fonts-glif/hero.svg",
+        "File: upload the zip",
+        "Set price (typical: $19 single family, $67 full family)",
+        "Decide license: Desktop only / Desktop + Web / App / Full — see Typography<sup>®</sup> for tiers",
+        "Publish"
+      ],
+      "hero_art_url": "https://luminara-pages.vercel.app/public/products/luminara-fonts-glif/hero.svg",
+      "thumbnail_url": "https://luminara-pages.vercel.app/public/thumbnails/luminara-fonts-glif.svg"
     },
     {
       "slug": "luminara-font-ovaca-mono",
@@ -312,7 +502,21 @@
       ],
       "gumroad_listing_url": null,
       "shipped": false,
-      "notes": "1 TTF verified."
+      "notes": "1 TTF verified.",
+      "publish_checklist": [
+        "Bundle all TTFs into a single zip (e.g. zip fonts/*)",
+        "Include a one-page usage/specimen PDF (Open Font License if applicable)",
+        "On gumroad.com → New Product → Digital Product",
+        "Title: LUMINARA — Ovača Mono (TTF)",
+        "Description: copy the `description` field from this catalog entry",
+        "Cover image: upload /public/products/luminara-font-ovaca-mono/hero.svg",
+        "File: upload the zip",
+        "Set price (typical: $19 single family, $67 full family)",
+        "Decide license: Desktop only / Desktop + Web / App / Full — see Typography<sup>®</sup> for tiers",
+        "Publish"
+      ],
+      "hero_art_url": "https://luminara-pages.vercel.app/public/products/luminara-font-ovaca-mono/hero.svg",
+      "thumbnail_url": "https://luminara-pages.vercel.app/public/thumbnails/luminara-font-ovaca-mono.svg"
     },
     {
       "slug": "luminara-hyperframe-bundle-launch",
@@ -337,7 +541,20 @@
       ],
       "gumroad_listing_url": null,
       "shipped": false,
-      "notes": "NOT deployed to Vercel yet. Awaiting deploy decision."
+      "notes": "NOT deployed to Vercel yet. Awaiting deploy decision.",
+      "publish_checklist": [
+        "Verify the .mp4 plays in a stock player (H.264, AAC, MP4 container)",
+        "On gumroad.com → New Product → Digital Product",
+        "Title: LUMINARA — HyperFrame: Luminara Bundle Launch (mp4)",
+        "Description: copy the `description` field from this catalog entry",
+        "Cover image: upload /public/products/luminara-hyperframe-bundle-launch/hero.svg (Gumroad will use it as the player poster if you leave the file field empty — otherwise upload a thumbnail JPG)",
+        "File: upload the .mp4 (size limits: Gumroad accepts up to ~16 GB on paid plans)",
+        "Set a streaming or download price (typical: $19 - $97)",
+        "Decide: looped streaming vs. one-time download — affects 'Type' field",
+        "Publish"
+      ],
+      "hero_art_url": "https://luminara-pages.vercel.app/public/products/luminara-hyperframe-bundle-launch/hero.svg",
+      "thumbnail_url": "https://luminara-pages.vercel.app/public/thumbnails/luminara-hyperframe-bundle-launch.svg"
     },
     {
       "slug": "luminara-hyperframe-sovereign-scale-001",
@@ -363,7 +580,20 @@
       ],
       "gumroad_listing_url": null,
       "shipped": false,
-      "notes": "NOT deployed to Vercel yet."
+      "notes": "NOT deployed to Vercel yet.",
+      "publish_checklist": [
+        "Verify the .mp4 plays in a stock player (H.264, AAC, MP4 container)",
+        "On gumroad.com → New Product → Digital Product",
+        "Title: LUMINARA — HyperFrame: Sovereign Scale 001 (mp4)",
+        "Description: copy the `description` field from this catalog entry",
+        "Cover image: upload /public/products/luminara-hyperframe-sovereign-scale-001/hero.svg (Gumroad will use it as the player poster if you leave the file field empty — otherwise upload a thumbnail JPG)",
+        "File: upload the .mp4 (size limits: Gumroad accepts up to ~16 GB on paid plans)",
+        "Set a streaming or download price (typical: $19 - $97)",
+        "Decide: looped streaming vs. one-time download — affects 'Type' field",
+        "Publish"
+      ],
+      "hero_art_url": "https://luminara-pages.vercel.app/public/products/luminara-hyperframe-sovereign-scale-001/hero.svg",
+      "thumbnail_url": "https://luminara-pages.vercel.app/public/thumbnails/luminara-hyperframe-sovereign-scale-001.svg"
     },
     {
       "slug": "skill-luminara-video-pipeline",
@@ -383,7 +613,36 @@
       ],
       "gumroad_listing_url": null,
       "shipped": false,
-      "notes": "Format unknown (not opened). .skill is a Hermes skill bundle, may not be a 'product' — listing as draft for visibility."
+      "notes": "Format unknown (not opened). .skill is a Hermes skill bundle, may not be a 'product' — listing as draft for visibility.",
+      "publish_checklist": [
+        "NOTE: a Hermes .skill bundle is NOT a typical Gumroad product. Decide whether to:",
+        "  (a) sell the .skill as a digital download (treat it as a binary file),",
+        "  (b) sell the skill's README + installation instructions as documentation, or",
+        "  (c) skip Gumroad and distribute via Hermes skill registry instead.",
+        "If (a): zip the .skill + any companion docs, upload as a Digital Product",
+        "If (b): write a 1-3 page install guide PDF, upload as Documentation",
+        "If (c): abandon this entry in the catalog",
+        "Title: LUMINARA — Video Pipeline (Hermes skill bundle)",
+        "Description: copy the `description` field from this catalog entry",
+        "Cover image: upload /public/products/skill-luminara-video-pipeline/hero.svg",
+        "Publish"
+      ],
+      "hero_art_url": "https://luminara-pages.vercel.app/public/products/skill-luminara-video-pipeline/hero.svg",
+      "thumbnail_url": "https://luminara-pages.vercel.app/public/thumbnails/skill-luminara-video-pipeline.svg"
     }
-  ]
+  ],
+  "publish_runbook": {
+    "generated_at": "2026-06-01",
+    "scope": "Manual publish flow on gumroad.com. No API calls, no automation, no shared credentials.",
+    "before_publishing_any_entry": [
+      "Decide entity separation: are these LUMINARA, KORËNA, or another entity? Never mix on one Gumroad profile.",
+      "Decide whether to publish at all — LUMINARA is a free public site, not all entries should be sold.",
+      "Set prices per product (current catalog: price_usd=null for all).",
+      "Decide license: CC0 / CC-BY / commercial / proprietary — one decision per product.",
+      "Reconcile known gaps flagged in catalog notes (e.g. arcana dir has 12 SVGs on disk, codex claims 22)."
+    ],
+    "shared_assets_root": "https://luminara-pages.vercel.app/public/products/<slug>/hero.svg",
+    "shared_assets_root_thumbs": "https://luminara-pages.vercel.app/public/thumbnails/<slug>.svg",
+    "caution": "Do not paste a Vercel API token or Gumroad API token into this repository or any chat. Tokens must be entered into gumroad.com and vercel.com directly, by the account owner."
+  }
 }
