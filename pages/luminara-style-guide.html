@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luminara — Style Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,300&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cyan: #00C9DB;
+    --magenta: #E8175D;
+    --yellow: #FFD400;
+    --green: #3CB371;
+    --orange: #FF6B2B;
+    --ink: #0D0D0D;
+    --cream: #FAF6F0;
+    --warm-gray: #B8AFA6;
+    --section-pad: clamp(60px, 10vw, 140px);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--ink);
+    color: var(--cream);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 40px 24px;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 80%, rgba(0,201,219,.12) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 20%, rgba(232,23,93,.10) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 50% 50%, rgba(255,212,0,.06) 0%, transparent 60%);
+    z-index: 0;
+  }
+
+  .hero-content { position: relative; z-index: 1; text-align: center; }
+
+  .hero-tag {
+    font-size: 11px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    margin-bottom: 40px;
+    font-weight: 500;
+  }
+
+  .hero-wordmark {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-bottom: 48px;
+  }
+
+  .hero-letter {
+    width: 120px;
+    height: 140px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeSlideUp .8s ease-out both;
+  }
+  .hero-letter:nth-child(1) { animation-delay: .1s; }
+  .hero-letter:nth-child(2) { animation-delay: .2s; border-radius: 50%; width: 140px; }
+  .hero-letter:nth-child(3) { animation-delay: .3s; }
+  .hero-letter:nth-child(4) { animation-delay: .4s; }
+  .hero-letter:nth-child(5) { animation-delay: .5s; }
+  .hero-letter:nth-child(6) { animation-delay: .6s; }
+  .hero-letter:nth-child(7) { animation-delay: .7s; border-radius: 50%; width: 140px; }
+
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .letter-fill {
+    position: absolute;
+    inset: 0;
+  }
+
+  .fill-rainbow {
+    background: repeating-conic-gradient(
+      from 0deg at 50% 120%,
+      var(--cyan) 0deg, var(--cyan) 10deg,
+      var(--magenta) 10deg, var(--magenta) 20deg,
+      var(--yellow) 20deg, var(--yellow) 30deg,
+      var(--green) 30deg, var(--green) 40deg,
+      var(--orange) 40deg, var(--orange) 50deg,
+      var(--cyan) 50deg, var(--cyan) 60deg
+    );
+  }
+
+  .fill-scales {
+    background:
+      radial-gradient(circle at 50% 0%, var(--magenta) 30%, transparent 31%) 0 0 / 40px 40px,
+      radial-gradient(circle at 50% 0%, var(--yellow) 30%, transparent 31%) 20px 20px / 40px 40px,
+      radial-gradient(circle at 50% 0%, var(--cyan) 30%, transparent 31%) 0 40px / 40px 40px,
+      var(--orange);
+  }
+
+  .fill-stars {
+    background: var(--green);
+    background-image:
+      radial-gradient(circle, var(--yellow) 4px, transparent 4px),
+      radial-gradient(circle, var(--orange) 3px, transparent 3px),
+      radial-gradient(circle, var(--cyan) 5px, transparent 5px);
+    background-size: 30px 30px, 45px 45px, 60px 60px;
+    background-position: 0 0, 15px 20px, 30px 10px;
+  }
+
+  .fill-waves {
+    background: linear-gradient(
+      180deg,
+      var(--cyan) 0%, var(--cyan) 14%,
+      var(--magenta) 14%, var(--magenta) 28%,
+      var(--yellow) 28%, var(--yellow) 42%,
+      var(--green) 42%, var(--green) 56%,
+      var(--orange) 56%, var(--orange) 70%,
+      var(--cyan) 70%, var(--cyan) 84%,
+      var(--magenta) 84%, var(--magenta) 100%
+    );
+  }
+
+  .fill-gradient1 {
+    background: linear-gradient(135deg, var(--magenta), var(--orange), var(--yellow));
+  }
+
+  .fill-gradient2 {
+    background: linear-gradient(135deg, var(--cyan), var(--green), var(--yellow));
+  }
+
+  .fill-gradient3 {
+    background: linear-gradient(45deg, var(--yellow), var(--magenta), var(--cyan));
+  }
+
+  .letter-glyph {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 140px;
+    line-height: 1;
+    color: var(--ink);
+    /* The letter is an SVG mask; simulated here with mix-blend-mode */
+    mix-blend-mode: multiply;
+    opacity: 0;
+  }
+
+  .hero-subtitle {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: clamp(18px, 3vw, 28px);
+    color: var(--warm-gray);
+    max-width: 500px;
+    line-height: 1.5;
+    margin: 0 auto 32px;
+    animation: fadeSlideUp 1s ease-out 1s both;
+  }
+
+  .hero-version {
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(184,175,166,.5);
+    animation: fadeSlideUp 1s ease-out 1.2s both;
+  }
+
+  /* ── NAV ── */
+  .toc {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(13,13,13,.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255,255,255,.06);
+    padding: 0 24px;
+    overflow-x: auto;
+  }
+
+  .toc-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    height: 52px;
+    white-space: nowrap;
+  }
+
+  .toc-brand {
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--cream);
+    flex-shrink: 0;
+  }
+
+  .toc a {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    text-decoration: none;
+    transition: color .2s;
+  }
+  .toc a:hover { color: var(--cream); }
+
+  /* ── SECTIONS ── */
+  section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--section-pad) 24px;
+  }
+
+  .section-divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-number {
+    font-size: 11px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+
+  .section-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(32px, 5vw, 56px);
+    line-height: 1.1;
+    margin-bottom: 40px;
+    color: var(--cream);
+  }
+
+  .section-title em {
+    font-style: italic;
+    color: var(--yellow);
+  }
+
+  .prose {
+    font-size: 15px;
+    line-height: 1.8;
+    color: rgba(250,246,240,.65);
+    max-width: 640px;
+  }
+
+  .prose strong { color: var(--cream); font-weight: 500; }
+
+  /* ── PALETTE ── */
+  .palette-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-top: 40px;
+  }
+
+  .swatch {
+    aspect-ratio: 1;
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+    overflow: hidden;
+    transition: transform .3s ease;
+  }
+  .swatch:hover { transform: scale(1.03); }
+
+  .swatch-name {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .swatch-hex {
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: rgba(13,13,13,.6);
+    margin-top: 4px;
+    font-family: 'DM Sans', monospace;
+  }
+
+  .swatch.dark-text .swatch-name,
+  .swatch.dark-text .swatch-hex { color: var(--cream); }
+
+  /* ── GEOMETRY ── */
+  .geo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 32px;
+    margin-top: 48px;
+  }
+
+  .geo-card {
+    background: rgba(255,255,255,.03);
+    border: 1px solid rgba(255,255,255,.06);
+    border-radius: 16px;
+    padding: 32px;
+    text-align: center;
+    transition: border-color .3s;
+  }
+  .geo-card:hover { border-color: rgba(255,255,255,.15); }
+
+  .geo-shape {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 24px;
+    position: relative;
+  }
+
+  .geo-shape-square { background: var(--cream); border-radius: 4px; }
+  .geo-shape-circle { background: var(--cream); border-radius: 50%; }
+  .geo-shape-triangle {
+    width: 0;
+    height: 0;
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+    border-top: 100px solid var(--cream);
+    background: none;
+  }
+  .geo-shape-stadium {
+    background: var(--cream);
+    border-radius: 0 0 50px 50px;
+  }
+  .geo-shape-block {
+    width: 140px;
+    background: var(--cream);
+    border-radius: 4px;
+    position: relative;
+  }
+  .geo-shape-block::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    border-left: 28px solid var(--ink);
+    border-right: 28px solid var(--ink);
+    border-bottom: 40px solid transparent;
+    width: 0; height: 0;
+  }
+
+  .geo-letter {
+    font-family: 'Instrument Serif', serif;
+    font-size: 24px;
+    color: var(--cream);
+    margin-bottom: 8px;
+  }
+
+  .geo-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+  }
+
+  /* ── MOTIFS ── */
+  .motif-row {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 32px;
+    align-items: center;
+    padding: 32px 0;
+    border-bottom: 1px solid rgba(255,255,255,.04);
+  }
+
+  .motif-preview {
+    width: 120px;
+    height: 120px;
+    border-radius: 12px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .motif-id {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    margin-bottom: 4px;
+  }
+
+  .motif-name {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px;
+    color: var(--cream);
+    margin-bottom: 8px;
+  }
+
+  .motif-desc {
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(250,246,240,.55);
+  }
+
+  /* ── LAYOUT RULES ── */
+  .rule-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    margin-top: 40px;
+  }
+
+  .rule-card {
+    background: rgba(255,255,255,.02);
+    border: 1px solid rgba(255,255,255,.05);
+    border-radius: 16px;
+    padding: 32px;
+  }
+
+  .rule-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+
+  .rule-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--cream);
+  }
+
+  .rule-card p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(250,246,240,.55);
+  }
+
+  /* ── CONTAINER CONCEPT ── */
+  .container-demo {
+    margin-top: 48px;
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .demo-glyph {
+    width: 160px;
+    height: 180px;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    transition: transform .3s;
+  }
+  .demo-glyph:hover { transform: translateY(-6px); }
+
+  .demo-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 12px;
+    background: linear-gradient(transparent, rgba(0,0,0,.7));
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.8);
+    text-align: center;
+  }
+
+  /* ── TECH SPEC ── */
+  .spec-table {
+    margin-top: 40px;
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .spec-table tr {
+    border-bottom: 1px solid rgba(255,255,255,.06);
+  }
+
+  .spec-table td {
+    padding: 16px 0;
+    font-size: 14px;
+    vertical-align: top;
+  }
+
+  .spec-table td:first-child {
+    font-weight: 700;
+    color: var(--cream);
+    width: 200px;
+    padding-right: 24px;
+  }
+
+  .spec-table td:last-child {
+    color: rgba(250,246,240,.55);
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-right: 6px;
+  }
+
+  .tag-cyan   { background: var(--cyan); color: var(--ink); }
+  .tag-yellow { background: var(--yellow); color: var(--ink); }
+  .tag-green  { background: var(--green); color: var(--ink); }
+
+  /* ── WALLPAPER DEMO ── */
+  .wallpaper-demo {
+    margin-top: 48px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+  }
+
+  .wp-cell {
+    aspect-ratio: .85;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  /* ── DO / DON'T ── */
+  .dodont-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 40px;
+  }
+
+  .dodont-card {
+    border-radius: 16px;
+    padding: 32px;
+    border: 1px solid;
+  }
+
+  .dodont-card.do {
+    border-color: var(--green);
+    background: rgba(60,179,113,.05);
+  }
+
+  .dodont-card.dont {
+    border-color: var(--magenta);
+    background: rgba(232,23,93,.05);
+  }
+
+  .dodont-badge {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+
+  .do .dodont-badge { color: var(--green); }
+  .dont .dodont-badge { color: var(--magenta); }
+
+  .dodont-card ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .dodont-card li {
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(250,246,240,.6);
+    padding: 6px 0;
+    padding-left: 20px;
+    position: relative;
+  }
+
+  .dodont-card li::before {
+    position: absolute;
+    left: 0;
+    font-weight: 700;
+  }
+
+  .do li::before { content: '✓'; color: var(--green); }
+  .dont li::before { content: '✕'; color: var(--magenta); }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 80px 24px;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(250,246,240,.2);
+  }
+
+  footer .footer-mark {
+    font-family: 'Instrument Serif', serif;
+    font-size: 28px;
+    letter-spacing: 8px;
+    color: rgba(250,246,240,.08);
+    margin-bottom: 16px;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 700px) {
+    .hero-letter { width: 64px; height: 76px; }
+    .hero-letter:nth-child(2),
+    .hero-letter:nth-child(7) { width: 76px; }
+    .hero-wordmark { gap: 8px; }
+    .motif-row { grid-template-columns: 1fr; }
+    .dodont-grid { grid-template-columns: 1fr; }
+    .wallpaper-demo { grid-template-columns: repeat(4, 1fr); }
+    .geo-shape-block { width: 100px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<header class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <p class="hero-tag">Type System &middot; Style Guide</p>
+    <div class="hero-wordmark">
+      <div class="hero-letter"><div class="letter-fill fill-rainbow"></div></div>
+      <div class="hero-letter"><div class="letter-fill fill-scales"></div></div>
+      <div class="hero-letter"><div class="letter-fill fill-stars"></div></div>
+      <div class="hero-letter"><div class="letter-fill fill-gradient1"></div></div>
+      <div class="hero-letter"><div class="letter-fill fill-waves"></div></div>
+      <div class="hero-letter"><div class="letter-fill fill-gradient2"></div></div>
+      <div class="hero-letter"><div class="letter-fill fill-gradient3"></div></div>
+    </div>
+    <p class="hero-subtitle">A geometric container typeface where every glyph is a window into color, pattern, and&nbsp;illustration.</p>
+    <p class="hero-version">Version 1.0 &middot; March 2026</p>
+  </div>
+</header>
+
+<!-- ═══════════════════ NAV ═══════════════════ -->
+<nav class="toc">
+  <div class="toc-inner">
+    <span class="toc-brand">Luminara</span>
+    <a href="#philosophy">Philosophy</a>
+    <a href="#geometry">Geometry</a>
+    <a href="#palette">Palette</a>
+    <a href="#motifs">Motifs</a>
+    <a href="#container">Container&nbsp;Rule</a>
+    <a href="#layout">Layout</a>
+    <a href="#usage">Do&nbsp;&amp;&nbsp;Don't</a>
+    <a href="#tech">Tech&nbsp;Spec</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════ PHILOSOPHY ═══════════════════ -->
+<section id="philosophy">
+  <p class="section-number">01</p>
+  <h2 class="section-title">The Letterform as <em>Landscape</em></h2>
+  <p class="prose">
+    <strong>Luminara</strong> is an ultra-heavy, capitals-only display typeface rooted in the 1972 Novum Gebrauchsgraphik tradition. Every glyph is reduced to its most primitive geometric shape — square, circle, triangle, stadium — and then hollowed out to become a <strong>container</strong>.
+  </p>
+  <br>
+  <p class="prose">
+    The black mass defines the letter. The internal graphic defines its <strong>soul</strong>. Where traditional type relies on white space to create legibility, Luminara relies on vivid pattern, illustration, and color locked inside razor-sharp silhouettes.
+  </p>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════ GEOMETRY ═══════════════════ -->
+<section id="geometry">
+  <p class="section-number">02</p>
+  <h2 class="section-title">Core <em>Geometry</em></h2>
+  <p class="prose">
+    Every letterform maps to a primitive shape. Stroke weight occupies <strong>80–90%</strong> of the bounding box — these are not letters with strokes, they are <strong>shapes with windows</strong>.
+  </p>
+
+  <div class="geo-grid">
+    <div class="geo-card">
+      <div class="geo-shape geo-shape-square"></div>
+      <p class="geo-letter">N</p>
+      <p class="geo-label">The Square</p>
+    </div>
+    <div class="geo-card">
+      <div class="geo-shape geo-shape-circle"></div>
+      <p class="geo-letter">O</p>
+      <p class="geo-label">The Circle</p>
+    </div>
+    <div class="geo-card">
+      <div class="geo-shape geo-shape-triangle"></div>
+      <p class="geo-letter">V</p>
+      <p class="geo-label">The Triangle</p>
+    </div>
+    <div class="geo-card">
+      <div class="geo-shape geo-shape-stadium"></div>
+      <p class="geo-letter">U</p>
+      <p class="geo-label">The Stadium</p>
+    </div>
+    <div class="geo-card">
+      <div class="geo-shape geo-shape-block"></div>
+      <p class="geo-letter">M</p>
+      <p class="geo-label">The Block</p>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════ PALETTE ═══════════════════ -->
+<section id="palette">
+  <p class="section-number">03</p>
+  <h2 class="section-title">The <em>Pop</em> Palette</h2>
+  <p class="prose">
+    High-saturation, 1970s "Pop" primaries. These five colors form the mandatory graphic vocabulary inside every Luminara glyph. No pastels, no neutrals inside the letterform.
+  </p>
+
+  <div class="palette-grid">
+    <div class="swatch" style="background:var(--cyan);">
+      <p class="swatch-name">Cyan</p>
+      <p class="swatch-hex">#00C9DB</p>
+    </div>
+    <div class="swatch" style="background:var(--magenta);">
+      <p class="swatch-name">Magenta</p>
+      <p class="swatch-hex">#E8175D</p>
+    </div>
+    <div class="swatch" style="background:var(--yellow);">
+      <p class="swatch-name">Yellow</p>
+      <p class="swatch-hex">#FFD400</p>
+    </div>
+    <div class="swatch" style="background:var(--green);">
+      <p class="swatch-name">Grass Green</p>
+      <p class="swatch-hex">#3CB371</p>
+    </div>
+    <div class="swatch" style="background:var(--orange);">
+      <p class="swatch-name">Orange</p>
+      <p class="swatch-hex">#FF6B2B</p>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════ MOTIFS ═══════════════════ -->
+<section id="motifs">
+  <p class="section-number">04</p>
+  <h2 class="section-title">Interior <em>Motifs</em></h2>
+  <p class="prose">
+    The graphic content inside each glyph follows one of four sanctioned motifs. Assign motifs per word or per row — never mix motifs within a single letterform.
+  </p>
+
+  <div style="margin-top: 40px;">
+    <div class="motif-row">
+      <div class="motif-preview fill-rainbow"></div>
+      <div>
+        <p class="motif-id">Motif A</p>
+        <p class="motif-name">Concentric Rainbow</p>
+        <p class="motif-desc">Arcs of alternating palette colors that follow the inner curve of the letter. The arcs radiate outward from the glyph's center of gravity.</p>
+      </div>
+    </div>
+
+    <div class="motif-row">
+      <div class="motif-preview fill-scales"></div>
+      <div>
+        <p class="motif-id">Motif B</p>
+        <p class="motif-name">Scale / Wave Pattern</p>
+        <p class="motif-desc">Overlapping semi-circles in the Seigaiha tradition, rendered in vibrant pop colors. Rows alternate direction for optical rhythm.</p>
+      </div>
+    </div>
+
+    <div class="motif-row">
+      <div class="motif-preview fill-stars"></div>
+      <div>
+        <p class="motif-id">Motif D</p>
+        <p class="motif-name">Celestial</p>
+        <p class="motif-desc">Flat five-pointed stars and stylized bubble clouds with thick black outlines, floating on a solid-color field from the palette.</p>
+      </div>
+    </div>
+
+    <div class="motif-row" style="border-bottom:none;">
+      <div class="motif-preview" style="background:var(--orange); display:flex; align-items:flex-end; justify-content:center;">
+        <svg width="80" height="90" viewBox="0 0 80 90">
+          <ellipse cx="40" cy="68" rx="26" ry="22" fill="#E8175D"/>
+          <circle cx="40" cy="42" r="22" fill="#E8175D"/>
+          <circle cx="32" cy="38" r="4" fill="#fff"/>
+          <circle cx="48" cy="38" r="4" fill="#fff"/>
+          <circle cx="32" cy="38" r="2" fill="#0D0D0D"/>
+          <circle cx="48" cy="38" r="2" fill="#0D0D0D"/>
+          <ellipse cx="40" cy="48" rx="5" ry="3" fill="#0D0D0D"/>
+          <ellipse cx="28" cy="28" r="8" fill="#E8175D"/>
+          <ellipse cx="52" cy="28" r="8" fill="#E8175D"/>
+        </svg>
+      </div>
+      <div>
+        <p class="motif-id">Motif C</p>
+        <p class="motif-name">Character Illustration</p>
+        <p class="motif-desc">A "rubber-hose" or 70s cartoon character — elephant, devil, candle, or creature — peeking out from the bottom of the glyph. Thick black outlines, flat palette fills.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════ CONTAINER RULE ═══════════════════ -->
+<section id="container">
+  <p class="section-number">05</p>
+  <h2 class="section-title">The <em>Container</em> Rule</h2>
+  <p class="prose">
+    Luminara glyphs function as <strong>clipping masks</strong>. The outer silhouette is razor-sharp — no serifs, no spurs, no terminals. Internal counter-spaces are maximized to provide the largest possible window for illustration.
+  </p>
+
+  <div class="container-demo">
+    <div class="demo-glyph">
+      <div class="letter-fill fill-waves"></div>
+      <span class="demo-label">Horizontal Bands</span>
+    </div>
+    <div class="demo-glyph" style="border-radius:50%;">
+      <div class="letter-fill fill-rainbow"></div>
+      <span class="demo-label">Concentric Arcs</span>
+    </div>
+    <div class="demo-glyph">
+      <div class="letter-fill fill-scales"></div>
+      <span class="demo-label">Wave Scales</span>
+    </div>
+    <div class="demo-glyph">
+      <div class="letter-fill fill-stars"></div>
+      <span class="demo-label">Celestial Field</span>
+    </div>
+    <div class="demo-glyph">
+      <div class="letter-fill fill-gradient1"></div>
+      <span class="demo-label">Pop Gradient</span>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════ LAYOUT ═══════════════════ -->
+<section id="layout">
+  <p class="section-number">06</p>
+  <h2 class="section-title">Grid &amp; <em>Layout</em></h2>
+  <p class="prose">
+    Arrangement is as important as the letters themselves. Luminara is designed to tile into dense, poster-like compositions.
+  </p>
+
+  <div class="rule-grid">
+    <div class="rule-card">
+      <div class="rule-icon" style="background:rgba(0,201,219,.12); color:var(--cyan);">↕</div>
+      <h3>Leading</h3>
+      <p>Extremely tight. The top of Row 2 should nearly touch the bottom of Row 1, creating a dense vertical rhythm.</p>
+    </div>
+    <div class="rule-card">
+      <div class="rule-icon" style="background:rgba(255,212,0,.12); color:var(--yellow);">↔</div>
+      <h3>Kerning</h3>
+      <p>Uniform and wide. Each letter breathes as an independent object — equal spacing between all glyph pairs.</p>
+    </div>
+    <div class="rule-card">
+      <div class="rule-icon" style="background:rgba(232,23,93,.12); color:var(--magenta);">▦</div>
+      <h3>Alignment</h3>
+      <p>Justified or centered grid. Letters must align vertically across rows to produce a "wallpaper" tiling effect.</p>
+    </div>
+  </div>
+
+  <!-- Wallpaper mini demo -->
+  <div class="wallpaper-demo">
+    <div class="wp-cell fill-rainbow"></div>
+    <div class="wp-cell fill-scales"></div>
+    <div class="wp-cell fill-stars" style="border-radius:50%;"></div>
+    <div class="wp-cell fill-gradient1"></div>
+    <div class="wp-cell fill-waves"></div>
+    <div class="wp-cell fill-gradient2"></div>
+    <div class="wp-cell fill-gradient3"></div>
+    <div class="wp-cell fill-stars"></div>
+    <div class="wp-cell fill-rainbow" style="border-radius:50%;"></div>
+    <div class="wp-cell fill-scales"></div>
+    <div class="wp-cell fill-gradient1"></div>
+    <div class="wp-cell fill-waves"></div>
+    <div class="wp-cell fill-scales"></div>
+    <div class="wp-cell fill-gradient2"></div>
+    <div class="wp-cell fill-rainbow"></div>
+    <div class="wp-cell fill-stars" style="border-radius:50%;"></div>
+    <div class="wp-cell fill-gradient3"></div>
+    <div class="wp-cell fill-waves"></div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════ DO & DON'T ═══════════════════ -->
+<section id="usage">
+  <p class="section-number">07</p>
+  <h2 class="section-title">Do &amp; <em>Don't</em></h2>
+
+  <div class="dodont-grid">
+    <div class="dodont-card do">
+      <p class="dodont-badge">✓ Do</p>
+      <ul>
+        <li>Use only uppercase — Luminara has no lowercase</li>
+        <li>Fill glyphs with sanctioned motifs (A–D)</li>
+        <li>Maintain uniform, wide kerning</li>
+        <li>Use the five Pop palette colors inside glyphs</li>
+        <li>Keep outer silhouettes razor-sharp</li>
+        <li>Maximize counter-spaces for illustration area</li>
+        <li>Tile letters into dense grid compositions</li>
+      </ul>
+    </div>
+    <div class="dodont-card dont">
+      <p class="dodont-badge">✕ Don't</p>
+      <ul>
+        <li>Add serifs, spurs, or decorative terminals</li>
+        <li>Use pastels or muted tones inside glyphs</li>
+        <li>Mix multiple motifs within a single letter</li>
+        <li>Modulate stroke width on circular forms</li>
+        <li>Apply drop shadows or 3D effects to silhouettes</li>
+        <li>Use loose leading — keep rows nearly touching</li>
+        <li>Set Luminara as body text — display only</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════ TECH SPEC ═══════════════════ -->
+<section id="tech">
+  <p class="section-number">08</p>
+  <h2 class="section-title">Technical <em>Specification</em></h2>
+
+  <table class="spec-table">
+    <tr>
+      <td>Format</td>
+      <td><span class="tag tag-cyan">OTF-SVG</span> OpenType-SVG Color Font (primary). Bakes textures and motifs directly into glyph data.</td>
+    </tr>
+    <tr>
+      <td>Fallback</td>
+      <td><span class="tag tag-yellow">OTF</span> Standard solid-black version for use with manual clipping masks in design software.</td>
+    </tr>
+    <tr>
+      <td>Case Support</td>
+      <td>Capitals only. All characters are uppercase "Titling" height. No lowercase, no small caps.</td>
+    </tr>
+    <tr>
+      <td>Weight</td>
+      <td><span class="tag tag-green">Black</span> Single weight — Ultra-Heavy / Black. Stroke occupies 80–90% of bounding box.</td>
+    </tr>
+    <tr>
+      <td>Stroke Width</td>
+      <td>No modulation. Uniform geometric strokes throughout.</td>
+    </tr>
+    <tr>
+      <td>Masking Behavior</td>
+      <td>Glyphs function as clipping masks. External edges are crisp vector paths suitable for SVG &lt;clipPath&gt; or CSS clip-path.</td>
+    </tr>
+    <tr>
+      <td>Recommended Use</td>
+      <td>Display / Headline / Poster. Minimum size 48pt. Not suitable for body text.</td>
+    </tr>
+    <tr>
+      <td>License</td>
+      <td>Luminara v1.0 &middot; Refer to EULA for distribution terms.</td>
+    </tr>
+  </table>
+</section>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<footer>
+  <p class="footer-mark">LUMINARA</p>
+  <p>Style Guide v1.0 &middot; Geometric Container Typeface &middot; 2026</p>
+</footer>
+
+</body>
+</html>

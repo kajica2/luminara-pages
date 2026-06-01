@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUMINARA — Your Voice Is the Instrument | Frequency Toolkit for Self-Initiation</title>
+    <meta name="description" content="12 frequency keys tuned to A=432 Hz. Real-time pitch detection. Sacred geometry. Your voice generates the state. No subscription. No guru. No dependency.">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Outfit:wght@100;200;300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        :root {
+            --bg: #050508;
+            --surface: #0e0e14;
+            --surface-alt: #0a0a10;
+            --text-main: #e8e8f0;
+            --text-dim: #8a8a9a;
+            --text-faint: #5a5a6a;
+            --accent: #d4a853;
+            --accent-dim: #b08a3a;
+            --accent-glow: rgba(212, 168, 83, 0.4);
+            --accent-glow-soft: rgba(212, 168, 83, 0.08);
+            --border: rgba(212, 168, 83, 0.15);
+            --border-dim: rgba(212, 168, 83, 0.08);
+            --glass: rgba(14, 14, 20, 0.88);
+            --ease: cubic-bezier(0.23, 1, 0.32, 1);
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        [data-theme="light"] {
+            --bg: #fdfcf8;
+            --surface: #ffffff;
+            --surface-alt: #f7f5f0;
+            --text-main: #1a1a24;
+            --text-dim: #5a5a6a;
+            --text-faint: #8a8a9a;
+            --accent: #b48c3d;
+            --accent-dim: #9a7830;
+            --accent-glow: rgba(180, 140, 61, 0.25);
+            --accent-glow-soft: rgba(180, 140, 61, 0.06);
+            --border: rgba(180, 140, 61, 0.2);
+            --border-dim: rgba(180, 140, 61, 0.1);
+            --glass: rgba(253, 252, 248, 0.88);
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+            background: var(--bg);
+            transition: background 0.6s var(--ease);
+        }
+
+        body {
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 300;
+            overflow-x: hidden;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ── THREE.JS BACKGROUND ── */
+        #three-container {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0; pointer-events: none; opacity: 0.4;
+        }
+
+        /* ── NAVIGATION ── */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            padding: 1.5rem 4rem;
+            display: flex; justify-content: space-between; align-items: center;
+            transition: all 0.6s var(--ease);
+            border-bottom: 1px solid transparent;
+        }
+        nav.scrolled {
+            padding: 1rem 4rem;
+            background: var(--glass);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-logo {
+            font-weight: 100; font-size: 1.4rem;
+            letter-spacing: 0.4em; color: var(--text-main);
+            text-decoration: none; text-transform: uppercase; cursor: pointer;
+            transition: opacity 0.3s;
+        }
+        .nav-logo:hover { opacity: 0.8; }
+        .nav-logo span { color: var(--accent); font-weight: 600; }
+
+        .nav-controls { display: flex; align-items: center; gap: 2rem; }
+
+        .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+        .nav-links a {
+            color: var(--text-dim); text-decoration: none;
+            font-size: 0.65rem; letter-spacing: 0.15em;
+            text-transform: uppercase; transition: color 0.3s; cursor: pointer;
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+
+        .lang-switcher {
+            display: flex; gap: 0.5rem;
+            background: var(--surface); border: 1px solid var(--border);
+            padding: 2px; border-radius: 20px;
+        }
+        .lang-btn {
+            background: none; border: none; color: var(--text-dim);
+            padding: 4px 10px; border-radius: 18px; cursor: pointer;
+            font-size: 0.6rem; font-weight: 500; transition: all 0.3s;
+            font-family: inherit;
+        }
+        .lang-btn.active { background: var(--accent); color: var(--bg); }
+
+        .theme-toggle {
+            background: none; border: 1px solid var(--border);
+            color: var(--text-main); cursor: pointer;
+            width: 34px; height: 34px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; transition: all 0.4s;
+        }
+        .theme-toggle:hover { border-color: var(--accent); transform: rotate(15deg); }
+
+        /* ── MOBILE NAV ── */
+        .hamburger {
+            display: none; background: none; border: none;
+            cursor: pointer; padding: 4px; color: var(--text-main);
+        }
+        .hamburger svg { display: block; }
+
+        .mobile-menu {
+            display: none; position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--bg); z-index: 200;
+            flex-direction: column; justify-content: center; align-items: center;
+            gap: 2rem; opacity: 0; transition: opacity 0.4s var(--ease);
+        }
+        .mobile-menu.open { display: flex; opacity: 1; }
+        .mobile-menu a {
+            color: var(--text-main); text-decoration: none;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem; font-weight: 300;
+            transition: color 0.3s; cursor: pointer;
+        }
+        .mobile-menu a:hover { color: var(--accent); }
+        .mobile-close {
+            position: absolute; top: 1.5rem; right: 2rem;
+            background: none; border: none; color: var(--text-main);
+            cursor: pointer; font-size: 2rem; font-family: inherit;
+        }
+
+        /* ── MAIN ── */
+        main { position: relative; z-index: 10; }
+        .page {
+            display: none; min-height: 100vh; padding-top: 8rem;
+            animation: fadeIn 0.6s var(--ease);
+        }
+        .page.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── HERO ── */
+        .hero {
+            min-height: 80vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            text-align: center; padding: 2rem 4rem;
+        }
+        .hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(3rem, 7.5vw, 6.2rem);
+            font-weight: 300; line-height: 0.95;
+            margin-bottom: 1.5rem; letter-spacing: -0.02em;
+        }
+        .hero h1 em { font-style: italic; color: var(--accent); }
+        .hero-sub {
+            max-width: 620px; font-size: 1.1rem;
+            color: var(--text-dim); margin-bottom: 3.5rem; font-weight: 300;
+        }
+        .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+
+        /* ── BUTTONS ── */
+        .btn {
+            padding: 1.15rem 2.8rem; font-size: 0.68rem;
+            letter-spacing: 0.25em; text-transform: uppercase;
+            text-decoration: none; display: inline-block;
+            transition: all 0.5s var(--ease);
+            border: 1px solid var(--accent); cursor: pointer;
+            font-family: inherit; font-weight: 500;
+        }
+        .btn-primary { background: var(--accent); color: var(--bg); }
+        .btn-primary:hover {
+            background: transparent; color: var(--accent);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px var(--accent-glow);
+        }
+        .btn-secondary { background: transparent; color: var(--text-dim); border-color: var(--border); }
+        .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* ── SECTIONS ── */
+        section { padding: 6rem 4rem; max-width: 1300px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 5rem; }
+        .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem; color: var(--accent);
+            letter-spacing: 0.5em; text-transform: uppercase;
+            display: block; margin-bottom: 1rem;
+        }
+        .title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.4rem, 4vw, 3.2rem);
+            line-height: 1.1; font-weight: 300;
+        }
+
+        /* ── GRID + CARDS ── */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .card {
+            background: var(--surface); border: 1px solid var(--border);
+            padding: 3rem 2.2rem; transition: all 0.5s var(--ease);
+        }
+        .card:hover { border-color: var(--accent); transform: translateY(-6px); }
+        .card-icon {
+            font-size: 2rem; margin-bottom: 1.5rem;
+            display: block; color: var(--accent); opacity: 0.8;
+        }
+        .card h3 { font-size: 1.2rem; margin-bottom: 1rem; font-weight: 400; letter-spacing: 0.04em; }
+        .card p { color: var(--text-dim); font-size: 0.88rem; line-height: 1.7; }
+        .micro-cta {
+            display: inline-block; margin-top: 1.5rem;
+            font-size: 0.6rem; color: var(--accent);
+            text-transform: uppercase; letter-spacing: 0.2em;
+            text-decoration: none; border-bottom: 1px solid transparent;
+            transition: border-color 0.3s; cursor: pointer;
+        }
+        .micro-cta:hover { border-bottom-color: var(--accent); }
+
+        /* ── OPENING STATEMENT ── */
+        .opening-statement {
+            text-align: center; max-width: 780px; margin: 4rem auto 8rem;
+            padding: 0 2rem;
+        }
+        .opening-statement p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.35rem; color: var(--text-main);
+            margin-bottom: 1.5rem; line-height: 1.65;
+        }
+        .opening-statement strong { color: var(--accent); font-weight: 400; }
+
+        /* ── STEPS SECTION ── */
+        .steps { max-width: 900px; margin: 0 auto; }
+        .step {
+            display: grid; grid-template-columns: 80px 1fr;
+            gap: 2rem; margin-bottom: 4rem; align-items: start;
+        }
+        .step-num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5rem; color: var(--accent); font-weight: 300;
+            line-height: 1; opacity: 0.6;
+        }
+        .step h4 {
+            font-size: 1.3rem; font-weight: 400;
+            margin-bottom: 0.8rem; letter-spacing: 0.03em;
+        }
+        .step p { color: var(--text-dim); font-size: 0.92rem; line-height: 1.7; }
+
+        /* ── SOCIAL PROOF ── */
+        .proof {
+            background: var(--surface-alt);
+            padding: 6rem 4rem;
+            border-top: 1px solid var(--border-dim);
+            border-bottom: 1px solid var(--border-dim);
+            margin: 6rem 0;
+        }
+        .testimonial-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 4rem; max-width: 1100px; margin: 0 auto;
+        }
+        .testimonial { padding: 0 1rem; }
+        .testimonial p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.35rem; font-style: italic;
+            margin-bottom: 1.2rem; line-height: 1.45; color: var(--text-main);
+        }
+        .testimonial cite {
+            font-size: 0.68rem; letter-spacing: 0.2em;
+            color: var(--accent); text-transform: uppercase; font-style: normal;
+        }
+
+        .trust-signals {
+            max-width: 900px; margin: 5rem auto 0;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+        }
+        .trust-item {
+            font-size: 0.8rem; color: var(--text-dim);
+            padding: 1.2rem 1.5rem;
+            border-left: 2px solid var(--border);
+            line-height: 1.6;
+        }
+
+        .stats {
+            display: flex; justify-content: center;
+            gap: 4rem; margin-top: 5rem;
+            flex-wrap: wrap; text-align: center;
+        }
+        .stat-item h4 {
+            font-size: 2.5rem; color: var(--accent);
+            margin-bottom: 0.3rem; font-weight: 300;
+            font-family: 'Cormorant Garamond', serif;
+        }
+        .stat-item p {
+            font-size: 0.62rem; letter-spacing: 0.2em;
+            color: var(--text-dim); text-transform: uppercase;
+        }
+
+        /* ── CLOSING CTA ── */
+        .closing-cta {
+            text-align: center; padding: 8rem 4rem 10rem;
+            max-width: 700px; margin: 0 auto;
+        }
+        .closing-cta .title { margin-bottom: 1.5rem; }
+        .closing-cta p {
+            color: var(--text-dim); font-size: 1.05rem;
+            margin-bottom: 3rem; line-height: 1.7;
+        }
+
+        /* ── KEYS TABLE ── */
+        .key-list { border-top: 1px solid var(--border); }
+        .key-item {
+            border-bottom: 1px solid var(--border);
+            padding: 2.5rem 1rem; cursor: pointer;
+            transition: all 0.4s var(--ease);
+        }
+        .key-item:hover { background: var(--accent-glow-soft); padding-left: 2rem; }
+        .key-header {
+            display: grid; grid-template-columns: 220px 1fr 180px;
+            gap: 2rem; align-items: center;
+        }
+        .key-info h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem; color: var(--accent);
+        }
+        .key-info span {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.62rem; color: var(--text-dim);
+        }
+        .key-summary { font-size: 0.88rem; color: var(--text-dim); line-height: 1.6; }
+        .key-meta {
+            font-size: 0.68rem; color: var(--text-main);
+            text-transform: uppercase; letter-spacing: 0.1em; text-align: right;
+        }
+        .key-expand {
+            max-height: 0; overflow: hidden;
+            transition: max-height 0.6s var(--ease), padding 0.4s;
+        }
+        .key-item.open .key-expand { max-height: 500px; padding-top: 2rem; }
+        .key-details {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem; padding-left: 1rem;
+            border-left: 2px solid var(--border);
+        }
+        .key-detail-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.55rem; color: var(--accent);
+            letter-spacing: 0.15em; text-transform: uppercase;
+            margin-bottom: 0.3rem;
+        }
+        .key-detail-value { font-size: 0.88rem; color: var(--text-main); }
+
+        /* ── DEEP CONTENT ── */
+        .deep-section {
+            max-width: 800px; margin: 4rem auto;
+            padding: 4rem 2rem;
+        }
+        .deep-section h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem; font-weight: 300;
+            margin-bottom: 2rem; color: var(--text-main);
+        }
+        .deep-section p {
+            color: var(--text-dim); font-size: 0.95rem;
+            line-height: 1.8; margin-bottom: 1.5rem;
+        }
+        .deep-section strong { color: var(--text-main); font-weight: 400; }
+        .deep-section .ratio-list {
+            padding: 1.5rem 2rem; margin: 2rem 0;
+            border-left: 2px solid var(--accent);
+            background: var(--accent-glow-soft);
+        }
+        .deep-section .ratio-list p {
+            margin-bottom: 0.5rem; font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem; color: var(--text-main);
+        }
+
+        /* ── ABOUT SECTION ── */
+        .about-narrative {
+            max-width: 800px; margin: 0 auto;
+        }
+        .about-narrative p {
+            font-size: 1rem; color: var(--text-dim);
+            line-height: 1.8; margin-bottom: 2rem;
+        }
+        .about-narrative p:first-child::first-line {
+            color: var(--text-main);
+        }
+
+        /* ── PRICING ── */
+        .price-anchor {
+            max-width: 750px; margin: 0 auto 5rem;
+            text-align: center;
+        }
+        .price-anchor p {
+            font-size: 0.95rem; color: var(--text-dim);
+            line-height: 1.8; margin-bottom: 1rem;
+        }
+        .price-anchor strong { color: var(--accent); font-weight: 400; }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem; margin-top: 4rem;
+        }
+        .pricing-card {
+            border: 1px solid var(--border); padding: 3.5rem 2.5rem;
+            background: var(--surface); display: flex; flex-direction: column;
+            transition: all 0.5s var(--ease);
+        }
+        .pricing-card.featured {
+            border-color: var(--accent);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            transform: scale(1.02);
+        }
+        .pricing-card .label { margin-bottom: 0.5rem; }
+        .price {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem; font-weight: 300;
+            margin: 1.2rem 0; color: var(--text-main);
+        }
+        .price sub { font-size: 0.9rem; color: var(--text-dim); font-weight: 300; }
+        .pricing-card ul { list-style: none; margin: 2rem 0; flex-grow: 1; }
+        .pricing-card li {
+            margin-bottom: 0.8rem; font-size: 0.85rem;
+            color: var(--text-dim); display: flex; align-items: center; gap: 0.8rem;
+        }
+        .pricing-card li::before { content: '◆'; color: var(--accent); font-size: 0.5rem; }
+
+        .guarantee {
+            max-width: 700px; margin: 5rem auto 0;
+            text-align: center; padding: 4rem 2rem;
+            border: 1px solid var(--border);
+            background: var(--accent-glow-soft);
+        }
+        .guarantee h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem; font-weight: 300; margin-bottom: 1.5rem;
+        }
+        .guarantee p {
+            color: var(--text-dim); font-size: 0.9rem; line-height: 1.8;
+        }
+
+        /* ── FAQ ── */
+        .faq-list { max-width: 800px; margin: 0 auto; }
+        .faq-item {
+            border-bottom: 1px solid var(--border);
+            padding: 2rem 0; cursor: pointer;
+            transition: all 0.3s;
+        }
+        .faq-item:first-child { border-top: 1px solid var(--border); }
+        .faq-q {
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .faq-q h4 {
+            font-size: 1.05rem; font-weight: 400;
+            letter-spacing: 0.02em; flex: 1; padding-right: 2rem;
+        }
+        .faq-toggle {
+            color: var(--accent); font-size: 1.4rem;
+            transition: transform 0.4s var(--ease);
+            flex-shrink: 0; width: 24px; text-align: center;
+        }
+        .faq-item.open .faq-toggle { transform: rotate(45deg); }
+        .faq-a {
+            max-height: 0; overflow: hidden;
+            transition: max-height 0.5s var(--ease), padding 0.3s;
+        }
+        .faq-item.open .faq-a { max-height: 300px; padding-top: 1.5rem; }
+        .faq-a p {
+            color: var(--text-dim); font-size: 0.9rem; line-height: 1.8;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            padding: 5rem 4rem 3rem;
+            border-top: 1px solid var(--border);
+            max-width: 1300px; margin: 0 auto;
+        }
+        .footer-top {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1fr;
+            gap: 4rem; margin-bottom: 4rem;
+        }
+        .footer-brand p {
+            font-size: 0.75rem; color: var(--text-dim);
+            margin-top: 1rem; line-height: 1.8;
+        }
+        .footer-col h5 {
+            font-size: 0.62rem; color: var(--accent);
+            text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 1.5rem;
+        }
+        .footer-col ul { list-style: none; }
+        .footer-col li { margin-bottom: 0.8rem; }
+        .footer-col a {
+            color: var(--text-dim); text-decoration: none;
+            font-size: 0.75rem; transition: color 0.3s; cursor: pointer;
+        }
+        .footer-col a:hover { color: var(--text-main); }
+        .footer-bottom {
+            border-top: 1px solid var(--border-dim);
+            padding-top: 2rem; text-align: center;
+        }
+        .footer-bottom p {
+            font-size: 0.65rem; color: var(--text-faint);
+            letter-spacing: 0.05em;
+        }
+        .footer-bottom .footer-quote {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.9rem; font-style: italic;
+            color: var(--text-dim); margin-top: 0.8rem;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 1100px) {
+            .key-header { grid-template-columns: 1fr; gap: 0.8rem; }
+            .key-meta { text-align: left; }
+            .footer-top { grid-template-columns: 1fr 1fr; gap: 3rem; }
+            .trust-signals { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            nav { padding: 1.2rem 1.5rem; }
+            nav.scrolled { padding: 0.8rem 1.5rem; }
+            .nav-links { display: none; }
+            .hamburger { display: block; }
+            .hero { padding: 2rem 1.5rem; min-height: 70vh; }
+            section { padding: 4rem 1.5rem; }
+            .btn { width: 100%; text-align: center; }
+            .hero-buttons { flex-direction: column; width: 100%; max-width: 320px; }
+            .hero-buttons .btn { margin: 0; }
+            .step { grid-template-columns: 50px 1fr; gap: 1.2rem; }
+            .step-num { font-size: 2.5rem; }
+            .pricing-card.featured { transform: none; }
+            .footer-top { grid-template-columns: 1fr; gap: 2.5rem; }
+            .stats { gap: 2.5rem; }
+            .proof { padding: 4rem 1.5rem; }
+            .opening-statement { padding: 0 1rem; }
+            .deep-section { padding: 2rem 1rem; }
+        }
+    </style>
+</head>
+<body data-lang="en">
+
+<div id="three-container"></div>
+
+<!-- ══════════════════════ NAVIGATION ══════════════════════ -->
+<nav id="navbar">
+    <div class="nav-logo" onclick="showPage('home')"><span>L</span>UMINARA</div>
+    <div class="nav-controls">
+        <ul class="nav-links">
+            <li><a href="luminara-index.html" style="color:var(--accent);opacity:0.7">← World</a></li>
+            <li><a onclick="showPage('keys')" data-i18n="nav-keys">The 12 Keys</a></li>
+            <li><a onclick="showPage('how-it-works')" data-i18n="nav-how">How It Works</a></li>
+            <li><a onclick="showPage('about')" data-i18n="nav-about">About</a></li>
+            <li><a onclick="showPage('pricing')" data-i18n="nav-pricing">Pricing</a></li>
+            <li><a onclick="showPage('faq')" data-i18n="nav-faq">FAQ</a></li>
+        </ul>
+        <div class="lang-switcher">
+            <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+            <button class="lang-btn" id="btn-sr" onclick="setLang('sr')">SR</button>
+        </div>
+        <button class="theme-toggle" id="theme-btn" aria-label="Toggle theme">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        </button>
+        <button class="hamburger" onclick="toggleMobile()" aria-label="Menu">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+    </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+    <button class="mobile-close" onclick="toggleMobile()">×</button>
+    <a href="luminara-index.html">← LUMINARA World</a>
+    <a onclick="showPage('home'); toggleMobile()">Home</a>
+    <a onclick="showPage('keys'); toggleMobile()" data-i18n="nav-keys">The 12 Keys</a>
+    <a onclick="showPage('how-it-works'); toggleMobile()" data-i18n="nav-how">How It Works</a>
+    <a onclick="showPage('about'); toggleMobile()" data-i18n="nav-about">About</a>
+    <a onclick="showPage('pricing'); toggleMobile()" data-i18n="nav-pricing">Pricing</a>
+    <a onclick="showPage('faq'); toggleMobile()" data-i18n="nav-faq">FAQ</a>
+</div>
+
+<main>
+
+<!-- ══════════════════════ PAGE: HOME ══════════════════════ -->
+<div id="page-home" class="page active">
+
+    <section class="hero">
+        <h1 data-i18n="h-hero-title">Your Voice Changes <em>Everything.</em></h1>
+        <p class="hero-sub" data-i18n="h-hero-sub">12 frequencies. Pure synthesis. Your body is the instrument — not your headphones.</p>
+        <div class="hero-buttons">
+            <a onclick="showPage('pricing')" class="btn btn-primary" data-i18n="h-hero-cta1">Access the Toolkit →</a>
+            <a onclick="showPage('how-it-works')" class="btn btn-secondary" data-i18n="h-hero-cta2">Hear how it works</a>
+        </div>
+    </section>
+
+    <section class="opening-statement">
+        <p data-i18n="h-open-p1">You have tried the apps. The playlists. The retreats. The guided sessions where a stranger's voice tells you to breathe deeper and imagine golden light. It worked for twenty minutes. Then it faded. Because you received it. <strong>You did not generate it.</strong></p>
+        <p data-i18n="h-open-p2">LUMINARA is built on one principle: the most powerful frequency instrument on the planet is already in your body. Your voice vibrates in your bones, your organs, your cells. When you tone a specific frequency, you do not listen to sound. You become sound. This is not philosophy. <strong>This is physics.</strong></p>
+    </section>
+
+    <section>
+        <div class="grid">
+            <div class="card">
+                <span class="card-icon">𓁹</span>
+                <h3 data-i18n="h-f1-t">Your Voice. Your Frequency.</h3>
+                <p data-i18n="h-f1-d">12 zodiacal keys tuned to Pythagorean A=432 Hz. The app generates the precise tone. You match it with your voice. Real-time pitch detection confirms when you lock in. Your body becomes the resonance chamber.</p>
+                <a onclick="showPage('keys')" class="micro-cta" data-i18n="h-f1-cta">Explore the 12 Keys →</a>
+            </div>
+            <div class="card">
+                <span class="card-icon">⌬</span>
+                <h3 data-i18n="h-f2-t">Sacred Geometry. Visible.</h3>
+                <p data-i18n="h-f2-d">5 Platonic solids rendered in 3D, synced to each key's element. Tetrahedron for fire. Icosahedron for water. You do not just hear the frequency — you see the geometry your voice is building.</p>
+                <a onclick="showPage('how-it-works')" class="micro-cta" data-i18n="h-f2-cta">See the geometry →</a>
+            </div>
+            <div class="card">
+                <span class="card-icon">⏱</span>
+                <h3 data-i18n="h-f3-t">Precision. Not Guesswork.</h3>
+                <p data-i18n="h-f3-d">Autocorrelation pitch detection listens to your voice in real time. You see exactly where you are relative to the target frequency. Train the instrument. Get precise. The feedback is instant, the calibration is yours.</p>
+                <a onclick="showPage('how-it-works')" class="micro-cta" data-i18n="h-f3-cta">Try the pitch detector →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- THREE STEPS -->
+    <section>
+        <div class="section-header">
+            <span class="label" data-i18n="h-steps-label">The Method</span>
+            <h2 class="title" data-i18n="h-steps-title">Three Steps. No Tricks.</h2>
+        </div>
+        <div class="steps">
+            <div class="step">
+                <div class="step-num">01</div>
+                <div>
+                    <h4 data-i18n="h-s1-t">Choose</h4>
+                    <p data-i18n="h-s1-d">Pick a key. Each one opens a different door. Aries for raw courage. Cancer for emotional depth. Scorpio for transformation. Pisces for dissolution. The architecture tells you where to go. Your intuition confirms it.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">02</div>
+                <div>
+                    <h4 data-i18n="h-s2-t">Tone</h4>
+                    <p data-i18n="h-s2-d">The app plays the frequency. You match it with your voice. Pitch detection shows you when you have locked in. The bija mantra seeds the vibration. RAM for fire. VAM for earth. YAM for air. LAM for foundation. OM for everything.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">03</div>
+                <div>
+                    <h4 data-i18n="h-s3-t">Feel</h4>
+                    <p data-i18n="h-s3-d">This is the part no one can sell you. Because it happens inside your body and no marketing copy can replicate it. The vibration is real. The shift is real. The only proof is the one you generate yourself.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOCIAL PROOF -->
+    <div class="proof">
+        <div class="testimonial-grid">
+            <div class="testimonial">
+                <p data-i18n="h-t1-p">"I have done breathwork, sound baths, and two Vipassana retreats. On the third day of toning with Key 4 — Cancer, A at 432 Hz — I felt something unlock in my chest that none of those touched. Not emotionally. Physically. My ribs opened. I am not being poetic. They opened."</p>
+                <cite data-i18n="h-t1-a">K. Djuric — Audio-Visual Artist</cite>
+            </div>
+            <div class="testimonial">
+                <p data-i18n="h-t2-p">"I cancelled my Calm subscription after the first week. Not because LUMINARA is better content. Because I realized I do not need content anymore. I need my own voice and a target frequency. That is it."</p>
+                <cite data-i18n="h-t2-a">Elena V. — Creative Director</cite>
+            </div>
+        </div>
+
+        <div class="trust-signals">
+            <div class="trust-item" data-i18n="h-trust-1">Built on Pythagorean mathematics — the same ratios that have governed Western harmony for 2,500 years.</div>
+            <div class="trust-item" data-i18n="h-trust-2">A=432 Hz with C4=256 Hz — a pure power of 2. Not an arbitrary standard. A mathematical foundation.</div>
+            <div class="trust-item" data-i18n="h-trust-3">Pure Web Audio synthesis. Zero sample files. Zero compression. Oscillators generating exact frequencies to the decimal.</div>
+            <div class="trust-item" data-i18n="h-trust-4">12 guided meditations. 4 elements. 5 Platonic solids. One complete system.</div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <h4>432Hz</h4>
+                <p data-i18n="h-stat-1">Mathematical Foundation</p>
+            </div>
+            <div class="stat-item">
+                <h4>12</h4>
+                <p data-i18n="h-stat-2">Operative Keys</p>
+            </div>
+            <div class="stat-item">
+                <h4>5</h4>
+                <p data-i18n="h-stat-3">Platonic Solids</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CLOSING CTA -->
+    <div class="closing-cta">
+        <h2 class="title" data-i18n="h-cta-h">Stop Listening. Start Toning.</h2>
+        <p data-i18n="h-cta-s">Every other tool in this space needs you to come back. LUMINARA needs you to become your own instrument. That is the difference. That is the only thing we are selling.</p>
+        <div class="hero-buttons" style="justify-content: center;">
+            <a onclick="showPage('pricing')" class="btn btn-primary" data-i18n="h-cta-btn">Get the LUMINARA Toolkit</a>
+            <a onclick="showPage('how-it-works')" class="btn btn-secondary" data-i18n="h-cta-btn2">Read the science behind it</a>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════ PAGE: THE 12 KEYS ══════════════════════ -->
+<div id="page-keys" class="page">
+
+    <section class="hero">
+        <h1 data-i18n="k-hero-t">Twelve Doors. <em>One Voice.</em></h1>
+        <p class="hero-sub" data-i18n="k-hero-s">Each key unlocks a frequency, an element, a geometry, and a state of consciousness.</p>
+        <div class="hero-buttons">
+            <a onclick="showPage('pricing')" class="btn btn-primary" data-i18n="k-hero-cta">Access All 12 Keys</a>
+        </div>
+    </section>
+
+    <section>
+        <div class="grid">
+            <div class="card">
+                <span class="card-icon">🜂🜃🜁🜄</span>
+                <h3 data-i18n="k-f1-t">Four Elements. Three Each.</h3>
+                <p data-i18n="k-f1-d">Fire keys carry the Tetrahedron. Earth keys carry the Cube. Air keys carry the Octahedron. Water keys carry the Icosahedron. The grouping is not decorative. It is structural.</p>
+            </div>
+            <div class="card">
+                <span class="card-icon">⊛</span>
+                <h3 data-i18n="k-f2-t">Circle of Fifths. Mapped.</h3>
+                <p data-i18n="k-f2-d">The 12 keys follow the most consonant progression in Western harmony: C → G → D → A → E → B → F# → C# → G# → D# → A# → F. Each key relates to every other through Pythagorean ratios.</p>
+            </div>
+            <div class="card">
+                <span class="card-icon">◎</span>
+                <h3 data-i18n="k-f3-t">Active Meditation. Not Passive.</h3>
+                <p data-i18n="k-f3-d">Each key includes a guided meditation — 11 to 22 minutes. You tone the frequency. You visualize the geometry. You speak the invocation. This is consciousness work that requires your participation.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="key-list" id="keys-container">
+        <!-- Dynamically injected -->
+    </section>
+
+    <div class="closing-cta">
+        <h2 class="title" data-i18n="k-cta-h">The Complete Circuit</h2>
+        <p data-i18n="k-cta-s">All 12 keys in sequence. 2–3 hours. The full zodiacal year of consciousness in one session. Aries to Pisces. Fire to Water to Fire again. For the moments that deserve everything you have.</p>
+        <a onclick="showPage('pricing')" class="btn btn-primary" data-i18n="k-cta-btn">Access the Complete Circuit</a>
+    </div>
+</div>
+
+<!-- ══════════════════════ PAGE: HOW IT WORKS ══════════════════════ -->
+<div id="page-how-it-works" class="page">
+
+    <section class="hero">
+        <h1 data-i18n="hw-hero-t">The Physics Is <em>Simple.</em></h1>
+        <p class="hero-sub" data-i18n="hw-hero-s">Your voice generates frequency. Frequency generates state. No belief required.</p>
+        <div class="hero-buttons">
+            <a onclick="showPage('pricing')" class="btn btn-primary" data-i18n="hw-hero-cta">Try It Now</a>
+        </div>
+    </section>
+
+    <section>
+        <div class="grid">
+            <div class="card">
+                <h3 data-i18n="hw-f1-t">A=432 Hz. Not Arbitrary.</h3>
+                <p data-i18n="hw-f1-d">Modern concert pitch is A=440 Hz — adopted in 1955 by international agreement, not by acoustic principle. In A=432 Hz tuning, C4 equals exactly 256 Hz — a power of 2. This creates a mathematically elegant system where all frequencies relate through whole-number Pythagorean ratios. The math is clean. The resonance is felt.</p>
+            </div>
+            <div class="card">
+                <h3 data-i18n="hw-f2-t">Internal Resonance. Not External.</h3>
+                <p data-i18n="hw-f2-d">When you listen to sound, your eardrums vibrate. When you tone with your voice, your entire body vibrates — skull, sinuses, ribcage, spine, organs. The frequency is not arriving from outside. It is being generated inside. That is the difference between receiving a frequency and becoming one.</p>
+            </div>
+            <div class="card">
+                <h3 data-i18n="hw-f3-t">Lock In. Real Time.</h3>
+                <p data-i18n="hw-f3-d">The pitch detection system uses autocorrelation analysis on your microphone input. It shows your voice frequency against the target in real time. When you match the frequency, you feel it before you see it — a click, a settling, a resonance that confirms the lock.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- DEEP: WHY VOICE -->
+    <section class="deep-section">
+        <span class="label" data-i18n="hw-deep-label">The Method</span>
+        <h3 data-i18n="hw-deep-t1">Why Voice?</h3>
+        <p data-i18n="hw-deep-p1">Every wisdom tradition that works with sound arrives at the same conclusion. The Tibetan monks tone. The Vedic practitioners chant. The Sufi mystics use zikr. The Pythagoreans tuned their instruments to ratios they called "the music of the spheres." They were not all wrong.</p>
+        <p data-i18n="hw-deep-p2">Your voice is simultaneously three things: <strong>Internal</strong> — it vibrates inside your body, you feel it in your bones. <strong>External</strong> — it produces measurable frequency, a spectrogram can show you the exact Hz of your tone. <strong>Intentional</strong> — it requires conscious activation, you do not accidentally tone.</p>
+        <p data-i18n="hw-deep-p3">No other instrument has all three properties. A singing bowl is external. A binaural beat is external. A guided meditation is someone else's voice. Only your own voice works from the inside.</p>
+    </section>
+
+    <!-- DEEP: WHY 432 -->
+    <section class="deep-section">
+        <h3 data-i18n="hw-deep-t2">Why A=432 Hz?</h3>
+        <p data-i18n="hw-deep-p4">In 432 Hz tuning, middle C is 256 Hz. 256 is 2 to the 8th power. A clean binary number. This means every octave in the system doubles through powers of 2 with mathematical precision.</p>
+        <div class="ratio-list">
+            <p>Octave — 2:1</p>
+            <p>Perfect Fifth — 3:2</p>
+            <p>Perfect Fourth — 4:3</p>
+        </div>
+        <p data-i18n="hw-deep-p5">These ratios are not cultural preferences. They are acoustic physics. They describe the most consonant intervals in any sound system, anywhere, in any civilization. The math is older than music. The music just follows the math.</p>
+    </section>
+
+    <!-- DEEP: WHY GEOMETRY -->
+    <section class="deep-section">
+        <h3 data-i18n="hw-deep-t3">Why Geometry?</h3>
+        <p data-i18n="hw-deep-p6">Plato identified 5 regular solids — shapes whose faces are all identical regular polygons meeting at identical angles. He mapped them to the elements: Tetrahedron to Fire, Cube to Earth, Octahedron to Air, Icosahedron to Water, Dodecahedron to Spirit.</p>
+        <p data-i18n="hw-deep-p7">This is not mystical decoration. When you visualize a specific geometry while toning a specific frequency, you give your consciousness a structure to inhabit. The frequency is the energy. The geometry is the container. Together they create a specific state — repeatable, trainable, precise.</p>
+    </section>
+
+    <div class="closing-cta">
+        <h2 class="title" data-i18n="hw-cta-h">Theory Is Cheap. Experience Costs Five Minutes.</h2>
+        <p data-i18n="hw-cta-s">Pick any key. Tone for 5 minutes. If you feel nothing, close the tab. If you feel something — and you will — you have just met the instrument you have been looking for.</p>
+        <a onclick="showPage('pricing')" class="btn btn-primary" data-i18n="hw-cta-btn">Start Toning</a>
+    </div>
+</div>
+
+<!-- ══════════════════════ PAGE: ABOUT ══════════════════════ -->
+<div id="page-about" class="page">
+
+    <section class="hero">
+        <h1 data-i18n="a-hero-t">Built From <em>Experience.</em></h1>
+        <p class="hero-sub" data-i18n="a-hero-s">Not from a vision board. Not from a certification. From decades of doing the work.</p>
+        <div class="hero-buttons">
+            <a onclick="showPage('pricing')" class="btn btn-secondary" data-i18n="a-hero-cta2">Go straight to the toolkit</a>
+        </div>
+    </section>
+
+    <section class="about-narrative">
+        <p data-i18n="a-p1">I am Kai Djuric. I have meditated for decades across traditions — yoga, Tibetan Buddhism, Nada Yoga, overtone chanting. I have played music since I was a kid. Blues harmonica. Production. Sound design. I have lived on different continents. I have been arrested. I have raised two sons. I arrived at this work through experience, not vision.</p>
+        <p data-i18n="a-p2">LUMINARA started with a question I could not stop asking: why does every consciousness practice depend on an external source? A teacher, a recording, an app, a retreat, a subscription. Why is the most powerful thing — the vibration of your own voice in your own body — the one thing nobody teaches you to use?</p>
+        <p data-i18n="a-p3">I built the system to answer that question. 12 keys based on Pythagorean tuning. Guided meditations you do with your voice, not your headphones. A web app that uses pure synthesis — no audio files, no compression — to generate exact frequencies you match with your own toning. The app is the scaffold. Your voice is the structure. The goal is the day you do not need the app.</p>
+        <p data-i18n="a-p4">The world is collapsing outward. Jobs are disappearing. We are surveilled. The algorithms know us better than we know ourselves. Every institution that once provided meaning is fragmenting. The answer is not out there. It never was. The answer is your voice, your breath, your body vibrating at a frequency you chose. This is self-initiation. No gatekeeper. No guru. No dependency. Just you and the physics of sound.</p>
+    </section>
+
+    <section>
+        <div class="grid">
+            <div class="card">
+                <span class="card-icon">📖</span>
+                <h3 data-i18n="a-f1-t">The Books Are the Door.</h3>
+                <p data-i18n="a-f1-d">LUMINARA Awakening. The Resonance of Wholeness. Seven Bodies of Sound. The Chaos Protocol. Each book opens a different entrance to the same system. Theory for those who need to understand first. Practice for those who need to feel first.</p>
+            </div>
+            <div class="card">
+                <span class="card-icon">🎵</span>
+                <h3 data-i18n="a-f2-t">The Music Is the Proof.</h3>
+                <p data-i18n="a-f2-d">Blues-structured, harmonica-driven, frequency-themed. The songs are not about LUMINARA. They are LUMINARA — the same voice, the same directness, the same refusal to polish away the imperfection. The crack is where the gold gets in.</p>
+            </div>
+            <div class="card">
+                <span class="card-icon">⟨/⟩</span>
+                <h3 data-i18n="a-f3-t">The App Is the Scaffold.</h3>
+                <p data-i18n="a-f3-d">React. Tone.js. Three.js. Web Audio API. Pure synthesis. No audio files. Every frequency generated mathematically in real time. The technology is invisible. The experience is felt. The app gets you to the place where you do not need the app.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="closing-cta">
+        <span class="label" data-i18n="a-mission-label">Mission</span>
+        <h2 class="title" data-i18n="a-mission-t">Self-Sufficiency.</h2>
+        <p data-i18n="a-mission-p">Guide people from pain to peace. From fear to love. From the outer collapse to the inner universe. Not through belief. Through experience. Right now.</p>
+        <a onclick="showPage('pricing')" class="btn btn-primary" data-i18n="a-mission-btn">Enter the System</a>
+    </div>
+</div>
+
+<!-- ══════════════════════ PAGE: PRICING ══════════════════════ -->
+<div id="page-pricing" class="page">
+
+    <section class="hero">
+        <h1 data-i18n="p-hero-t">No Subscription. <em>Ever.</em></h1>
+        <p class="hero-sub" data-i18n="p-hero-s">Your voice does not expire. Neither does your access.</p>
+    </section>
+
+    <section class="price-anchor">
+        <p data-i18n="p-anchor-1">A private sound healing session: <strong>$150–300</strong> per hour.</p>
+        <p data-i18n="p-anchor-2">A meditation retreat: <strong>$500–2,000</strong> per weekend.</p>
+        <p data-i18n="p-anchor-3">A premium meditation app: <strong>$70–200</strong> per year. Every year. Forever.</p>
+        <p data-i18n="p-anchor-4" style="margin-top: 2rem;">All three models need you to come back. Their revenue depends on your incompleteness. LUMINARA is a one-time purchase. Because the point is not that you keep using the app. The point is that you become your own instrument.</p>
+    </section>
+
+    <section>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <span class="label">Foundation</span>
+                <div class="price">$47<sub> USD</sub></div>
+                <ul>
+                    <li data-i18n="p-t1-f1">12 Keys Explorer with live tone generation</li>
+                    <li data-i18n="p-t1-f2">All 12 guided meditations (11–22 min each)</li>
+                    <li data-i18n="p-t1-f3">Bija mantra reference and pronunciation guide</li>
+                    <li data-i18n="p-t1-f4">Frequency reference table</li>
+                </ul>
+                <a href="#" class="btn btn-secondary" data-i18n="p-t1-btn">Get the Foundation</a>
+            </div>
+            <div class="pricing-card featured">
+                <span class="label">Full Toolkit</span>
+                <div class="price">$97<sub> USD</sub></div>
+                <ul>
+                    <li data-i18n="p-t2-f1">Everything in The Foundation</li>
+                    <li data-i18n="p-t2-f2">Real-time voice pitch detection</li>
+                    <li data-i18n="p-t2-f3">3D sacred geometry visualizer</li>
+                    <li data-i18n="p-t2-f4">Complete Circuit mode (all 12 keys)</li>
+                    <li data-i18n="p-t2-f5">Binaural beat engine</li>
+                    <li data-i18n="p-t2-f6">Euclidean rhythm patterns</li>
+                    <li data-i18n="p-t2-f7">Lifetime updates</li>
+                </ul>
+                <a href="#" class="btn btn-primary" data-i18n="p-t2-btn">Get the Full Toolkit</a>
+            </div>
+            <div class="pricing-card">
+                <span class="label">Founding Circle</span>
+                <div class="price">$197<sub> USD</sub></div>
+                <ul>
+                    <li data-i18n="p-t3-f1">Everything in The Full Toolkit</li>
+                    <li data-i18n="p-t3-f2">Direct access to Kai (email / voice memo)</li>
+                    <li data-i18n="p-t3-f3">Early access to new books and music</li>
+                    <li data-i18n="p-t3-f4">Name in LUMINARA Acknowledgments</li>
+                    <li data-i18n="p-t3-f5">Input on future features</li>
+                    <li data-i18n="p-t3-f6">Founding member pricing locked permanently</li>
+                </ul>
+                <a href="#" class="btn btn-secondary" data-i18n="p-t3-btn">Join the Founding Circle</a>
+            </div>
+        </div>
+
+        <div class="guarantee">
+            <h3 data-i18n="p-guar-t">The Only Risk Is Staying Where You Are.</h3>
+            <p data-i18n="p-guar-p">30-Day Money-Back Guarantee. Full refund. No forms. No interrogation. Work with the 12 Keys. Tone every day for a month. If you do not feel a measurable shift in your state — not believe, not hope, not think, <em>feel</em> — request your money back. The system works or it does not.</p>
+        </div>
+    </section>
+
+    <div class="closing-cta">
+        <h2 class="title" data-i18n="p-cta-h">One Purchase. One System. One Voice — Yours.</h2>
+        <a onclick="showPage('pricing')" class="btn btn-primary" data-i18n="p-cta-btn">Get LUMINARA Now</a>
+    </div>
+</div>
+
+<!-- ══════════════════════ PAGE: FAQ ══════════════════════ -->
+<div id="page-faq" class="page">
+
+    <section class="hero">
+        <h1 data-i18n="f-hero-t">Questions. <em>Real Answers.</em></h1>
+        <p class="hero-sub" data-i18n="f-hero-s">No corporate deflection. Ask the hard ones.</p>
+        <div class="hero-buttons">
+            <a onclick="showPage('pricing')" class="btn btn-primary" data-i18n="f-hero-cta">Get LUMINARA</a>
+        </div>
+    </section>
+
+    <section class="faq-list" id="faq-container">
+        <!-- Dynamically injected -->
+    </section>
+
+    <div class="closing-cta">
+        <h2 class="title" data-i18n="f-cta-h">Still Have Questions?</h2>
+        <p data-i18n="f-cta-s">Ask directly. No chatbot. No ticket system. A real person who built this system and uses it every morning.</p>
+        <div class="hero-buttons" style="justify-content: center;">
+            <a onclick="showPage('pricing')" class="btn btn-primary" data-i18n="f-cta-btn1">Get LUMINARA</a>
+            <a href="mailto:kai@luminara.app" class="btn btn-secondary" data-i18n="f-cta-btn2">Email Kai directly</a>
+        </div>
+    </div>
+</div>
+
+</main>
+
+<!-- ══════════════════════ FOOTER ══════════════════════ -->
+<footer>
+    <div class="footer-top">
+        <div class="footer-brand">
+            <div class="nav-logo" onclick="showPage('home')"><span>L</span>UMINARA</div>
+            <p data-i18n="footer-tag">Twelve keys. One voice. Yours.</p>
+        </div>
+        <div class="footer-col">
+            <h5 data-i18n="f-col1">LUMINARA</h5>
+            <ul>
+                <li><a onclick="showPage('keys')" data-i18n="nav-keys">The 12 Keys</a></li>
+                <li><a onclick="showPage('how-it-works')" data-i18n="nav-how">How It Works</a></li>
+                <li><a onclick="showPage('pricing')" data-i18n="nav-pricing">Pricing</a></li>
+                <li><a onclick="showPage('faq')" data-i18n="nav-faq">FAQ</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h5 data-i18n="f-col2">From Kai</h5>
+            <ul>
+                <li><a onclick="showPage('about')" data-i18n="nav-about">About</a></li>
+                <li><a href="#">The Books</a></li>
+                <li><a href="#">The Music</a></li>
+                <li><a href="#">Journal</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h5 data-i18n="f-col3">Legal</h5>
+            <ul>
+                <li><a href="#">Terms of Use</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Refund Policy</a></li>
+                <li><a href="mailto:kai@luminara.app">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2026 Kai Djuric · LUMINARA · gnosisparadigm</p>
+        <p class="footer-quote" data-i18n="footer-quote">Your voice is the most powerful instrument you possess for consciousness exploration.</p>
+    </div>
+</footer>
+
+<script>
+/** ══════════════════════ DATA ══════════════════════ */
+
+const keysData = [
+    { id: 1, sign: "Aries", subtitle: "The Ram", quality: "Fire · Cardinal · Mars", freq: "C = 256.0 Hz", ratio: "1:1", geo: "Tetrahedron", element: "Fire",
+      desc: "The spark. The beginning. The first note in the system. Aries does not ask permission. It initiates. If you are stuck, if you cannot start, if you have been circling the same decision for months — this is your key.",
+      mantra: "I AM, THEREFORE I INITIATE", bija: "RAM", body: "Head, face, adrenal glands", meditation: "~11 minutes" },
+    { id: 2, sign: "Taurus", subtitle: "The Bull", quality: "Earth · Fixed · Venus", freq: "G = 384.0 Hz", ratio: "3:2", geo: "Hexahedron", element: "Earth",
+      desc: "The ground beneath your feet. Taurus does not move until it is ready. And when it moves, nothing stops it. If you are ungrounded, if the world feels unstable, if you have lost your sense of home in your own body — this is your key.",
+      mantra: "I HAVE, THEREFORE I BUILD", bija: "VAM", body: "Throat, neck, thyroid", meditation: "~13 minutes" },
+    { id: 3, sign: "Gemini", subtitle: "The Celestial Twins", quality: "Air · Mutable · Mercury", freq: "D = 288.0 Hz", ratio: "9:8", geo: "Octahedron", element: "Air",
+      desc: "The bridge. The connection between inner and outer. Gemini holds the duality without collapsing it. If your mind is scattered, if you cannot communicate what you feel, if the gap between what you think and what you say has become a canyon — this is your key.",
+      mantra: "I THINK, THEREFORE I COMMUNICATE", bija: "YAM", body: "Hands, arms, lungs, nervous system", meditation: "~12 minutes" },
+    { id: 4, sign: "Cancer", subtitle: "The Crab", quality: "Water · Cardinal · Moon", freq: "A = 432.0 Hz", ratio: "27:16", geo: "Icosahedron", element: "Water",
+      desc: "The emotional body. The waters. Cancer carries its home on its back — the shell of the personal unconscious. If you are grieving, if you cannot feel, if you have armored yourself so completely that nothing gets in or out — this is your key. A=432 Hz. The cosmic frequency of water.",
+      mantra: "I FEEL, THEREFORE I NURTURE", bija: "LAM", body: "Chest, stomach, womb", meditation: "~15 minutes" },
+    { id: 5, sign: "Leo", subtitle: "The Lion", quality: "Fire · Fixed · Sun", freq: "E = 324.0 Hz", ratio: "81:64", geo: "Tetrahedron", element: "Fire",
+      desc: "The heart on fire. Not explosive like Aries — sustained. Radiant. Leo generates light from within. If your creative power has gone cold, if you have forgotten what joy feels like in your chest, if you are reflecting borrowed light instead of generating your own — this is your key.",
+      mantra: "I CREATE, THEREFORE I SHINE", bija: "RAM", body: "Heart, spine, back", meditation: "~14 minutes" },
+    { id: 6, sign: "Virgo", subtitle: "The Maiden", quality: "Earth · Mutable · Mercury", freq: "B = 486.0 Hz", ratio: "243:128", geo: "Hexahedron", element: "Earth",
+      desc: "Precision as prayer. Virgo finds the sacred in the small things. If your life feels chaotic, if you have lost the ability to focus on what matters, if you need to refine before you can expand — this is your key.",
+      mantra: "I ANALYZE, THEREFORE I PERFECT", bija: "VAM", body: "Intestines, digestive system, nervous system", meditation: "~13 minutes" },
+    { id: 7, sign: "Libra", subtitle: "The Scales", quality: "Air · Cardinal · Venus", freq: "F# = 364.5 Hz", ratio: "729:512", geo: "Octahedron", element: "Air",
+      desc: "The balance point. The tritone opposite of C — the exact midpoint of the zodiac. Libra holds tension between opposites without resolving prematurely. If your relationships are pulling you apart, if you cannot find center — this is your key.",
+      mantra: "I BALANCE, THEREFORE I HARMONIZE", bija: "YAM", body: "Kidneys, lower back, skin", meditation: "~14 minutes" },
+    { id: 8, sign: "Scorpio", subtitle: "The Scorpion", quality: "Water · Fixed · Pluto/Mars", freq: "C# = 273.0 Hz", ratio: "2187:2048", geo: "Icosahedron", element: "Water",
+      desc: "The depths. Scorpio holds three forms: the Scorpion, the Eagle, and the Phoenix. Something must die for something new to be born. If you are holding on to a version of yourself that no longer serves you, if you know something needs to end but you cannot let go — this is your key.",
+      mantra: "I TRANSFORM, THEREFORE I TRANSCEND", bija: "LAM", body: "Reproductive organs, elimination system", meditation: "~18 minutes" },
+    { id: 9, sign: "Sagittarius", subtitle: "The Archer", quality: "Fire · Mutable · Jupiter", freq: "G# = 410.0 Hz", ratio: "6561:4096", geo: "Tetrahedron", element: "Fire",
+      desc: "The arrow aimed at the stars. Sagittarius combines animal instinct with human aspiration. If your world has become too small, if you have stopped seeking, if comfort has replaced growth — this is your key.",
+      mantra: "I SEEK, THEREFORE I EXPAND", bija: "RAM", body: "Hips, thighs, liver", meditation: "~16 minutes" },
+    { id: 10, sign: "Capricorn", subtitle: "The Sea-Goat", quality: "Earth · Cardinal · Saturn", freq: "D# = 307.0 Hz", ratio: "19683:16384", geo: "Hexahedron", element: "Earth",
+      desc: "The mountain. Capricorn climbs with patience that outlasts everything. If you have a vision but no discipline, if you start things but never finish them, if you need structure to hold your ambition — this is your key.",
+      mantra: "I STRUCTURE, THEREFORE I ACHIEVE", bija: "VAM", body: "Knees, bones, skeletal system", meditation: "~17 minutes" },
+    { id: 11, sign: "Aquarius", subtitle: "The Water Bearer", quality: "Air · Fixed · Uranus/Saturn", freq: "A# = 461.0 Hz", ratio: "59049:32768", geo: "Octahedron", element: "Air",
+      desc: "The collective frequency. Aquarius pours not water but knowledge — consciousness that flows freely for all. If you feel disconnected from humanity, if your vision has no audience, if you have something to give but no channel to give it through — this is your key.",
+      mantra: "I KNOW, THEREFORE I INNOVATE", bija: "YAM", body: "Ankles, calves, circulatory system", meditation: "~15 minutes" },
+    { id: 12, sign: "Pisces", subtitle: "The Fish", quality: "Water · Mutable · Neptune/Jupiter", freq: "F = 341.0 Hz", ratio: "4:3", geo: "Icosahedron", element: "Water",
+      desc: "The ocean. The end that becomes the beginning. Pisces dissolves the boundary between self and everything else. If you are holding on too tightly, if you need to surrender, if the only way forward is to let go of the one who is trying to go forward — this is your key. The last key leads back to the first.",
+      mantra: "I BELIEVE, THEREFORE I DISSOLVE", bija: "OM", body: "Feet, lymphatic system, pineal gland", meditation: "~22 minutes" }
+];
+
+const faqsData = {
+    en: [
+        { q: "Do I need to be a musician or have any musical training?", a: "No. You need a voice. You have one. The app generates the exact target frequency. You match it by adjusting your pitch until the detector shows alignment. There is no sheet music, no theory, no prerequisites. If you can hum, you can use LUMINARA." },
+        { q: "What makes this different from binaural beat apps or sound bath recordings?", a: "Binaural beats and sound baths are passive — you receive an external frequency through headphones or speakers. LUMINARA is active — you generate the frequency with your own voice. The difference is the difference between watching someone lift weights and lifting them yourself. One is observation. The other changes your body." },
+        { q: "Why A=432 Hz instead of standard tuning?", a: "Standard concert pitch (A=440 Hz) was adopted by international agreement in 1955. It is a compromise, not a principle. In A=432 Hz, middle C equals 256 Hz — a power of 2 — creating a system where all frequencies relate through clean Pythagorean ratios. The math is elegant. The resonance is felt. Try both and let your body decide." },
+        { q: "Is this a religious or spiritual practice?", a: "LUMINARA draws from multiple traditions — Pythagorean mathematics, Vedic bija mantras, Platonic geometry, Tibetan toning practices. It does not require belief in any of them. The frequencies are physics. The geometry is mathematics. The voice is biology. If it works, it works because your body responds to vibration. Not because you believe the right things." },
+        { q: "How much time does it take?", a: "A single key meditation runs 11–22 minutes. The Complete Circuit (all 12 keys) runs 2–3 hours. A daily practice of one key takes about 15 minutes. That is less than most people spend scrolling before breakfast." },
+        { q: "What technology do I need?", a: "A device with a browser and a microphone. Phone, tablet, laptop — anything. The app runs entirely in the browser using Web Audio API. No downloads. No plugins. No installs. No third-party software. Pure synthesis." },
+        { q: "What if I cannot match the pitch?", a: "You will not match it perfectly on day one. That is the point — the pitch detection trains your ear and your voice over time. The practice of approaching the frequency is itself the practice. You do not need to be exact. You need to be present. Precision comes with repetition." },
+        { q: "Is there a subscription?", a: "No. One purchase. Lifetime access. The entire model of LUMINARA is built around self-sufficiency — you learn the frequencies, you internalize them, you carry them in your body. Charging you monthly would contradict the core philosophy. Your voice does not expire. Neither does your access." }
+    ],
+    sr: [
+        { q: "Da li moram da budem muzičar ili da imam muzičko obrazovanje?", a: "Ne. Potreban vam je glas. Imate ga. Aplikacija generiše tačnu ciljnu frekvenciju. Vi je usklađujete podešavanjem tona dok detektor ne pokaže poravnanje. Nema nota, nema teorije, nema preduslova. Ako možete da pevušite, možete da koristite LUMINARA." },
+        { q: "Po čemu se ovo razlikuje od binauralnih ritmova ili zvučnih kupki?", a: "Binauralni ritmovi i zvučne kupke su pasivni — primate spoljnu frekvenciju kroz slušalice ili zvučnike. LUMINARA je aktivna — vi generišete frekvenciju sopstvenim glasom. Razlika je kao između gledanja nekoga ko diže tegove i dizanja tegova. Jedno je posmatranje. Drugo menja vaše telo." },
+        { q: "Zašto A=432 Hz umesto standardnog štima?", a: "Standardni koncertni štim (A=440 Hz) usvojen je međunarodnim dogovorom 1955. To je kompromis, ne princip. U A=432 Hz, srednje C iznosi 256 Hz — stepen broja 2 — stvarajući sistem gde se sve frekvencije odnose kroz čiste pitagorejske proporcije. Matematika je elegantna. Rezonanca se oseća. Probajte oba i pustite telo da odluči." },
+        { q: "Da li je ovo religiozna ili duhovna praksa?", a: "LUMINARA crpi iz više tradicija — pitagorejske matematike, vedskih bija mantri, platonske geometrije, tibetanskih tonskih praksi. Ne zahteva verovanje ni u jednu od njih. Frekvencije su fizika. Geometrija je matematika. Glas je biologija. Ako funkcioniše, funkcioniše zato što vaše telo reaguje na vibracije. Ne zato što verujete u prave stvari." },
+        { q: "Koliko vremena oduzima?", a: "Jedna meditacija sa ključem traje 11–22 minuta. Kompletni Krug (svih 12 ključeva) traje 2–3 sata. Dnevna praksa jednog ključa zahteva oko 15 minuta. To je manje nego što većina ljudi provede skrolujući pre doručka." },
+        { q: "Koja tehnologija mi je potrebna?", a: "Uređaj sa pretraživačem i mikrofonom. Telefon, tablet, laptop — bilo šta. Aplikacija radi potpuno u pretraživaču koristeći Web Audio API. Nema preuzimanja. Nema dodataka. Nema instaliranja. Čista sinteza." },
+        { q: "Šta ako ne mogu da pogodim ton?", a: "Nećete ga savršeno pogoditi prvog dana. U tome je poenta — detekcija tona trenira vaše uho i glas tokom vremena. Praksa približavanja frekvenciji je sama po sebi praksa. Ne morate biti tačni. Morate biti prisutni. Preciznost dolazi ponavljanjem." },
+        { q: "Da li postoji pretplata?", a: "Ne. Jedna kupovina. Doživotni pristup. Ceo model LUMINARA je izgrađen oko samodovoljnosti — naučite frekvencije, internalizujete ih, nosite ih u telu. Mesečno naplaćivanje bi bilo u suprotnosti sa osnovnom filozofijom. Vaš glas ne ističe. Kao ni vaš pristup." }
+    ]
+};
+
+/** ══════════════════════ TRANSLATIONS ══════════════════════ */
+const translations = {
+en: {
+    "nav-keys": "The 12 Keys", "nav-how": "How It Works", "nav-about": "About", "nav-pricing": "Pricing", "nav-faq": "FAQ",
+    "h-hero-title": 'Your Voice Changes <em>Everything.</em>',
+    "h-hero-sub": "12 frequencies. Pure synthesis. Your body is the instrument — not your headphones.",
+    "h-hero-cta1": "Access the Toolkit →", "h-hero-cta2": "Hear how it works",
+    "h-open-p1": 'You have tried the apps. The playlists. The retreats. The guided sessions where a stranger\'s voice tells you to breathe deeper and imagine golden light. It worked for twenty minutes. Then it faded. Because you received it. <strong>You did not generate it.</strong>',
+    "h-open-p2": 'LUMINARA is built on one principle: the most powerful frequency instrument on the planet is already in your body. Your voice vibrates in your bones, your organs, your cells. When you tone a specific frequency, you do not listen to sound. You become sound. This is not philosophy. <strong>This is physics.</strong>',
+    "h-f1-t": "Your Voice. Your Frequency.", "h-f1-d": "12 zodiacal keys tuned to Pythagorean A=432 Hz. The app generates the precise tone. You match it with your voice. Real-time pitch detection confirms when you lock in. Your body becomes the resonance chamber.", "h-f1-cta": "Explore the 12 Keys →",
+    "h-f2-t": "Sacred Geometry. Visible.", "h-f2-d": "5 Platonic solids rendered in 3D, synced to each key's element. Tetrahedron for fire. Icosahedron for water. You do not just hear the frequency — you see the geometry your voice is building.", "h-f2-cta": "See the geometry →",
+    "h-f3-t": "Precision. Not Guesswork.", "h-f3-d": "Autocorrelation pitch detection listens to your voice in real time. You see exactly where you are relative to the target frequency. Train the instrument. Get precise. The feedback is instant, the calibration is yours.", "h-f3-cta": "Try the pitch detector →",
+    "h-steps-label": "The Method", "h-steps-title": "Three Steps. No Tricks.",
+    "h-s1-t": "Choose", "h-s1-d": "Pick a key. Each one opens a different door. Aries for raw courage. Cancer for emotional depth. Scorpio for transformation. Pisces for dissolution. The architecture tells you where to go. Your intuition confirms it.",
+    "h-s2-t": "Tone", "h-s2-d": "The app plays the frequency. You match it with your voice. Pitch detection shows you when you have locked in. The bija mantra seeds the vibration. RAM for fire. VAM for earth. YAM for air. LAM for foundation. OM for everything.",
+    "h-s3-t": "Feel", "h-s3-d": "This is the part no one can sell you. Because it happens inside your body and no marketing copy can replicate it. The vibration is real. The shift is real. The only proof is the one you generate yourself.",
+    "h-t1-p": '"I have done breathwork, sound baths, and two Vipassana retreats. On the third day of toning with Key 4 — Cancer, A at 432 Hz — I felt something unlock in my chest that none of those touched. Not emotionally. Physically. My ribs opened. I am not being poetic. They opened."',
+    "h-t1-a": "K. Djuric — Audio-Visual Artist",
+    "h-t2-p": '"I cancelled my Calm subscription after the first week. Not because LUMINARA is better content. Because I realized I do not need content anymore. I need my own voice and a target frequency. That is it."',
+    "h-t2-a": "Elena V. — Creative Director",
+    "h-trust-1": "Built on Pythagorean mathematics — the same ratios that have governed Western harmony for 2,500 years.",
+    "h-trust-2": "A=432 Hz with C4=256 Hz — a pure power of 2. Not an arbitrary standard. A mathematical foundation.",
+    "h-trust-3": "Pure Web Audio synthesis. Zero sample files. Zero compression. Oscillators generating exact frequencies to the decimal.",
+    "h-trust-4": "12 guided meditations. 4 elements. 5 Platonic solids. One complete system.",
+    "h-stat-1": "Mathematical Foundation", "h-stat-2": "Operative Keys", "h-stat-3": "Platonic Solids",
+    "h-cta-h": "Stop Listening. Start Toning.",
+    "h-cta-s": "Every other tool in this space needs you to come back. LUMINARA needs you to become your own instrument. That is the difference. That is the only thing we are selling.",
+    "h-cta-btn": "Get the LUMINARA Toolkit", "h-cta-btn2": "Read the science behind it",
+    "k-hero-t": 'Twelve Doors. <em>One Voice.</em>', "k-hero-s": "Each key unlocks a frequency, an element, a geometry, and a state of consciousness.", "k-hero-cta": "Access All 12 Keys",
+    "k-f1-t": "Four Elements. Three Each.", "k-f1-d": "Fire keys carry the Tetrahedron. Earth keys carry the Cube. Air keys carry the Octahedron. Water keys carry the Icosahedron. The grouping is not decorative. It is structural.",
+    "k-f2-t": "Circle of Fifths. Mapped.", "k-f2-d": "The 12 keys follow the most consonant progression in Western harmony: C → G → D → A → E → B → F# → C# → G# → D# → A# → F. Each key relates to every other through Pythagorean ratios.",
+    "k-f3-t": "Active Meditation. Not Passive.", "k-f3-d": "Each key includes a guided meditation — 11 to 22 minutes. You tone the frequency. You visualize the geometry. You speak the invocation. This is consciousness work that requires your participation.",
+    "k-cta-h": "The Complete Circuit", "k-cta-s": "All 12 keys in sequence. 2–3 hours. The full zodiacal year of consciousness in one session. Aries to Pisces. Fire to Water to Fire again. For the moments that deserve everything you have.", "k-cta-btn": "Access the Complete Circuit",
+    "hw-hero-t": 'The Physics Is <em>Simple.</em>', "hw-hero-s": "Your voice generates frequency. Frequency generates state. No belief required.", "hw-hero-cta": "Try It Now",
+    "hw-f1-t": "A=432 Hz. Not Arbitrary.", "hw-f1-d": "Modern concert pitch is A=440 Hz — adopted in 1955 by international agreement, not by acoustic principle. In A=432 Hz tuning, C4 equals exactly 256 Hz — a power of 2. This creates a mathematically elegant system where all frequencies relate through whole-number Pythagorean ratios. The math is clean. The resonance is felt.",
+    "hw-f2-t": "Internal Resonance. Not External.", "hw-f2-d": "When you listen to sound, your eardrums vibrate. When you tone with your voice, your entire body vibrates — skull, sinuses, ribcage, spine, organs. The frequency is not arriving from outside. It is being generated inside. That is the difference between receiving a frequency and becoming one.",
+    "hw-f3-t": "Lock In. Real Time.", "hw-f3-d": "The pitch detection system uses autocorrelation analysis on your microphone input. It shows your voice frequency against the target in real time. When you match the frequency, you feel it before you see it — a click, a settling, a resonance that confirms the lock.",
+    "hw-deep-label": "The Method",
+    "hw-deep-t1": "Why Voice?", "hw-deep-p1": 'Every wisdom tradition that works with sound arrives at the same conclusion. The Tibetan monks tone. The Vedic practitioners chant. The Sufi mystics use zikr. The Pythagoreans tuned their instruments to ratios they called "the music of the spheres." They were not all wrong.',
+    "hw-deep-p2": "Your voice is simultaneously three things: <strong>Internal</strong> — it vibrates inside your body, you feel it in your bones. <strong>External</strong> — it produces measurable frequency, a spectrogram can show you the exact Hz of your tone. <strong>Intentional</strong> — it requires conscious activation, you do not accidentally tone.",
+    "hw-deep-p3": "No other instrument has all three properties. A singing bowl is external. A binaural beat is external. A guided meditation is someone else's voice. Only your own voice works from the inside.",
+    "hw-deep-t2": "Why A=432 Hz?", "hw-deep-p4": "In 432 Hz tuning, middle C is 256 Hz. 256 is 2 to the 8th power. A clean binary number. This means every octave in the system doubles through powers of 2 with mathematical precision.",
+    "hw-deep-p5": "These ratios are not cultural preferences. They are acoustic physics. They describe the most consonant intervals in any sound system, anywhere, in any civilization. The math is older than music. The music just follows the math.",
+    "hw-deep-t3": "Why Geometry?", "hw-deep-p6": "Plato identified 5 regular solids — shapes whose faces are all identical regular polygons meeting at identical angles. He mapped them to the elements: Tetrahedron to Fire, Cube to Earth, Octahedron to Air, Icosahedron to Water, Dodecahedron to Spirit.",
+    "hw-deep-p7": "This is not mystical decoration. When you visualize a specific geometry while toning a specific frequency, you give your consciousness a structure to inhabit. The frequency is the energy. The geometry is the container. Together they create a specific state — repeatable, trainable, precise.",
+    "hw-cta-h": "Theory Is Cheap. Experience Costs Five Minutes.", "hw-cta-s": "Pick any key. Tone for 5 minutes. If you feel nothing, close the tab. If you feel something — and you will — you have just met the instrument you have been looking for.", "hw-cta-btn": "Start Toning",
+    "a-hero-t": 'Built From <em>Experience.</em>', "a-hero-s": "Not from a vision board. Not from a certification. From decades of doing the work.", "a-hero-cta2": "Go straight to the toolkit",
+    "a-p1": "I am Kai Djuric. I have meditated for decades across traditions — yoga, Tibetan Buddhism, Nada Yoga, overtone chanting. I have played music since I was a kid. Blues harmonica. Production. Sound design. I have lived on different continents. I have been arrested. I have raised two sons. I arrived at this work through experience, not vision.",
+    "a-p2": "LUMINARA started with a question I could not stop asking: why does every consciousness practice depend on an external source? A teacher, a recording, an app, a retreat, a subscription. Why is the most powerful thing — the vibration of your own voice in your own body — the one thing nobody teaches you to use?",
+    "a-p3": "I built the system to answer that question. 12 keys based on Pythagorean tuning. Guided meditations you do with your voice, not your headphones. A web app that uses pure synthesis — no audio files, no compression — to generate exact frequencies you match with your own toning. The app is the scaffold. Your voice is the structure. The goal is the day you do not need the app.",
+    "a-p4": "The world is collapsing outward. Jobs are disappearing. We are surveilled. The algorithms know us better than we know ourselves. Every institution that once provided meaning is fragmenting. The answer is not out there. It never was. The answer is your voice, your breath, your body vibrating at a frequency you chose. This is self-initiation. No gatekeeper. No guru. No dependency. Just you and the physics of sound.",
+    "a-f1-t": "The Books Are the Door.", "a-f1-d": "LUMINARA Awakening. The Resonance of Wholeness. Seven Bodies of Sound. The Chaos Protocol. Each book opens a different entrance to the same system. Theory for those who need to understand first. Practice for those who need to feel first.",
+    "a-f2-t": "The Music Is the Proof.", "a-f2-d": "Blues-structured, harmonica-driven, frequency-themed. The songs are not about LUMINARA. They are LUMINARA — the same voice, the same directness, the same refusal to polish away the imperfection. The crack is where the gold gets in.",
+    "a-f3-t": "The App Is the Scaffold.", "a-f3-d": "React. Tone.js. Three.js. Web Audio API. Pure synthesis. No audio files. Every frequency generated mathematically in real time. The technology is invisible. The experience is felt. The app gets you to the place where you do not need the app.",
+    "a-mission-label": "Mission", "a-mission-t": "Self-Sufficiency.", "a-mission-p": "Guide people from pain to peace. From fear to love. From the outer collapse to the inner universe. Not through belief. Through experience. Right now.", "a-mission-btn": "Enter the System",
+    "p-hero-t": 'No Subscription. <em>Ever.</em>', "p-hero-s": "Your voice does not expire. Neither does your access.",
+    "p-anchor-1": "A private sound healing session: <strong>$150–300</strong> per hour.", "p-anchor-2": "A meditation retreat: <strong>$500–2,000</strong> per weekend.", "p-anchor-3": "A premium meditation app: <strong>$70–200</strong> per year. Every year. Forever.", "p-anchor-4": "All three models need you to come back. Their revenue depends on your incompleteness. LUMINARA is a one-time purchase. Because the point is not that you keep using the app. The point is that you become your own instrument.",
+    "p-t1-f1": "12 Keys Explorer with live tone generation", "p-t1-f2": "All 12 guided meditations (11–22 min each)", "p-t1-f3": "Bija mantra reference and pronunciation guide", "p-t1-f4": "Frequency reference table", "p-t1-btn": "Get the Foundation",
+    "p-t2-f1": "Everything in The Foundation", "p-t2-f2": "Real-time voice pitch detection", "p-t2-f3": "3D sacred geometry visualizer", "p-t2-f4": "Complete Circuit mode (all 12 keys)", "p-t2-f5": "Binaural beat engine", "p-t2-f6": "Euclidean rhythm patterns", "p-t2-f7": "Lifetime updates", "p-t2-btn": "Get the Full Toolkit",
+    "p-t3-f1": "Everything in The Full Toolkit", "p-t3-f2": "Direct access to Kai (email / voice memo)", "p-t3-f3": "Early access to new books and music", "p-t3-f4": "Name in LUMINARA Acknowledgments", "p-t3-f5": "Input on future features", "p-t3-f6": "Founding member pricing locked permanently", "p-t3-btn": "Join the Founding Circle",
+    "p-guar-t": "The Only Risk Is Staying Where You Are.", "p-guar-p": '30-Day Money-Back Guarantee. Full refund. No forms. No interrogation. Work with the 12 Keys. Tone every day for a month. If you do not feel a measurable shift in your state — not believe, not hope, not think, <em>feel</em> — request your money back. The system works or it does not.',
+    "p-cta-h": "One Purchase. One System. One Voice — Yours.", "p-cta-btn": "Get LUMINARA Now",
+    "f-hero-t": 'Questions. <em>Real Answers.</em>', "f-hero-s": "No corporate deflection. Ask the hard ones.", "f-hero-cta": "Get LUMINARA",
+    "f-cta-h": "Still Have Questions?", "f-cta-s": "Ask directly. No chatbot. No ticket system. A real person who built this system and uses it every morning.", "f-cta-btn1": "Get LUMINARA", "f-cta-btn2": "Email Kai directly",
+    "footer-tag": "Twelve keys. One voice. Yours.", "f-col1": "LUMINARA", "f-col2": "From Kai", "f-col3": "Legal",
+    "footer-quote": "Your voice is the most powerful instrument you possess for consciousness exploration."
+},
+sr: {
+    "nav-keys": "12 Ključeva", "nav-how": "Kako Radi", "nav-about": "O Nama", "nav-pricing": "Cene", "nav-faq": "Česta Pitanja",
+    "h-hero-title": 'Vaš Glas Menja <em>Sve.</em>',
+    "h-hero-sub": "12 frekvencija. Čista sinteza. Vaše telo je instrument — ne vaše slušalice.",
+    "h-hero-cta1": "Pristupi Alatu →", "h-hero-cta2": "Saznaj kako radi",
+    "h-open-p1": 'Probali ste aplikacije. Plejliste. Povlačenja. Vođene sesije gde vam tuđ glas govori da dišete dublje i zamislite zlatnu svetlost. Radilo je dvadeset minuta. Zatim je izbledelo. Zato što ste to primali. <strong>Niste to generisali.</strong>',
+    "h-open-p2": 'LUMINARA je izgrađena na jednom principu: najmoćniji instrument frekvencije na planeti je već u vašem telu. Vaš glas vibrira u kostima, organima, ćelijama. Kada tonirate određenu frekvenciju, ne slušate zvuk. Postajete zvuk. Ovo nije filozofija. <strong>Ovo je fizika.</strong>',
+    "h-f1-t": "Vaš Glas. Vaša Frekvencija.", "h-f1-d": "12 zodijačkih ključeva na pitagorejskom A=432 Hz. Aplikacija generiše precizan ton. Vi ga usklađujete glasom. Detekcija tona u realnom vremenu potvrđuje sinhronizaciju. Telo je rezonantna komora.", "h-f1-cta": "Istraži 12 Ključeva →",
+    "h-f2-t": "Sveta Geometrija. Vidljiva.", "h-f2-d": "5 Platonovih tela u 3D, sinhronizovanih sa elementom svakog ključa. Tetraedar za vatru. Ikosaedar za vodu. Ne samo da čujete frekvenciju — vidite geometriju koju vaš glas gradi.", "h-f2-cta": "Vidi geometriju →",
+    "h-f3-t": "Preciznost. Ne nagađanje.", "h-f3-d": "Autokorelaciona detekcija tona sluša vaš glas u realnom vremenu. Vidite tačno gde ste u odnosu na ciljnu frekvenciju. Trenirajte instrument. Postanite precizni. Kalibracija je vaša.", "h-f3-cta": "Probaj detektor →",
+    "h-steps-label": "Metoda", "h-steps-title": "Tri koraka. Bez trikova.",
+    "h-s1-t": "Izaberi", "h-s1-d": "Odaberi ključ. Svaki otvara druga vrata. Ovan za sirovu hrabrost. Rak za emocionalnu dubinu. Škorpija za transformaciju. Ribe za rastvorenje. Arhitektura vam kaže kuda. Intuicija potvrđuje.",
+    "h-s2-t": "Toniraj", "h-s2-d": "Aplikacija pušta frekvenciju. Vi je usklađujete glasom. Detekcija tona pokazuje sinhronizaciju. Bija mantra zasejava vibraciju. RAM za vatru. VAM za zemlju. YAM za vazduh. LAM za temelj. OM za sve.",
+    "h-s3-t": "Oseti", "h-s3-d": "Ovo je deo koji niko ne može da vam proda. Jer se dešava unutar vašeg tela i nijedan marketinški tekst ne može to da replicira. Vibracija je stvarna. Promena je stvarna. Jedini dokaz je onaj koji sami generišete.",
+    "h-t1-p": '"Radio sam breathwork, zvučne kupke i dva Vipassana povlačenja. Trećeg dana toniranja sa Ključem 4 — Rak, A na 432 Hz — osetio sam da se nešto u grudima otključava što nijedno od toga nije dotaklo. Ne emocionalno. Fizički. Rebra su mi se otvorila. Ne pričam poetski. Otvorila su se."',
+    "h-t1-a": "K. Djurić — Audio-vizuelni umetnik",
+    "h-t2-p": '"Otkazala sam Calm pretplatu posle prve nedelje. Ne zato što je LUMINARA bolji sadržaj. Zato što sam shvatila da mi više ne treba sadržaj. Treba mi moj glas i ciljna frekvencija. To je to."',
+    "h-t2-a": "Elena V. — Kreativna direktorka",
+    "h-trust-1": "Izgrađeno na pitagorejskoj matematici — istim proporcijama koje vladaju zapadnom harmonijom 2.500 godina.",
+    "h-trust-2": "A=432 Hz sa C4=256 Hz — čist stepen broja 2. Ne nasumičan standard. Matematička osnova.",
+    "h-trust-3": "Čista Web Audio sinteza. Nula audio fajlova. Nula kompresije. Oscilatori generišu tačne frekvencije do decimale.",
+    "h-trust-4": "12 vođenih meditacija. 4 elementa. 5 Platonovih tela. Jedan kompletan sistem.",
+    "h-stat-1": "Matematička Osnova", "h-stat-2": "Operativni Ključevi", "h-stat-3": "Platonova Tela",
+    "h-cta-h": "Prestanite da slušate. Počnite da tonirate.",
+    "h-cta-s": "Svaki drugi alat u ovom prostoru treba vas da se vraćate. LUMINARA želi da postanete sopstveni instrument. To je razlika. To je jedina stvar koju prodajemo.",
+    "h-cta-btn": "Nabavi LUMINARA Alat", "h-cta-btn2": "Pročitaj nauku iza svega",
+    "k-hero-t": 'Dvanaest Vrata. <em>Jedan Glas.</em>', "k-hero-s": "Svaki ključ otključava frekvenciju, element, geometriju i stanje svesti.", "k-hero-cta": "Pristupi svim ključevima",
+    "k-f1-t": "Četiri Elementa. Tri za svaki.", "k-f1-d": "Vatreni ključevi nose Tetraedar. Zemljani Kocku. Vazdušni Oktaedar. Vodeni Ikosaedar. Grupisanje nije dekorativno. Ono je strukturalno.",
+    "k-f2-t": "Krug Kvinti. Mapiran.", "k-f2-d": "12 ključeva prati najkonsonantniju progresiju u zapadnoj harmoniji: C → G → D → A → E → B → F# → C# → G# → D# → A# → F. Svaki ključ se odnosi na svaki drugi kroz pitagorejske proporcije.",
+    "k-f3-t": "Aktivna Meditacija. Ne pasivna.", "k-f3-d": "Svaki ključ uključuje vođenu meditaciju — 11 do 22 minuta. Tonirate frekvenciju. Vizuelizujete geometriju. Izgovarate invokaciju. Ovo je rad sa svešću koji zahteva vaše učešće.",
+    "k-cta-h": "Kompletni Krug", "k-cta-s": "Svih 12 ključeva u nizu. 2–3 sata. Cela zodijačka godina svesti u jednoj sesiji. Od Ovna do Riba. Od vatre do vode i nazad. Za trenutke koji zaslužuju sve što imate.", "k-cta-btn": "Pristupi Kompletnom Krugu",
+    "hw-hero-t": 'Fizika je <em>Jednostavna.</em>', "hw-hero-s": "Vaš glas generiše frekvenciju. Frekvencija generiše stanje. Vera nije potrebna.", "hw-hero-cta": "Probaj sada",
+    "hw-f1-t": "A=432 Hz. Nije nasumično.", "hw-f1-d": "Moderni koncertni štim je A=440 Hz — usvojen 1955. međunarodnim dogovorom, ne akustičkim principom. U A=432 Hz štimu, C4 je tačno 256 Hz — stepen broja 2. Ovo stvara matematički elegantan sistem gde se sve frekvencije odnose kroz celobrojne pitagorejske proporcije.",
+    "hw-f2-t": "Interna Rezonanca. Ne eksterna.", "hw-f2-d": "Kada slušate zvuk, bubne opne vibriraju. Kada tonirate glasom, celo telo vibrira — lobanja, sinusi, grudni koš, kičma, organi. Frekvencija ne dolazi spolja. Generiše se iznutra. To je razlika između primanja frekvencije i postajanja nje.",
+    "hw-f3-t": "Sinhronizacija. Realno vreme.", "hw-f3-d": "Sistem za detekciju tona koristi autokorelacionu analizu vašeg mikrofona. Pokazuje frekvenciju glasa naspram cilja u realnom vremenu. Kada pogodite frekvenciju, osetite to pre nego što vidite — klik, smirivanje, rezonanca koja potvrđuje zaključavanje.",
+    "hw-deep-label": "Metoda",
+    "hw-deep-t1": "Zašto Glas?", "hw-deep-p1": 'Svaka mudrosna tradicija koja radi sa zvukom dolazi do istog zaključka. Tibetanski monasi toniraju. Vedski praktičari pojaju. Sufijski mistici koriste zikr. Pitagorejci su štimovali instrumente prema proporcijama koje su zvali „muzika sfera." Nisu svi grešili.',
+    "hw-deep-p2": "Vaš glas je istovremeno tri stvari: <strong>Interni</strong> — vibrira unutar tela, osećate ga u kostima. <strong>Eksterni</strong> — proizvodi merljivu frekvenciju, spektrogram može da pokaže tačan Hz tona. <strong>Nameran</strong> — zahteva svesnu aktivaciju, ne tonirate slučajno.",
+    "hw-deep-p3": "Nijedan drugi instrument nema sva tri svojstva. Tibetanska činija je eksterna. Binauralni ritam je eksteran. Vođena meditacija je tuđ glas. Samo vaš glas radi iznutra.",
+    "hw-deep-t2": "Zašto A=432 Hz?", "hw-deep-p4": "U 432 Hz štimu, srednje C je 256 Hz. 256 je 2 na 8. stepen. Čist binarni broj. To znači da se svaka oktava u sistemu udvostručuje kroz stepene broja 2 sa matematičkom preciznošću.",
+    "hw-deep-p5": "Ove proporcije nisu kulturne preferencije. One su akustička fizika. Opisuju najkonsonantnije intervale u bilo kom zvučnom sistemu, bilo gde, u bilo kojoj civilizaciji. Matematika je starija od muzike. Muzika samo prati matematiku.",
+    "hw-deep-t3": "Zašto Geometrija?", "hw-deep-p6": "Platon je identifikovao 5 pravilnih tela — oblika čija su lica identični pravilni poligoni koji se susreću pod identičnim uglovima. Mapirao ih je na elemente: Tetraedar na Vatru, Kocku na Zemlju, Oktaedar na Vazduh, Ikosaedar na Vodu, Dodekaedar na Duh.",
+    "hw-deep-p7": "Ovo nije mistička dekoracija. Kada vizuelizujete specifičnu geometriju dok tonirate specifičnu frekvenciju, dajete svojoj svesti strukturu u kojoj boravi. Frekvencija je energija. Geometrija je posuda. Zajedno stvaraju specifično stanje — ponovljivo, trenabilno, precizno.",
+    "hw-cta-h": "Teorija je jeftina. Iskustvo košta pet minuta.", "hw-cta-s": "Odaberite bilo koji ključ. Tonirajte 5 minuta. Ako ne osetite ništa, zatvorite tab. Ako osetite nešto — a osetićete — upravo ste upoznali instrument koji ste tražili.", "hw-cta-btn": "Počni da toniraš",
+    "a-hero-t": 'Izgrađeno iz <em>Iskustva.</em>', "a-hero-s": "Ne iz vizionarske table. Ne iz sertifikata. Iz decenija rada.", "a-hero-cta2": "Idi pravo na alat",
+    "a-p1": "Ja sam Kai Djurić. Meditiram decenijama kroz tradicije — joga, tibetanski budizam, Nada Yoga, overtonsko pojanje. Sviram muziku od malena. Bluz usna harmonika. Produkcija. Zvučni dizajn. Živeo sam na različitim kontinentima. Bio sam hapšen. Odgojio sam dva sina. Do ovog rada sam došao kroz iskustvo, ne viziju.",
+    "a-p2": "LUMINARA je počela sa pitanjem koje nisam mogao da prestanem da postavljam: zašto svaka praksa svesti zavisi od spoljnog izvora? Učitelj, snimak, aplikacija, povlačenje, pretplata. Zašto je najmoćnija stvar — vibracija vašeg sopstvenog glasa u vašem sopstvenom telu — jedina stvar koju vas niko ne uči da koristite?",
+    "a-p3": "Napravio sam sistem da odgovorim na to pitanje. 12 ključeva zasnovanih na pitagorejskom štimu. Vođene meditacije koje radite glasom, ne slušalicama. Web aplikacija koja koristi čistu sintezu — bez audio fajlova, bez kompresije — da generiše tačne frekvencije koje usklađujete sopstvenim toniranjem. Aplikacija je skela. Vaš glas je struktura. Cilj je dan kada vam aplikacija više ne treba.",
+    "a-p4": "Svet se raspada spolja. Poslovi nestaju. Nadzirani smo. Algoritmi nas poznaju bolje nego mi sami sebe. Svaka institucija koja je nekad pružala smisao se fragmentira. Odgovor nije negde tamo. Nikad nije bio. Odgovor je vaš glas, vaš dah, vaše telo koje vibrira na frekvenciji koju ste sami odabrali. Ovo je samo-inicijacija. Bez čuvara kapije. Bez gurua. Bez zavisnosti. Samo vi i fizika zvuka.",
+    "a-f1-t": "Knjige su vrata.", "a-f1-d": "LUMINARA Buđenje. Rezonanca Celovitosti. Sedam Tela Zvuka. Haos Protokol. Svaka knjiga otvara drugi ulaz u isti sistem. Teorija za one kojima treba razumevanje prvo. Praksa za one kojima treba osećaj prvo.",
+    "a-f2-t": "Muzika je dokaz.", "a-f2-d": "Bluz-struktura, harmonika, frekvencijska tematika. Pesme nisu o LUMINARA. One jesu LUMINARA — isti glas, ista direktnost, isto odbijanje da se ispolira nesavršenost. Pukotina je mesto gde zlato ulazi.",
+    "a-f3-t": "Aplikacija je skela.", "a-f3-d": "React. Tone.js. Three.js. Web Audio API. Čista sinteza. Bez audio fajlova. Svaka frekvencija generisana matematički u realnom vremenu. Tehnologija je nevidljiva. Iskustvo se oseća. Aplikacija vas dovede do mesta gde vam aplikacija više ne treba.",
+    "a-mission-label": "Misija", "a-mission-t": "Samo-dovoljnost.", "a-mission-p": "Voditi ljude od bola do mira. Od straha do ljubavi. Od spoljnog kolapsa do unutrašnjeg univerzuma. Ne kroz verovanje. Kroz iskustvo. Sada.", "a-mission-btn": "Uđi u sistem",
+    "p-hero-t": 'Bez Pretplata. <em>Nikada.</em>', "p-hero-s": "Vaš glas ne ističe. Kao ni vaš pristup.",
+    "p-anchor-1": "Privatna sesija zvučnog isceljenja: <strong>$150–300</strong> po satu.", "p-anchor-2": "Meditativno povlačenje: <strong>$500–2.000</strong> za vikend.", "p-anchor-3": "Premium aplikacija za meditaciju: <strong>$70–200</strong> godišnje. Svake godine. Zauvek.", "p-anchor-4": "Sva tri modela zahtevaju da se vraćate. Njihov prihod zavisi od vaše nekompletnosti. LUMINARA je jednokratna kupovina. Jer poenta nije da nastavite da koristite aplikaciju. Poenta je da postanete sopstveni instrument.",
+    "p-t1-f1": "Istraživač 12 ključeva sa generisanjem tona uživo", "p-t1-f2": "Svih 12 vođenih meditacija (11–22 min)", "p-t1-f3": "Bija mantra referenca i vodič za izgovor", "p-t1-f4": "Tabela referenci frekvencija", "p-t1-btn": "Nabavi Osnovu",
+    "p-t2-f1": "Sve iz Osnove", "p-t2-f2": "Detekcija tona glasa u realnom vremenu", "p-t2-f3": "3D vizuelizator svete geometrije", "p-t2-f4": "Režim Kompletnog Kruga (svih 12 ključeva)", "p-t2-f5": "Binauralni motor", "p-t2-f6": "Euklidski ritmički obrasci", "p-t2-f7": "Doživotna ažuriranja", "p-t2-btn": "Nabavi Kompletan Alat",
+    "p-t3-f1": "Sve iz Kompletnog Alata", "p-t3-f2": "Direktan pristup Kai-u (email / glasovna poruka)", "p-t3-f3": "Rani pristup novim knjigama i muzici", "p-t3-f4": "Ime u LUMINARA zahvalnicama", "p-t3-f5": "Učešće u razvoju budućih funkcija", "p-t3-f6": "Cena osnivačkog člana zauvek zaključana", "p-t3-btn": "Pridruži se Osnivačkom Krugu",
+    "p-guar-t": "Jedini rizik je ostati gde jeste.", "p-guar-p": 'Garancija povrata novca u roku od 30 dana. Pun povrat. Bez formulara. Bez ispitivanja. Radite sa 12 ključeva. Tonirajte svaki dan mesec dana. Ako ne osetite merljivu promenu stanja — ne verujete, ne nadate se, ne mislite, <em>osetite</em> — zatražite povrat. Sistem radi ili ne radi.',
+    "p-cta-h": "Jedna kupovina. Jedan sistem. Jedan glas — vaš.", "p-cta-btn": "Nabavi LUMINARA sada",
+    "f-hero-t": 'Pitanja. <em>Pravi Odgovori.</em>', "f-hero-s": "Bez korporativnog skretanja. Pitajte najteža pitanja.", "f-hero-cta": "Nabavi LUMINARA",
+    "f-cta-h": "Još imate pitanja?", "f-cta-s": "Pitajte direktno. Bez chatbota. Bez tiketing sistema. Stvarna osoba koja je napravila ovaj sistem i koristi ga svako jutro.", "f-cta-btn1": "Nabavi LUMINARA", "f-cta-btn2": "Pišite Kai-u direktno",
+    "footer-tag": "Dvanaest ključeva. Jedan glas. Vaš.", "f-col1": "LUMINARA", "f-col2": "Od Kai-a", "f-col3": "Pravno",
+    "footer-quote": "Vaš glas je najmoćniji instrument koji posedujete za istraživanje svesti."
+}
+};
+
+/** ══════════════════════ CORE LOGIC ══════════════════════ */
+
+let currentLang = 'en';
+
+function showPage(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const target = document.getElementById('page-' + pageId);
+    if (target) target.classList.add('active');
+    document.querySelectorAll('.nav-links a').forEach(a => {
+        a.classList.toggle('active', a.getAttribute('onclick')?.includes(pageId));
+    });
+    window.scrollTo(0, 0);
+    updateMeta(pageId);
+}
+
+function setLang(lang) {
+    currentLang = lang;
+    document.body.setAttribute('data-lang', lang);
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.getElementById('btn-sr').classList.toggle('active', lang === 'sr');
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang]?.[key]) el.innerHTML = translations[lang][key];
+    });
+    renderFAQ();
+}
+
+function toggleMobile() {
+    document.getElementById('mobile-menu').classList.toggle('open');
+}
+
+/** ══════════════════════ META TAGS ══════════════════════ */
+const metaMap = {
+    home: { title: "LUMINARA — Your Voice Is the Instrument | Frequency Toolkit for Self-Initiation", desc: "12 frequency keys tuned to A=432 Hz. Real-time pitch detection. Sacred geometry. Your voice generates the state. No subscription. No guru. No dependency." },
+    keys: { title: "The 12 Keys — LUMINARA Frequency Map | Zodiacal Sound Architecture", desc: "12 zodiacal keys, each with a specific frequency, Platonic solid, element, bija mantra, and guided meditation." },
+    "how-it-works": { title: "How LUMINARA Works — The Science of Voice Frequency and Resonance", desc: "A=432 Hz Pythagorean tuning. Autocorrelation pitch detection. Internal resonance vs. external listening." },
+    about: { title: "About Kai Djuric — Builder of LUMINARA | Meditation, Music, Sound", desc: "Decades of meditation, music production. LUMINARA was built from experience, not theory." },
+    pricing: { title: "LUMINARA Pricing — One Purchase, No Subscription | Sound Toolkit", desc: "One-time purchase. Lifetime access. No subscription. Full money-back guarantee." },
+    faq: { title: "LUMINARA FAQ — Questions About Frequency, Voice, and Practice", desc: "Real answers about 432 Hz tuning, pitch matching, daily practice time, and why this is not another meditation app." }
+};
+
+function updateMeta(pageId) {
+    const m = metaMap[pageId];
+    if (m) {
+        document.title = m.title;
+        const desc = document.querySelector('meta[name="description"]');
+        if (desc) desc.setAttribute('content', m.desc);
+    }
+}
+
+/** ══════════════════════ DYNAMIC CONTENT ══════════════════════ */
+
+function renderKeys() {
+    const container = document.getElementById('keys-container');
+    if (!container) return;
+    container.innerHTML = keysData.map(k => `
+        <div class="key-item" onclick="this.classList.toggle('open')">
+            <div class="key-header">
+                <div class="key-info">
+                    <h4>Key ${k.id} — ${k.sign}: ${k.subtitle}</h4>
+                    <span>${k.freq} · Ratio ${k.ratio}</span>
+                </div>
+                <p class="key-summary">${k.desc}</p>
+                <div class="key-meta">${k.element} / ${k.geo}</div>
+            </div>
+            <div class="key-expand">
+                <div class="key-details">
+                    <div>
+                        <div class="key-detail-label">Quality</div>
+                        <div class="key-detail-value">${k.quality}</div>
+                    </div>
+                    <div>
+                        <div class="key-detail-label">Mantra</div>
+                        <div class="key-detail-value">${k.mantra}</div>
+                    </div>
+                    <div>
+                        <div class="key-detail-label">Bija Seed</div>
+                        <div class="key-detail-value">${k.bija}</div>
+                    </div>
+                    <div>
+                        <div class="key-detail-label">Body</div>
+                        <div class="key-detail-value">${k.body}</div>
+                    </div>
+                    <div>
+                        <div class="key-detail-label">Meditation</div>
+                        <div class="key-detail-value">${k.meditation}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function renderFAQ() {
+    const container = document.getElementById('faq-container');
+    if (!container) return;
+    const faqs = faqsData[currentLang] || faqsData.en;
+    container.innerHTML = faqs.map((f, i) => `
+        <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-q">
+                <h4>${f.q}</h4>
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-a">
+                <p>${f.a}</p>
+            </div>
+        </div>
+    `).join('');
+}
+
+/** ══════════════════════ THREE.JS ══════════════════════ */
+
+let scene, camera, renderer, group;
+
+function initThree() {
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 40;
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    const container = document.getElementById('three-container');
+    if (container) container.appendChild(renderer.domElement);
+
+    group = new THREE.Group();
+    scene.add(group);
+
+    const accentHex = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#d4a853';
+    const mat = new THREE.MeshBasicMaterial({
+        color: new THREE.Color(accentHex),
+        wireframe: true, transparent: true, opacity: 0.12
+    });
+
+    for (let i = 0; i < 6; i++) {
+        const geo = new THREE.IcosahedronGeometry(10 + i * 3, 1);
+        const mesh = new THREE.Mesh(geo, mat.clone());
+        mesh.rotation.x = Math.random() * Math.PI;
+        mesh.rotation.y = Math.random() * Math.PI;
+        group.add(mesh);
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        group.rotation.y += 0.0008;
+        group.children.forEach((m, i) => {
+            m.rotation.x += 0.0015 * (i + 1) * 0.1;
+            m.rotation.z += 0.0005 * (i + 1) * 0.05;
+        });
+        renderer.render(scene, camera);
+    }
+    animate();
+}
+
+/** ══════════════════════ EVENTS ══════════════════════ */
+
+window.addEventListener('resize', () => {
+    if (camera && renderer) {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+});
+
+document.getElementById('theme-btn').addEventListener('click', () => {
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    document.documentElement.setAttribute('data-theme', isLight ? 'dark' : 'light');
+    setTimeout(() => {
+        const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+        if (group) group.children.forEach(m => m.material.color.set(accent));
+    }, 100);
+});
+
+window.addEventListener('scroll', () => {
+    const navbar = document.getElementById('navbar');
+    if (navbar) navbar.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+/** ══════════════════════ INIT ══════════════════════ */
+
+window.onload = () => {
+    initThree();
+    renderKeys();
+    renderFAQ();
+    setLang('en');
+};
+</script>
+
+</body>
+</html>

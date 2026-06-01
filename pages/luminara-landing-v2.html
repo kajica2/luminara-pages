@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUMINARA — Creative Technology Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --void: #050508;
+  --deep: #0a0a10;
+  --surface: #111118;
+  --subtle: #1a1a24;
+  --muted: #3a3a50;
+  --text-dim: #6a6a82;
+  --text: #c8c8d8;
+  --text-bright: #e8e8f0;
+  --white: #f4f0ff;
+  --luminara-gold: #d4a853;
+  --luminara-amber: #c78632;
+  --luminara-violet: #7b5ea7;
+  --luminara-indigo: #4a3f8a;
+  --luminara-cyan: #3a8a9a;
+  --luminara-rose: #9a3a5a;
+  --glow-gold: rgba(212, 168, 83, 0.15);
+  --glow-violet: rgba(123, 94, 167, 0.12);
+}
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  background: var(--void);
+  color: var(--text);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--luminara-violet);
+  color: var(--white);
+}
+
+/* ── CANVAS BG ── */
+#geo-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* ── GRAIN OVERLAY ── */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 1.5rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(20px);
+  background: rgba(5, 5, 8, 0.7);
+  border-bottom: 1px solid rgba(212, 168, 83, 0.08);
+  transition: all 0.4s ease;
+}
+
+nav.scrolled {
+  padding: 1rem 3rem;
+  background: rgba(5, 5, 8, 0.92);
+}
+
+.nav-logo {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 200;
+  font-size: 1.4rem;
+  letter-spacing: 0.35em;
+  color: var(--luminara-gold);
+  text-transform: uppercase;
+}
+
+.nav-logo span {
+  font-weight: 500;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2.5rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.78rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 400;
+  transition: color 0.3s;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--luminara-gold);
+  transition: width 0.3s;
+}
+
+.nav-links a:hover { color: var(--luminara-gold); }
+.nav-links a:hover::after { width: 100%; }
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+  z-index: 1;
+}
+
+.hero-overline {
+  font-size: 0.7rem;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--luminara-gold);
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: fadeUp 1s 0.3s forwards;
+}
+
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: clamp(3.5rem, 10vw, 8rem);
+  line-height: 0.95;
+  color: var(--white);
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: fadeUp 1.2s 0.5s forwards;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--luminara-gold);
+  font-weight: 300;
+}
+
+.hero-sub {
+  font-size: 1.15rem;
+  font-weight: 200;
+  color: var(--text-dim);
+  max-width: 520px;
+  margin-bottom: 3rem;
+  opacity: 0;
+  animation: fadeUp 1s 0.8s forwards;
+}
+
+.hero-cta {
+  display: flex;
+  gap: 1.5rem;
+  opacity: 0;
+  animation: fadeUp 1s 1.1s forwards;
+}
+
+.btn {
+  padding: 0.85rem 2.5rem;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 400;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-primary {
+  background: var(--luminara-gold);
+  color: var(--void);
+}
+
+.btn-primary:hover {
+  background: var(--white);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(212, 168, 83, 0.3);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid var(--muted);
+}
+
+.btn-ghost:hover {
+  border-color: var(--luminara-gold);
+  color: var(--luminara-gold);
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0;
+  animation: fadeUp 1s 1.5s forwards;
+}
+
+.scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--luminara-gold), transparent);
+  animation: scrollPulse 2s infinite;
+}
+
+/* ── SECTIONS ── */
+section {
+  position: relative;
+  z-index: 1;
+  padding: 8rem 3rem;
+}
+
+.section-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--luminara-gold);
+  margin-bottom: 1.5rem;
+  font-weight: 400;
+}
+
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  color: var(--white);
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+}
+
+/* ── PILLARS ── */
+.pillars {
+  background: var(--deep);
+  border-top: 1px solid rgba(212, 168, 83, 0.06);
+  border-bottom: 1px solid rgba(212, 168, 83, 0.06);
+}
+
+.pillars-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(212, 168, 83, 0.06);
+  margin-top: 4rem;
+}
+
+.pillar-card {
+  background: var(--deep);
+  padding: 3rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s ease;
+}
+
+.pillar-card:hover {
+  background: var(--surface);
+}
+
+.pillar-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--luminara-gold), transparent);
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.pillar-card:hover::before { opacity: 1; }
+
+.pillar-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.pillar-icon svg {
+  width: 100%;
+  height: 100%;
+  stroke: var(--luminara-gold);
+  stroke-width: 1;
+  fill: none;
+}
+
+.pillar-card h3 {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 400;
+  font-size: 1.1rem;
+  color: var(--text-bright);
+  margin-bottom: 1rem;
+  letter-spacing: 0.05em;
+}
+
+.pillar-card p {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  line-height: 1.8;
+}
+
+.pillar-tag {
+  display: inline-block;
+  margin-top: 1.5rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  border: 1px solid rgba(58, 58, 80, 0.5);
+  padding: 0.3rem 0.8rem;
+}
+
+/* ── MANIFESTO ── */
+.manifesto {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.manifesto-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--text-bright);
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.manifesto-text strong {
+  color: var(--luminara-gold);
+  font-weight: 400;
+}
+
+.manifesto-attr {
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ── ECOSYSTEM ── */
+.ecosystem { background: var(--void); }
+
+.eco-grid {
+  max-width: 1100px;
+  margin: 4rem auto 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.eco-item {
+  border: 1px solid rgba(212, 168, 83, 0.08);
+  padding: 2.5rem;
+  position: relative;
+  transition: all 0.4s;
+  background: rgba(10, 10, 16, 0.5);
+}
+
+.eco-item:hover {
+  border-color: rgba(212, 168, 83, 0.25);
+  background: var(--surface);
+}
+
+.eco-item-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--muted);
+  letter-spacing: 0.2em;
+  margin-bottom: 1.5rem;
+}
+
+.eco-item h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  font-size: 1.5rem;
+  color: var(--white);
+  margin-bottom: 0.8rem;
+}
+
+.eco-item p {
+  font-size: 0.88rem;
+  color: var(--text-dim);
+}
+
+.eco-item-full {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+}
+
+.eco-item-full .eco-visual {
+  flex-shrink: 0;
+  width: 200px;
+  height: 200px;
+  position: relative;
+}
+
+/* ── TECH STRIP ── */
+.tech-strip {
+  padding: 4rem 3rem;
+  background: var(--surface);
+  border-top: 1px solid rgba(212, 168, 83, 0.06);
+  border-bottom: 1px solid rgba(212, 168, 83, 0.06);
+  overflow: hidden;
+}
+
+.tech-marquee {
+  display: flex;
+  gap: 4rem;
+  animation: marquee 20s linear infinite;
+  width: max-content;
+}
+
+.tech-item {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+.tech-item::before {
+  content: '◆';
+  margin-right: 1rem;
+  color: var(--luminara-gold);
+  font-size: 0.5rem;
+}
+
+/* ── CONTACT / FOOTER ── */
+.contact {
+  text-align: center;
+  padding: 10rem 3rem;
+}
+
+.contact-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  color: var(--white);
+  margin-bottom: 1.5rem;
+  line-height: 1;
+}
+
+.contact-sub {
+  color: var(--text-dim);
+  font-weight: 200;
+  font-size: 1.05rem;
+  margin-bottom: 3rem;
+}
+
+footer {
+  padding: 3rem;
+  border-top: 1px solid rgba(212, 168, 83, 0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.72rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+}
+
+footer a {
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+footer a:hover { color: var(--luminara-gold); }
+
+/* ── SACRED GEOMETRY ORB (CSS) ── */
+.orb-container {
+  position: relative;
+  width: 320px;
+  height: 320px;
+  margin: 0 auto;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid;
+  animation: orbRotate 20s linear infinite;
+}
+
+.orb-1 {
+  width: 100%; height: 100%;
+  border-color: rgba(212, 168, 83, 0.12);
+  top: 0; left: 0;
+}
+
+.orb-2 {
+  width: 75%; height: 75%;
+  border-color: rgba(123, 94, 167, 0.15);
+  top: 12.5%; left: 12.5%;
+  animation-direction: reverse;
+  animation-duration: 15s;
+}
+
+.orb-3 {
+  width: 50%; height: 50%;
+  border-color: rgba(58, 138, 154, 0.15);
+  top: 25%; left: 25%;
+  animation-duration: 12s;
+}
+
+.orb-center {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--luminara-gold);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 30px rgba(212, 168, 83, 0.4), 0 0 60px rgba(212, 168, 83, 0.15);
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+@keyframes orbRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ── REVEAL ON SCROLL ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .pillars-grid { grid-template-columns: 1fr; }
+  .eco-grid { grid-template-columns: 1fr; }
+  .eco-item-full { flex-direction: column; }
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  section { padding: 5rem 1.5rem; }
+}
+
+@media (max-width: 600px) {
+  .hero h1 { font-size: 2.8rem; }
+  .hero-cta { flex-direction: column; align-items: center; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="geo-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo"><span>L</span>UMINARA</div>
+  <ul class="nav-links">
+    <li><a href="#pillars">Pillars</a></li>
+    <li><a href="#ecosystem">Ecosystem</a></li>
+    <li><a href="#manifesto">Manifesto</a></li>
+    <li><a href="#enter">Enter</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-overline">Creative Technology Platform</div>
+  <h1>Where Sound<br>Becomes <em>Light</em></h1>
+  <p class="hero-sub">Audio-reactive visualization. WebXR immersion. Consciousness-expanding tools. A unified ecosystem for artists who refuse to choose between the technical and the transcendent.</p>
+  <div class="hero-cta">
+    <a href="#ecosystem" class="btn btn-primary">Explore Ecosystem</a>
+    <a href="#manifesto" class="btn btn-ghost">Read Manifesto</a>
+  </div>
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- PILLARS -->
+<section class="pillars" id="pillars">
+  <div style="max-width: 1200px; margin: 0 auto;">
+    <div class="section-label reveal">Core Architecture</div>
+    <div class="section-title reveal">Three Pillars</div>
+  </div>
+  <div class="pillars-grid">
+    <div class="pillar-card reveal">
+      <div class="pillar-icon">
+        <svg viewBox="0 0 48 48">
+          <circle cx="24" cy="24" r="18"/>
+          <path d="M12 24 C12 18, 18 12, 24 12 C30 12, 36 18, 36 24"/>
+          <path d="M12 24 C12 30, 18 36, 24 36 C30 36, 36 30, 36 24"/>
+          <line x1="6" y1="24" x2="42" y2="24"/>
+        </svg>
+      </div>
+      <h3>Audio-Reactive Visualization</h3>
+      <p>Real-time frequency analysis mapped to visual parameters. Sound becomes geometry. Rhythm becomes light. Every frequency band drives a distinct visual dimension.</p>
+      <div class="pillar-tag">ASTRO-VYSIO ENGINE</div>
+    </div>
+    <div class="pillar-card reveal">
+      <div class="pillar-icon">
+        <svg viewBox="0 0 48 48">
+          <polygon points="24,4 44,36 4,36"/>
+          <polygon points="24,14 36,34 12,34"/>
+          <circle cx="24" cy="28" r="3"/>
+        </svg>
+      </div>
+      <h3>WebXR / VR Immersion</h3>
+      <p>Step inside the signal. Spatial audio environments, celestial data overlays, and real-time cosmic coordinate mapping — experienced in full three-dimensional space.</p>
+      <div class="pillar-tag">SPATIAL LAYER</div>
+    </div>
+    <div class="pillar-card reveal">
+      <div class="pillar-icon">
+        <svg viewBox="0 0 48 48">
+          <path d="M24 4 L24 44"/>
+          <path d="M14 14 L34 34"/>
+          <path d="M34 14 L14 34"/>
+          <circle cx="24" cy="24" r="10"/>
+          <circle cx="24" cy="24" r="20"/>
+        </svg>
+      </div>
+      <h3>Consciousness Tools</h3>
+      <p>MORPHA Protocol integration. Harmonic Zodiac mapping. Audio features linked to mudras, Kuji-In seals, and operative states — technology as initiation instrument.</p>
+      <div class="pillar-tag">AWAKING FRAMEWORK</div>
+    </div>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section id="manifesto" style="padding: 10rem 3rem;">
+  <div class="manifesto reveal">
+    <div class="section-label">Manifesto</div>
+    <div class="manifesto-text">
+      "<strong>Never cut, only morph.</strong> We don't choose between spiritual integrity and technical elegance. We don't separate the signal from the meaning. Every frequency is a doorway. Every visual parameter is a state of consciousness. The platform is the practice."
+    </div>
+    <div class="manifesto-attr">— LUMINARA Operative Codex</div>
+  </div>
+</section>
+
+<!-- ECOSYSTEM -->
+<section class="ecosystem" id="ecosystem">
+  <div style="max-width: 1100px; margin: 0 auto;">
+    <div class="section-label reveal">Integrated Systems</div>
+    <div class="section-title reveal">The Ecosystem</div>
+  </div>
+  <div class="eco-grid">
+    <div class="eco-item reveal">
+      <div class="eco-item-number">SYS.01</div>
+      <h3>MORPHA Protocol</h3>
+      <p>Creative navigation system. Persona Nodes, Dimension Nodes, and Tarot Nodes — structured diagnostic framework for creative blocks and operative state transitions. Never cut, only morph.</p>
+    </div>
+    <div class="eco-item reveal">
+      <div class="eco-item-number">SYS.02</div>
+      <h3>Astro-Vysio</h3>
+      <p>Audio-reactive visualization engine with real-time celestial data integration. Frequency bands mapped to visual parameters, planetary positions mapped to color palettes and geometry.</p>
+    </div>
+    <div class="eco-item reveal">
+      <div class="eco-item-number">SYS.03</div>
+      <h3>Harmonic Zodiac</h3>
+      <p>Twelve zodiac signs mapped to audio features, frequencies, mudras, and Kuji-In seals. The bridge between sonic analysis and embodied practice. Original system from the AWAKING series.</p>
+    </div>
+    <div class="eco-item reveal">
+      <div class="eco-item-number">SYS.04</div>
+      <h3>AWAKING</h3>
+      <p>Book series and knowledge architecture. TAM/RAN self-initiation rituals, Green Tara practice integration, sacred geometry foundations. The theoretical spine of the entire platform.</p>
+    </div>
+    <div class="eco-item eco-item-full reveal">
+      <div class="eco-visual">
+        <div class="orb-container" style="width: 200px; height: 200px;">
+          <div class="orb orb-1"></div>
+          <div class="orb orb-2"></div>
+          <div class="orb orb-3"></div>
+          <div class="orb-center"></div>
+        </div>
+      </div>
+      <div>
+        <div class="eco-item-number">SYS.05</div>
+        <h3>VJ Performance Layer</h3>
+        <p>Live visual performance engine purpose-built for club environments. Real-time audio analysis driving generative visuals — tested across Serbian clubs and venues. Where the entire ecosystem meets the dancefloor.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STRIP -->
+<div class="tech-strip">
+  <div class="tech-marquee">
+    <span class="tech-item">Three.js</span>
+    <span class="tech-item">WebXR</span>
+    <span class="tech-item">Web Audio API</span>
+    <span class="tech-item">React</span>
+    <span class="tech-item">TypeScript</span>
+    <span class="tech-item">GLSL Shaders</span>
+    <span class="tech-item">Neo4j</span>
+    <span class="tech-item">Sacred Geometry</span>
+    <span class="tech-item">Celestial Data</span>
+    <span class="tech-item">FFT Analysis</span>
+    <span class="tech-item">Three.js</span>
+    <span class="tech-item">WebXR</span>
+    <span class="tech-item">Web Audio API</span>
+    <span class="tech-item">React</span>
+    <span class="tech-item">TypeScript</span>
+    <span class="tech-item">GLSL Shaders</span>
+    <span class="tech-item">Neo4j</span>
+    <span class="tech-item">Sacred Geometry</span>
+    <span class="tech-item">Celestial Data</span>
+    <span class="tech-item">FFT Analysis</span>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<section class="contact" id="enter">
+  <div class="section-label reveal">Begin</div>
+  <div class="contact-title reveal">Enter the<br>Frequency</div>
+  <p class="contact-sub reveal">Ready to collapse the boundary between tool and practice.</p>
+  <div class="reveal">
+    <a href="#" class="btn btn-primary">Request Access</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>© 2026 LUMINARA — Kai Djuric</div>
+  <div>
+    <a href="#" style="margin-right: 1.5rem;">GitHub</a>
+    <a href="#" style="margin-right: 1.5rem;">X / Twitter</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+<script>
+// ── Sacred Geometry Canvas ──
+const canvas = document.getElementById('geo-canvas');
+const ctx = canvas.getContext('2d');
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+let time = 0;
+
+function drawSacredGeo() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 2;
+  const maxR = Math.min(canvas.width, canvas.height) * 0.35;
+
+  // Flower of life pattern
+  for (let i = 0; i < 6; i++) {
+    const angle = (i * Math.PI * 2) / 6 + time * 0.1;
+    const x = cx + Math.cos(angle) * maxR * 0.3;
+    const y = cy + Math.sin(angle) * maxR * 0.3;
+    ctx.beginPath();
+    ctx.arc(x, y, maxR * 0.3, 0, Math.PI * 2);
+    ctx.strokeStyle = `rgba(212, 168, 83, ${0.03 + Math.sin(time + i) * 0.015})`;
+    ctx.lineWidth = 0.5;
+    ctx.stroke();
+  }
+
+  // Central circle
+  ctx.beginPath();
+  ctx.arc(cx, cy, maxR * 0.3, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(123, 94, 167, 0.04)';
+  ctx.stroke();
+
+  // Outer ring
+  ctx.beginPath();
+  ctx.arc(cx, cy, maxR * 0.6, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(212, 168, 83, 0.02)';
+  ctx.stroke();
+
+  // Rotating lines
+  for (let i = 0; i < 12; i++) {
+    const angle = (i * Math.PI * 2) / 12 + time * 0.05;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(
+      cx + Math.cos(angle) * maxR * 0.6,
+      cy + Math.sin(angle) * maxR * 0.6
+    );
+    ctx.strokeStyle = `rgba(58, 138, 154, ${0.015 + Math.sin(time * 0.5 + i) * 0.01})`;
+    ctx.lineWidth = 0.5;
+    ctx.stroke();
+  }
+
+  time += 0.008;
+  requestAnimationFrame(drawSacredGeo);
+}
+drawSacredGeo();
+
+// ── Scroll reveal ──
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 100);
+    }
+  });
+}, { threshold: 0.15 });
+
+reveals.forEach(el => observer.observe(el));
+
+// ── Nav scroll state ──
+window.addEventListener('scroll', () => {
+  document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 50);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GLIF Display — Product Showcase</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    html {
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.15) transparent;
+    }
+
+    body { 
+      background: #0a0a0a; 
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+
+    /* ═══════════════════════════════════════════
+       NOISE OVERLAY — atmospheric grain
+       ═══════════════════════════════════════════ */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0.028;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 200px;
+    }
+
+    /* ═══════════════════════════════════════════
+       NAV DOTS — fixed side navigation
+       ═══════════════════════════════════════════ */
+    .nav-dots {
+      position: fixed;
+      right: clamp(12px, 2vw, 24px);
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .nav-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.2);
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      position: relative;
+    }
+
+    .nav-dot::before {
+      content: attr(data-label);
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .nav-dot:hover::before { opacity: 1; }
+
+    .nav-dot:hover, .nav-dot.active {
+      background: #fff;
+      border-color: #fff;
+      transform: scale(1.4);
+      box-shadow: 0 0 12px rgba(255,255,255,0.3);
+    }
+
+    @media (max-width: 600px) {
+      .nav-dots { display: none; }
+    }
+
+    /* ═══════════════════════════════════════════
+       SCROLL ANIMATIONS
+       ═══════════════════════════════════════════ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1), 
+                  transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1), 
+                  transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .reveal-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1), 
+                  transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .reveal-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.92);
+      transition: opacity 0.7s cubic-bezier(0.23, 1, 0.32, 1), 
+                  transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .reveal-scale.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Stagger children */
+    .stagger > .reveal:nth-child(1) { transition-delay: 0s; }
+    .stagger > .reveal:nth-child(2) { transition-delay: 0.08s; }
+    .stagger > .reveal:nth-child(3) { transition-delay: 0.16s; }
+    .stagger > .reveal:nth-child(4) { transition-delay: 0.24s; }
+    .stagger > .reveal:nth-child(5) { transition-delay: 0.32s; }
+    .stagger > .reveal:nth-child(6) { transition-delay: 0.40s; }
+    .stagger > .reveal:nth-child(7) { transition-delay: 0.48s; }
+
+    /* ═══════════════════════════════════════════
+       SLIDE BASE
+       ═══════════════════════════════════════════ */
+    .slide {
+      width: 100%;
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ═══════════════════════════════════════════
+       SLIDE 1 — HERO (Electric Red + Cream)
+       ═══════════════════════════════════════════ */
+    .slide-1 {
+      background: #E8192C;
+      justify-content: center;
+      align-items: center;
+      padding: clamp(20px, 5vw, 60px);
+    }
+
+    .slide-1 .bg-letter {
+      position: absolute;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(400px, 100vw, 1200px);
+      color: rgba(0,0,0,0.06);
+      top: -10%;
+      left: -5%;
+      line-height: 1;
+      pointer-events: none;
+      animation: bgLetterFloat 20s ease-in-out infinite;
+    }
+
+    @keyframes bgLetterFloat {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      25% { transform: translate(8px, -5px) rotate(0.3deg); }
+      50% { transform: translate(-3px, 6px) rotate(-0.2deg); }
+      75% { transform: translate(5px, 3px) rotate(0.15deg); }
+    }
+
+    .slide-1 .top-bar {
+      position: absolute;
+      top: clamp(20px, 4vw, 40px);
+      left: clamp(20px, 5vw, 50px);
+      right: clamp(20px, 5vw, 50px);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .slide-1 .top-bar .brand {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(11px, 2vw, 13px);
+      font-weight: 700;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: #FFF5E1;
+    }
+
+    .slide-1 .top-bar .tag {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(9px, 1.5vw, 11px);
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,245,225,0.6);
+      border: 1px solid rgba(255,245,225,0.3);
+      padding: 6px 16px;
+      border-radius: 100px;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    .slide-1 .hero-stack {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+
+    .slide-1 .hero-word {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(80px, 20vw, 200px);
+      line-height: 0.85;
+      letter-spacing: clamp(4px, 1vw, 10px);
+      color: #FFF5E1;
+      text-shadow: 6px 6px 0 rgba(0,0,0,0.12);
+      transition: letter-spacing 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .slide-1 .hero-word:hover {
+      letter-spacing: clamp(10px, 2vw, 20px);
+    }
+
+    .slide-1 .hero-word.outline {
+      -webkit-text-stroke: clamp(1px, 0.5vw, 3px) #FFF5E1;
+      color: transparent;
+      text-shadow: none;
+    }
+
+    .slide-1 .hero-sub {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(20px, 4vw, 36px);
+      color: #FFF5E1;
+      margin-top: 24px;
+      opacity: 0.8;
+    }
+
+    .slide-1 .bottom-strip {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #FFF5E1;
+      padding: clamp(15px, 3vw, 22px) clamp(20px, 5vw, 50px);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .slide-1 .bottom-strip span {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(10px, 1.5vw, 12px);
+      font-weight: 600;
+      letter-spacing: clamp(1px, 0.5vw, 3px);
+      text-transform: uppercase;
+      color: #E8192C;
+      transition: transform 0.3s ease;
+    }
+
+    .slide-1 .bottom-strip span:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Scroll indicator */
+    .scroll-hint {
+      position: absolute;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      animation: scrollBounce 2.5s ease-in-out infinite;
+    }
+
+    .scroll-hint span {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,245,225,0.4);
+    }
+
+    .scroll-hint .arrow {
+      width: 1px;
+      height: 24px;
+      background: linear-gradient(to bottom, rgba(255,245,225,0.4), transparent);
+    }
+
+    @keyframes scrollBounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); opacity: 1; }
+      50% { transform: translateX(-50%) translateY(8px); opacity: 0.5; }
+    }
+
+    /* ═══════════════════════════════════════════
+       SLIDE 2 — WEIGHT SHOWCASE 
+       ═══════════════════════════════════════════ */
+    .slide-2 {
+      background: #0A3D2F;
+      padding: clamp(30px, 6vw, 60px);
+      justify-content: space-between;
+    }
+
+    .slide-2::before {
+      content: '';
+      position: absolute;
+      top: -10vw;
+      right: -10vw;
+      width: clamp(300px, 60vw, 600px);
+      height: clamp(300px, 60vw, 600px);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(212,175,55,0.12) 0%, transparent 70%);
+    }
+
+    .slide-2::after {
+      content: '';
+      position: absolute;
+      bottom: -15vw;
+      left: -10vw;
+      width: clamp(200px, 40vw, 400px);
+      height: clamp(200px, 40vw, 400px);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(212,175,55,0.06) 0%, transparent 70%);
+    }
+
+    .slide-2 .header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: space-between;
+      align-items: flex-start;
+      position: relative;
+      z-index: 2;
+      margin-bottom: 30px;
+    }
+
+    .slide-2 .header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 5vw, 42px);
+      color: #D4AF37;
+      font-weight: 400;
+    }
+
+    .slide-2 .header .count {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(42px, 8vw, 64px);
+      font-weight: 700;
+      color: #D4AF37;
+      line-height: 1;
+      text-align: right;
+    }
+
+    .slide-2 .header .count span {
+      display: block;
+      font-size: clamp(10px, 1.5vw, 12px);
+      font-weight: 500;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(212,175,55,0.6);
+    }
+
+    .slide-2 .weight-list {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .slide-2 .weight-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(212,175,55,0.08);
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      cursor: default;
+    }
+
+    .slide-2 .weight-row:hover {
+      padding-left: 12px;
+      border-bottom-color: rgba(212,175,55,0.3);
+      background: rgba(212,175,55,0.03);
+    }
+
+    .slide-2 .weight-row .name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(10px, 1.5vw, 13px);
+      font-weight: 500;
+      letter-spacing: clamp(1px, 0.5vw, 3px);
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      width: clamp(80px, 15vw, 140px);
+      flex-shrink: 0;
+      transition: color 0.3s ease;
+    }
+
+    .slide-2 .weight-row:hover .name {
+      color: #D4AF37;
+    }
+
+    .slide-2 .weight-row .sample {
+      font-family: 'Bebas Neue', sans-serif;
+      color: #FFF5E1;
+      flex: 1;
+      text-align: right;
+      white-space: nowrap;
+      transition: letter-spacing 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .slide-2 .weight-row:hover .sample {
+      letter-spacing: 0.15em !important;
+    }
+
+    .slide-2 .w-thin .sample { font-size: clamp(20px, 4vw, 36px); opacity: 0.5; letter-spacing: clamp(2px, 1vw, 8px); }
+    .slide-2 .w-light .sample { font-size: clamp(24px, 4.5vw, 42px); opacity: 0.6; letter-spacing: clamp(2px, 0.8vw, 6px); }
+    .slide-2 .w-regular .sample { font-size: clamp(28px, 5vw, 48px); opacity: 0.7; letter-spacing: clamp(1px, 0.6vw, 5px); }
+    .slide-2 .w-medium .sample { font-size: clamp(32px, 6vw, 54px); opacity: 0.8; letter-spacing: clamp(1px, 0.5vw, 4px); }
+    .slide-2 .w-semibold .sample { font-size: clamp(36px, 7vw, 60px); opacity: 0.85; letter-spacing: clamp(1px, 0.4vw, 3px); }
+    .slide-2 .w-bold .sample { font-size: clamp(42px, 8vw, 68px); opacity: 0.95; letter-spacing: clamp(0px, 0.3vw, 2px); }
+    .slide-2 .w-black .sample { font-size: clamp(48px, 9vw, 78px); color: #D4AF37; letter-spacing: clamp(0px, 0.2vw, 1px); }
+
+    .slide-2 .footer {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(9px, 1.2vw, 11px);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(212,175,55,0.35);
+      position: relative;
+      z-index: 2;
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    /* ═══════════════════════════════════════════
+       SLIDE 3 — DINGBATS 
+       ═══════════════════════════════════════════ */
+    .slide-3 { background: #0D0D0D; }
+    .slide-3 .color-block-1 { position: absolute; top: 0; left: 0; width: 50%; height: 100%; background: #2D1BFF; transition: transform 8s ease-in-out; }
+    .slide-3 .color-block-2 { position: absolute; bottom: 0; right: 0; width: 55%; height: 55%; background: #FF2D78; transition: transform 8s ease-in-out; }
+    .slide-3 .color-block-3 { position: absolute; top: 0; right: 0; width: 55%; height: 50%; background: #00E5A0; transition: transform 8s ease-in-out; }
+
+    .slide-3 .content {
+      position: relative;
+      z-index: 2;
+      padding: clamp(30px, 6vw, 60px);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .slide-3 .title-area {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .slide-3 .title-area h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(60px, 12vw, 100px);
+      line-height: 0.9;
+      color: #FFF;
+      text-shadow: 4px 4px 0 rgba(0,0,0,0.3);
+    }
+
+    .slide-3 .title-area .badge {
+      background: #FFE600;
+      color: #000;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(10px, 1.5vw, 14px);
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 10px 24px;
+      transform: rotate(3deg);
+      box-shadow: 4px 4px 0 rgba(0,0,0,0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .slide-3 .title-area .badge:hover {
+      transform: rotate(0deg) scale(1.05);
+    }
+
+    .slide-3 .symbol-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+      gap: clamp(8px, 2vw, 16px);
+      flex: 1;
+      align-content: center;
+      padding: 30px 0;
+    }
+
+    .slide-3 .sym-cell {
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.25);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+      padding: 5px;
+      cursor: default;
+    }
+
+    .slide-3 .sym-cell:nth-child(odd) { background: rgba(255,255,255,0.06); }
+
+    .slide-3 .sym-cell:hover {
+      transform: translateY(-4px) scale(1.06);
+      border-color: rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.12);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    .slide-3 .sym-icon { 
+      font-size: clamp(24px, 5vw, 48px); 
+      margin-bottom: 6px; 
+      filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.3)); 
+      transition: transform 0.3s ease;
+    }
+
+    .slide-3 .sym-cell:hover .sym-icon {
+      transform: scale(1.15);
+    }
+    
+    .slide-3 .sym-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(6px, 1vw, 8px);
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      text-align: center;
+      transition: color 0.3s ease;
+    }
+
+    .slide-3 .sym-cell:hover .sym-label {
+      color: rgba(255,255,255,0.8);
+    }
+
+    .slide-3 .bottom-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+    }
+
+    .slide-3 .bottom-bar .left {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(9px, 1.5vw, 12px);
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .slide-3 .bottom-bar .right {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(14px, 2vw, 18px);
+      color: #FFE600;
+    }
+
+    /* ═══════════════════════════════════════════
+       SLIDE 4 — CHARACTER SET 
+       ═══════════════════════════════════════════ */
+    .slide-4 {
+      background: #F5EDE0;
+      padding: clamp(30px, 6vw, 60px);
+      justify-content: space-between;
+    }
+
+    .slide-4::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: clamp(200px, 40vw, 400px);
+      height: clamp(200px, 40vw, 400px);
+      background: #E8192C;
+      clip-path: polygon(100% 0, 100% 100%, 0 100%);
+      transition: clip-path 0.8s ease;
+    }
+
+    .slide-4 .top {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: space-between;
+      align-items: flex-start;
+      position: relative;
+      z-index: 2;
+    }
+
+    .slide-4 .top h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(48px, 10vw, 72px);
+      color: #1A1A1A;
+      line-height: 0.9;
+    }
+
+    .slide-4 .top .meta { text-align: right; }
+    
+    .slide-4 .top .meta div {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(9px, 1.5vw, 11px);
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #999;
+      line-height: 2.2;
+    }
+
+    .slide-4 .top .meta .highlight { color: #E8192C; font-weight: 700; }
+
+    .slide-4 .char-display {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+      padding: 30px 0;
+    }
+
+    .slide-4 .char-row {
+      font-family: 'Bebas Neue', sans-serif;
+      text-align: center;
+      line-height: 1.15;
+      color: #1A1A1A;
+      word-break: break-all;
+      transition: letter-spacing 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .slide-4 .char-row:hover {
+      letter-spacing: 0.2em !important;
+    }
+
+    .slide-4 .char-row.alpha { font-size: clamp(36px, 8vw, 72px); letter-spacing: clamp(4px, 1.5vw, 12px); }
+    
+    .slide-4 .char-row.nums {
+      font-size: clamp(42px, 9vw, 80px);
+      letter-spacing: clamp(6px, 2vw, 14px);
+      color: #E8192C;
+      margin-top: 12px;
+    }
+    
+    .slide-4 .char-row.punct {
+      font-size: clamp(24px, 5vw, 48px);
+      letter-spacing: clamp(8px, 2.5vw, 20px);
+      color: #999;
+      margin-top: 16px;
+    }
+
+    .slide-4 .bottom-info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: space-between;
+      align-items: flex-end;
+      position: relative;
+      z-index: 2;
+    }
+
+    .slide-4 .bottom-info .left {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(14px, 2.5vw, 20px);
+      color: #1A1A1A;
+    }
+
+    .slide-4 .bottom-info .right {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(9px, 1.5vw, 11px);
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #E8192C;
+    }
+
+    /* ═══════════════════════════════════════════
+       SLIDE 5 — CYRILLIC 
+       ═══════════════════════════════════════════ */
+    .slide-5 {
+      background: linear-gradient(135deg, #1A0533 0%, #2D0A4E 50%, #0A0A2E 100%);
+      padding: clamp(30px, 6vw, 60px);
+      justify-content: space-between;
+    }
+
+    .slide-5::before {
+      content: '';
+      position: absolute;
+      top: -10vw;
+      left: -10vw;
+      width: clamp(250px, 50vw, 500px);
+      height: clamp(250px, 50vw, 500px);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,107,0,0.18) 0%, transparent 70%);
+      animation: orbFloat 15s ease-in-out infinite;
+    }
+
+    .slide-5::after {
+      content: '';
+      position: absolute;
+      bottom: -10vw;
+      right: -10vw;
+      width: clamp(200px, 40vw, 400px);
+      height: clamp(200px, 40vw, 400px);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(139,92,246,0.2) 0%, transparent 70%);
+      animation: orbFloat 18s ease-in-out infinite reverse;
+    }
+
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0, 0); }
+      33% { transform: translate(15px, -10px); }
+      66% { transform: translate(-10px, 12px); }
+    }
+
+    .slide-5 .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      position: relative;
+      z-index: 2;
+    }
+
+    .slide-5 .header h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(42px, 8vw, 64px);
+      color: #FF6B00;
+      line-height: 0.9;
+    }
+
+    .slide-5 .header .flag { font-size: clamp(32px, 6vw, 48px); }
+
+    .slide-5 .cyr-display {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+      padding: 30px 0;
+    }
+
+    .slide-5 .cyr-row {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(32px, 7vw, 64px);
+      letter-spacing: clamp(3px, 1vw, 8px);
+      text-align: center;
+      line-height: 1.3;
+      color: #FFF;
+      word-break: break-all;
+    }
+
+    .slide-5 .cyr-row.serbian {
+      color: #FF6B00;
+      font-size: clamp(40px, 8vw, 80px);
+      letter-spacing: clamp(6px, 2vw, 16px);
+      margin-top: 20px;
+      text-shadow: 0 0 40px rgba(255,107,0,0.2);
+    }
+
+    .slide-5 .cyr-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(9px, 1.5vw, 11px);
+      font-weight: 500;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,107,0,0.5);
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    .slide-5 .bottom {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: space-between;
+      align-items: flex-end;
+      position: relative;
+      z-index: 2;
+    }
+
+    .slide-5 .bottom .left {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(9px, 1.5vw, 11px);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.25);
+      line-height: 2;
+    }
+
+    .slide-5 .bottom .right {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(12px, 2vw, 16px);
+      color: rgba(255,107,0,0.7);
+    }
+
+    /* ═══════════════════════════════════════════
+       SLIDE 6 — USE CASES
+       ═══════════════════════════════════════════ */
+    .slide-6 {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+    }
+
+    @media (min-width: 768px) {
+      .slide-6 {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+      }
+    }
+
+    .slide-6 .panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: clamp(30px, 5vw, 40px);
+      position: relative;
+      overflow: hidden;
+      min-height: 25vh;
+      cursor: default;
+      transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .slide-6 .panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0);
+      transition: background 0.5s ease;
+    }
+
+    .slide-6 .panel:hover::before {
+      background: rgba(0,0,0,0.08);
+    }
+
+    .slide-6 .panel-1 { background: #FF6154; }
+    .slide-6 .panel-2 { background: #00B4A6; }
+    .slide-6 .panel-3 { background: #FFB800; }
+    .slide-6 .panel-4 { background: #2D1BFF; }
+
+    .slide-6 .panel .use-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(8px, 1.2vw, 10px);
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .slide-6 .panel .use-text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(48px, 8vw, 64px);
+      line-height: 0.9;
+      color: #FFF;
+      text-shadow: 3px 3px 0 rgba(0,0,0,0.12);
+      position: relative;
+      z-index: 1;
+      transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .slide-6 .panel:hover .use-text {
+      transform: scale(1.06);
+    }
+
+    .slide-6 .panel .use-sub {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(12px, 2vw, 16px);
+      color: rgba(255,255,255,0.7);
+      margin-top: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ═══════════════════════════════════════════
+       SLIDE 7 — FREE CTA 
+       ═══════════════════════════════════════════ */
+    .slide-7 {
+      background: #0A0A0A;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: clamp(30px, 5vw, 60px);
+    }
+
+    .slide-7::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 30% 60%, rgba(45,27,255,0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 40%, rgba(255,45,120,0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 80%, rgba(0,229,160,0.08) 0%, transparent 40%);
+      animation: ctaGlow 10s ease-in-out infinite alternate;
+    }
+
+    @keyframes ctaGlow {
+      0% { opacity: 0.7; }
+      100% { opacity: 1; }
+    }
+
+    .slide-7 .free-pill {
+      position: relative;
+      z-index: 2;
+      background: linear-gradient(135deg, #FF2D78, #FFE600);
+      color: #000;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(12px, 2vw, 16px);
+      font-weight: 700;
+      letter-spacing: clamp(3px, 1vw, 6px);
+      text-transform: uppercase;
+      padding: clamp(10px, 2vw, 14px) clamp(24px, 5vw, 48px);
+      border-radius: 100px;
+      margin-bottom: clamp(30px, 5vw, 50px);
+      box-shadow: 0 4px 30px rgba(255,45,120,0.2);
+    }
+
+    .slide-7 .big-num {
+      position: relative;
+      z-index: 2;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(120px, 25vw, 240px);
+      line-height: 0.85;
+      color: #FFF;
+      text-shadow: 0 0 80px rgba(255,45,120,0.25);
+    }
+
+    .slide-7 .big-label {
+      position: relative;
+      z-index: 2;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(12px, 2vw, 18px);
+      font-weight: 600;
+      letter-spacing: clamp(5px, 1.5vw, 10px);
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-top: -10px;
+    }
+
+    .slide-7 .price {
+      position: relative;
+      z-index: 2;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(80px, 15vw, 140px);
+      background: linear-gradient(135deg, #00E5A0, #00B4FF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-top: 20px;
+    }
+
+    .slide-7 .price-label {
+      position: relative;
+      z-index: 2;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(10px, 1.5vw, 14px);
+      font-weight: 500;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.25);
+    }
+
+    .slide-7 .includes-list {
+      position: relative;
+      z-index: 2;
+      margin-top: clamp(20px, 4vw, 40px);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: clamp(12px, 2vw, 24px);
+    }
+
+    .slide-7 .inc-item {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(9px, 1.5vw, 11px);
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      transition: all 0.3s ease;
+    }
+
+    .slide-7 .inc-item:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.18);
+      color: rgba(255,255,255,0.8);
+      transform: translateY(-2px);
+    }
+
+    .slide-7 .bottom-footer {
+      position: absolute;
+      bottom: clamp(20px, 4vw, 50px);
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      padding: 0 clamp(20px, 5vw, 60px);
+      z-index: 2;
+      align-items: center;
+    }
+
+    .slide-7 .link-cta {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(12px, 2vw, 16px);
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #FFE600;
+      animation: ctaPulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes ctaPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    .slide-7 .handle {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(10px, 1.5vw, 12px);
+      font-weight: 500;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.15);
+    }
+
+    /* --- Social Buttons --- */
+    .social-links {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .social-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      text-decoration: none;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .social-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+      transition: all 0.3s ease;
+    }
+
+    .social-btn.ig:hover {
+      background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+      border-color: transparent;
+      box-shadow: 0 10px 20px rgba(220, 39, 67, 0.4);
+      transform: translateY(-6px) scale(1.1);
+    }
+
+    .social-btn.x:hover {
+      background: #fff;
+      color: #000;
+      border-color: #fff;
+      box-shadow: 0 10px 20px rgba(255, 255, 255, 0.3);
+      transform: translateY(-6px) scale(1.1);
+    }
+
+    /* ═══════════════════════════════════════════
+       SLIDE 8 — SRPSKI KANJI
+       ═══════════════════════════════════════════ */
+    @font-face {
+      font-family: 'SK';
+      src: url('font.otf') format('opentype'),
+           url('data:font/truetype;base64,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AUYBRwFIAUkHdW5pMDAzMAd1bmkwMDMxB3VuaTAwMzIHdW5pMDAzMwd1bmkwMDM0B3VuaTAwMzUHdW5pMDAzNgd1bmkwMDM3B3VuaTAwMzgHdW5pMDAzOQd1bmkwNDAyB3VuaTA0MDgHdW5pMDQwOQd1bmkwNDBBB3VuaTA0MEIHdW5pMDQwRgd1bmkwNDEwB3VuaTA0MTEHdW5pMDQxMgd1bmkwNDEzB3VuaTA0MTQHdW5pMDQxNQd1bmkwNDE2B3VuaTA0MTcHdW5pMDQxOAd1bmkwNDE5B3VuaTA0MUEHdW5pMDQxQgd1bmkwNDFDB3VuaTA0MUQHdW5pMDQxRQd1bmkwNDFGB3VuaTA0MjAHdW5pMDQyMQd1bmkwNDIyB3VuaTA0MjMHdW5pMDQyNAd1bmkwNDI1B3VuaTA0MjYHdW5pMDQyNwd1bmkwNDI4B3VuaTA0MzAHdW5pMDQzMQd1bmkwNDMyB3VuaTA0MzMHdW5pMDQzNAd1bmkwNDM1B3VuaTA0MzYHdW5pMDQzNwd1bmkwNDM4B3VuaTA0MzkHdW5pMDQzQQd1bmkwNDNCB3VuaTA0M0MHdW5pMDQzRAd1bmkwNDNFB3VuaTA0M0YHdW5pMDQ0MAd1bmkwNDQxB3VuaTA0NDIHdW5pMDQ0Mwd1bmkwNDQ0B3VuaTA0NDUHdW5pMDQ0Ngd1bmkwNDQ3B3VuaTA0NDgHdW5pMDQ1Mgd1bmkwNDU4B3VuaTA0NTkHdW5pMDQ1QQd1bmkwNDVCB3VuaTA0NUY=') format('truetype');
+    }
+
+    .slide-8 {
+      background: #0a0a0a;
+      color: #d8d0c4;
+      padding: clamp(20px, 5vw, 60px);
+      overflow-y: auto;
+      display: block;
+      padding-bottom: 100px;
+    }
+
+    .slide-8-content {
+      max-width: 1000px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .slide-8 h1 {
+      font-family: 'SK', serif;
+      font-size: clamp(40px, 8vw, 72px);
+      text-align: center;
+      letter-spacing: .15em;
+      color: #fff;
+      margin-bottom: 6px;
+      font-weight: normal;
+    }
+
+    .slide-8 .sub {
+      text-align: center;
+      font-size: clamp(9px, 1.5vw, 12px);
+      color: #555;
+      letter-spacing: .4em;
+      text-transform: uppercase;
+      margin-bottom: clamp(30px, 5vw, 50px);
+    }
+
+    .slide-8 .st {
+      font-family: 'Space Grotesk', system-ui, sans-serif;
+      font-size: 10px;
+      color: #c41e1e;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      margin: 48px 0 16px;
+      border-bottom: 1px solid #1a1a1a;
+      padding-bottom: 6px;
+    }
+
+    .slide-8 .gg {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+      gap: 3px;
+    }
+
+    .slide-8 .gc {
+      background: #111;
+      border: 1px solid #1a1a1a;
+      text-align: center;
+      padding: 8px 2px 5px;
+      transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .slide-8 .gc:hover {
+      background: #1a1a1a;
+      border-color: #c41e1e;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(196,30,30,0.15);
+    }
+
+    .slide-8 .gc .c {
+      font-family: 'SK', serif;
+      font-size: 42px;
+      color: #fff;
+      line-height: 1.3;
+      display: block;
+      transition: color 0.3s ease;
+    }
+
+    .slide-8 .gc:hover .c {
+      color: #c41e1e;
+    }
+
+    .slide-8 .gc .l {
+      font-family: 'Space Grotesk', system-ui, sans-serif;
+      font-size: 8px;
+      color: #444;
+      margin-top: 2px;
+      display: block;
+    }
+
+    .slide-8 .s {
+      font-family: 'SK', serif;
+      color: #fff;
+      line-height: 1.9;
+      letter-spacing: .1em;
+      margin: 14px 0;
+      padding: 14px 18px;
+      background: #111;
+      border-left: 3px solid #c41e1e;
+      word-break: break-all;
+      transition: border-left-width 0.3s ease, padding-left 0.3s ease;
+    }
+
+    .slide-8 .s:hover {
+      border-left-width: 6px;
+      padding-left: 24px;
+    }
+
+    .slide-8 .sz {
+      background: #111;
+      padding: 16px;
+    }
+
+    .slide-8 .sz div {
+      font-family: 'SK', serif;
+      color: #fff;
+      margin: 10px 0;
+      padding: 0 18px;
+      word-break: break-all;
+    }
+
+    .slide-8 .cr {
+      text-align: center;
+      margin-top: 50px;
+      font-family: 'Space Grotesk', system-ui, sans-serif;
+      font-size: 9px;
+      color: #2a2a2a;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+    }
+
+    /* ═══════════════════════════════════════════
+       RESPONSIVE TWEAKS
+       ═══════════════════════════════════════════ */
+    @media (max-width: 480px) {
+      .slide-1 .bottom-strip {
+        justify-content: center;
+        text-align: center;
+      }
+      .slide-7 .bottom-footer {
+        justify-content: center;
+        gap: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV DOTS -->
+  <nav class="nav-dots" id="navDots">
+    <div class="nav-dot active" data-slide="0" data-label="Hero"></div>
+    <div class="nav-dot" data-slide="1" data-label="Weights"></div>
+    <div class="nav-dot" data-slide="2" data-label="Dingbats"></div>
+    <div class="nav-dot" data-slide="3" data-label="Characters"></div>
+    <div class="nav-dot" data-slide="4" data-label="Cyrillic"></div>
+    <div class="nav-dot" data-slide="5" data-label="Use Cases"></div>
+    <div class="nav-dot" data-slide="6" data-label="Download"></div>
+    <div class="nav-dot" data-slide="7" data-label="Srpski Kanji"></div>
+  </nav>
+
+  <!-- SLIDE 1 — HERO -->
+  <div class="slide slide-1" id="slide-0">
+    <div class="bg-letter">G</div>
+    <div class="top-bar">
+      <div class="brand reveal reveal-left">Kai Djuric</div>
+      <div class="tag reveal reveal-right">Luminara Ecosystem</div>
+    </div>
+    <div class="hero-stack">
+      <div class="hero-word reveal" style="transition-delay: 0.1s">GLIF</div>
+      <div class="hero-word outline reveal" style="transition-delay: 0.25s">DISPLAY</div>
+      <div class="hero-sub reveal" style="transition-delay: 0.4s">Angular Esoteric Typeface</div>
+    </div>
+    <div class="scroll-hint">
+      <span>Scroll</span>
+      <div class="arrow"></div>
+    </div>
+    <div class="bottom-strip">
+      <span>7 Weights</span>
+      <span>A — Z + 0 — 9</span>
+      <span>+ Dingbats</span>
+      <span>Free Demo Available</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 2 — WEIGHT SHOWCASE -->
+  <div class="slide slide-2" id="slide-1">
+    <div class="header">
+      <h2 class="reveal reveal-left">Weight<br>Spectrum</h2>
+      <div class="count reveal reveal-right">7<span>Weights</span></div>
+    </div>
+    <div class="weight-list stagger">
+      <div class="weight-row w-thin reveal"><span class="name">Thin</span><span class="sample">SIGNAL DRIVEN</span></div>
+      <div class="weight-row w-light reveal"><span class="name">Light</span><span class="sample">SIGNAL DRIVEN</span></div>
+      <div class="weight-row w-regular reveal"><span class="name">Regular</span><span class="sample">SIGNAL DRIVEN</span></div>
+      <div class="weight-row w-medium reveal"><span class="name">Medium</span><span class="sample">SIGNAL DRIVEN</span></div>
+      <div class="weight-row w-semibold reveal"><span class="name">SemiBold</span><span class="sample">SIGNAL DRIVEN</span></div>
+      <div class="weight-row w-bold reveal"><span class="name">Bold</span><span class="sample">SIGNAL DRIVEN</span></div>
+      <div class="weight-row w-black reveal"><span class="name">Black</span><span class="sample">SIGNAL DRIVEN</span></div>
+    </div>
+    <div class="footer reveal">Geometric Construction · Sharp Terminals · Chamfered Corners</div>
+  </div>
+
+  <!-- SLIDE 3 — DINGBATS -->
+  <div class="slide slide-3" id="slide-2">
+    <div class="color-block-1"></div>
+    <div class="color-block-2"></div>
+    <div class="color-block-3"></div>
+    <div class="content">
+      <div class="title-area">
+        <h2 class="reveal reveal-left">GLIF<br>DINGS</h2>
+        <div class="badge reveal reveal-right">36 SYMBOLS</div>
+      </div>
+      <div class="symbol-grid">
+        <div class="sym-cell reveal-scale"><div class="sym-icon">★</div><div class="sym-label">Pentagram</div></div>
+        <div class="sym-cell reveal-scale"><div class="sym-icon">✡</div><div class="sym-label">Hexagram</div></div>
+        <div class="sym-cell reveal-scale"><div class="sym-icon">◯</div><div class="sym-label">Circle</div></div>
+        <div class="sym-cell reveal-scale"><div class="sym-icon">△</div><div class="sym-label">Fire</div></div>
+        <div class="sym-cell reveal-scale"><div class="sym-icon">▽</div><div class="sym-label">Water</div></div>
+        <div class="sym-cell reveal-scale"><div class="sym-icon">◻</div><div class="sym-label">Earth</div></div>
+        <div class="sym-cell reveal-scale"><div class="sym-icon">◇</div><div class="sym-label">Diamond</div></div>
+        <div class="sym-cell reveal-scale"><div class="sym-icon">✚</div><div class="sym-label">Cross</div></div>
+        <div class="sym-cell reveal-scale"><div class="sym-icon">☥</div><div class="sym-label">Ankh</div></div>
+        <div class="sym-cell reveal-scale"><div class="sym-icon">◉</div><div class="sym-label">Eye</div></div>
+        <div class="sym-cell reveal-scale"><div class="sym-icon">☾</div><div class="sym-label">Moon</div></div>
+        <div class="sym-cell reveal-scale"><div class="sym-icon">☀</div><div class="sym-label">Sun</div></div>
+        <div class="sym-cell reveal-scale"><div class="sym-icon">↑</div><div class="sym-label">Ascend</div></div>
+        <div class="sym-cell reveal-scale"><div class="sym-icon">→</div><div class="sym-label">Direct</div></div>
+        <div class="sym-cell reveal-scale"><div class="sym-icon">∞</div><div class="sym-label">Infinity</div></div>
+        <div class="sym-cell reveal-scale"><div class="sym-icon">◌</div><div class="sym-label">Spiral</div></div>
+        <div class="sym-cell reveal-scale"><div class="sym-icon">✴</div><div class="sym-label">Chaos</div></div>
+        <div class="sym-cell reveal-scale"><div class="sym-icon">⬡</div><div class="sym-label">Merkaba</div></div>
+        <div class="sym-cell reveal-scale"><div class="sym-icon">⊖</div><div class="sym-label">Vesica</div></div>
+        <div class="sym-cell reveal-scale"><div class="sym-icon">⊛</div><div class="sym-label">Triskele</div></div>
+        <div class="sym-cell reveal-scale"><div class="sym-icon">▲</div><div class="sym-label">Pyramid</div></div>
+        <div class="sym-cell reveal-scale"><div class="sym-icon">⚱</div><div class="sym-label">Chalice</div></div>
+        <div class="sym-cell reveal-scale"><div class="sym-icon">⚔</div><div class="sym-label">Sword</div></div>
+        <div class="sym-cell reveal-scale"><div class="sym-icon">⚷</div><div class="sym-label">Key</div></div>
+      </div>
+      <div class="bottom-bar">
+        <div class="left reveal reveal-left">Type A–Z for symbols · 0–9 for geometry</div>
+        <div class="right reveal reveal-right">Esoteric Symbol Font</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4 — CHARACTER SET -->
+  <div class="slide slide-4" id="slide-3">
+    <div class="top">
+      <h2 class="reveal reveal-left">FULL<br>SET</h2>
+      <div class="meta reveal reveal-right">
+        <div>Uppercase Latin</div>
+        <div>Digits 0–9</div>
+        <div class="highlight">53 Glyphs Per Weight</div>
+      </div>
+    </div>
+    <div class="char-display stagger">
+      <div class="char-row alpha reveal">ABCDEFGHIJKLM</div>
+      <div class="char-row alpha reveal">NOPQRSTUVWXYZ</div>
+      <div class="char-row nums reveal">0123456789</div>
+      <div class="char-row punct reveal">. , : ; ! ? - / @ & ( ) _ = + *</div>
+    </div>
+    <div class="bottom-info">
+      <div class="left reveal reveal-left">Geometric construction,<br>sharp terminals</div>
+      <div class="right reveal reveal-right">GLIF Display · Kai Djuric</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5 — CYRILLIC -->
+  <div class="slide slide-5" id="slide-4">
+    <div class="header">
+      <h2 class="reveal reveal-left">OVAČA<br>MONO</h2>
+      <div class="flag reveal reveal-right">🇷🇸</div>
+    </div>
+    <div class="cyr-display stagger">
+      <div class="cyr-row reveal">АБВГДЖЗИКЛМН</div>
+      <div class="cyr-row reveal">ОПРСТУФХЦЧШЩ</div>
+      <div class="cyr-row serbian reveal">Ђ Ј Љ Њ Ћ Џ</div>
+      <div class="cyr-label reveal">Serbian-Specific Characters</div>
+    </div>
+    <div class="bottom">
+      <div class="left reveal reveal-left">76 Glyphs<br>Monospaced<br>Latin + Cyrillic</div>
+      <div class="right reveal reveal-right">Made in Ovača, Serbia</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6 — USE CASES -->
+  <div class="slide slide-6" id="slide-5">
+    <div class="panel panel-1 reveal-scale">
+      <div class="use-label">Posters</div>
+      <div class="use-text">RAVE<br>NIGHT</div>
+      <div class="use-sub">Event Graphics</div>
+    </div>
+    <div class="panel panel-2 reveal-scale">
+      <div class="use-label">Brand</div>
+      <div class="use-text">DARK<br>LUXE</div>
+      <div class="use-sub">Identity Systems</div>
+    </div>
+    <div class="panel panel-3 reveal-scale">
+      <div class="use-label">Merch</div>
+      <div class="use-text">DRIP<br>DROP</div>
+      <div class="use-sub">Apparel & Print</div>
+    </div>
+    <div class="panel panel-4 reveal-scale">
+      <div class="use-label">Digital</div>
+      <div class="use-text">WEB3<br>NOIR</div>
+      <div class="use-sub">UI & Motion</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7 — FREE CTA -->
+  <div class="slide slide-7" id="slide-6">
+    <div class="free-pill reveal-scale">FREE DEMO PACK</div>
+    <div class="big-num reveal" style="transition-delay: 0.1s">8</div>
+    <div class="big-label reveal" style="transition-delay: 0.15s">Font Files</div>
+    <div class="price reveal" style="transition-delay: 0.25s">€0</div>
+    <div class="price-label reveal" style="transition-delay: 0.3s">Demo · Personal Use</div>
+    <div class="includes-list">
+      <div class="inc-item reveal" style="transition-delay: 0.35s">GLIF Regular</div>
+      <div class="inc-item reveal" style="transition-delay: 0.4s">GLIF Bold</div>
+      <div class="inc-item reveal" style="transition-delay: 0.45s">Ovača Mono</div>
+      <div class="inc-item reveal" style="transition-delay: 0.5s">Dingbats Ref</div>
+    </div>
+    <div class="bottom-footer">
+      <div class="link-cta reveal reveal-left">↓ DOWNLOAD ↓</div>
+      <div class="social-links reveal reveal-right">
+        <a href="#" class="social-btn ig" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        </a>
+        <a href="#" class="social-btn x" aria-label="X (Twitter)">
+          <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8 — SRPSKI KANJI SHOWCASE -->
+  <div class="slide slide-8" id="slide-7">
+    <div class="slide-8-content">
+      <h1 class="reveal">СРПСКИ КАНЈИ</h1>
+      <div class="sub reveal" style="transition-delay: 0.1s">Serbian Cyrillic &middot; CJK Brush Calligraphy &middot; v3</div>
+
+      <div class="st reveal">Велика Слова &mdash; Uppercase</div>
+      <div class="gg">
+        <div class="gc"><span class="c">А</span><span class="l">А</span></div><div class="gc"><span class="c">Б</span><span class="l">Б</span></div><div class="gc"><span class="c">В</span><span class="l">В</span></div><div class="gc"><span class="c">Г</span><span class="l">Г</span></div><div class="gc"><span class="c">Д</span><span class="l">Д</span></div><div class="gc"><span class="c">Ђ</span><span class="l">Ђ</span></div><div class="gc"><span class="c">Е</span><span class="l">Е</span></div><div class="gc"><span class="c">Ж</span><span class="l">Ж</span></div><div class="gc"><span class="c">З</span><span class="l">З</span></div><div class="gc"><span class="c">И</span><span class="l">И</span></div><div class="gc"><span class="c">Й</span><span class="l">Й</span></div><div class="gc"><span class="c">Ј</span><span class="l">Ј</span></div><div class="gc"><span class="c">К</span><span class="l">К</span></div><div class="gc"><span class="c">Л</span><span class="l">Л</span></div><div class="gc"><span class="c">Љ</span><span class="l">Љ</span></div><div class="gc"><span class="c">М</span><span class="l">М</span></div><div class="gc"><span class="c">Н</span><span class="l">Н</span></div><div class="gc"><span class="c">Њ</span><span class="l">Њ</span></div><div class="gc"><span class="c">О</span><span class="l">О</span></div><div class="gc"><span class="c">П</span><span class="l">П</span></div><div class="gc"><span class="c">Р</span><span class="l">Р</span></div><div class="gc"><span class="c">С</span><span class="l">С</span></div><div class="gc"><span class="c">Т</span><span class="l">Т</span></div><div class="gc"><span class="c">Ћ</span><span class="l">Ћ</span></div><div class="gc"><span class="c">У</span><span class="l">У</span></div><div class="gc"><span class="c">Ф</span><span class="l">Ф</span></div><div class="gc"><span class="c">Х</span><span class="l">Х</span></div><div class="gc"><span class="c">Ц</span><span class="l">Ц</span></div><div class="gc"><span class="c">Ч</span><span class="l">Ч</span></div><div class="gc"><span class="c">Ш</span><span class="l">Ш</span></div><div class="gc"><span class="c">Џ</span><span class="l">Џ</span></div>
+      </div>
+
+      <div class="st reveal">Мала Слова &mdash; Lowercase</div>
+      <div class="gg">
+        <div class="gc"><span class="c">а</span><span class="l">а</span></div><div class="gc"><span class="c">б</span><span class="l">б</span></div><div class="gc"><span class="c">в</span><span class="l">в</span></div><div class="gc"><span class="c">г</span><span class="l">г</span></div><div class="gc"><span class="c">д</span><span class="l">д</span></div><div class="gc"><span class="c">ђ</span><span class="l">ђ</span></div><div class="gc"><span class="c">е</span><span class="l">е</span></div><div class="gc"><span class="c">ж</span><span class="l">ж</span></div><div class="gc"><span class="c">з</span><span class="l">з</span></div><div class="gc"><span class="c">и</span><span class="l">и</span></div><div class="gc"><span class="c">й</span><span class="l">й</span></div><div class="gc"><span class="c">ј</span><span class="l">ј</span></div><div class="gc"><span class="c">к</span><span class="l">к</span></div><div class="gc"><span class="c">л</span><span class="l">л</span></div><div class="gc"><span class="c">љ</span><span class="l">љ</span></div><div class="gc"><span class="c">м</span><span class="l">м</span></div><div class="gc"><span class="c">н</span><span class="l">н</span></div><div class="gc"><span class="c">њ</span><span class="l">њ</span></div><div class="gc"><span class="c">о</span><span class="l">о</span></div><div class="gc"><span class="c">п</span><span class="l">п</span></div><div class="gc"><span class="c">р</span><span class="l">р</span></div><div class="gc"><span class="c">с</span><span class="l">с</span></div><div class="gc"><span class="c">т</span><span class="l">т</span></div><div class="gc"><span class="c">ћ</span><span class="l">ћ</span></div><div class="gc"><span class="c">у</span><span class="l">у</span></div><div class="gc"><span class="c">ф</span><span class="l">ф</span></div><div class="gc"><span class="c">х</span><span class="l">х</span></div><div class="gc"><span class="c">ц</span><span class="l">ц</span></div><div class="gc"><span class="c">ч</span><span class="l">ч</span></div><div class="gc"><span class="c">ш</span><span class="l">ш</span></div><div class="gc"><span class="c">џ</span><span class="l">џ</span></div>
+      </div>
+
+      <div class="st reveal">Бројеви &amp; Интерпункција</div>
+      <div class="gg">
+        <div class="gc"><span class="c">0</span><span class="l">0</span></div><div class="gc"><span class="c">1</span><span class="l">1</span></div><div class="gc"><span class="c">2</span><span class="l">2</span></div><div class="gc"><span class="c">3</span><span class="l">3</span></div><div class="gc"><span class="c">4</span><span class="l">4</span></div><div class="gc"><span class="c">5</span><span class="l">5</span></div><div class="gc"><span class="c">6</span><span class="l">6</span></div><div class="gc"><span class="c">7</span><span class="l">7</span></div><div class="gc"><span class="c">8</span><span class="l">8</span></div><div class="gc"><span class="c">9</span><span class="l">9</span></div><div class="gc"><span class="c">!</span><span class="l">!</span></div><div class="gc"><span class="c">?</span><span class="l">?</span></div><div class="gc"><span class="c">,</span><span class="l">,</span></div><div class="gc"><span class="c">.</span><span class="l">.</span></div><div class="gc"><span class="c">-</span><span class="l">-</span></div>
+      </div>
+
+      <div class="st reveal">Примери</div>
+      <div class="s reveal" style="font-size:clamp(30px, 6vw, 52px)">ЛУМИНАРА</div>
+      <div class="s reveal" style="font-size:clamp(24px, 5vw, 40px)">МОРФА ПРОТОКОЛ</div>
+      <div class="s reveal" style="font-size:clamp(20px, 4vw, 34px)">Ђурић Кај</div>
+      <div class="s reveal" style="font-size:clamp(16px, 3vw, 28px)">Београд Нови Сад</div>
+      <div class="s reveal" style="font-size:clamp(14px, 2.5vw, 24px)">Никад не сеци, увек морфуј.</div>
+      <div class="s reveal" style="font-size:clamp(12px, 2vw, 20px)">абвгдђежзијклљмнњопрстћуфхцчшџ</div>
+      <div class="s reveal" style="font-size:clamp(10px, 1.5vw, 18px)">0123456789 !?,.-</div>
+
+      <div class="st reveal">Величина</div>
+      <div class="sz reveal">
+        <div style="font-size:clamp(40px, 8vw, 80px)">80 СРПСКИ</div>
+        <div style="font-size:clamp(28px, 6vw, 56px)">56 Ћирилица</div>
+        <div style="font-size:clamp(20px, 4vw, 40px)">40 Канџи</div>
+        <div style="font-size:clamp(14px, 3vw, 28px)">28 Четкица</div>
+      </div>
+
+      <div class="cr reveal">SRPSKI KANJI v3.0 &bull; 78 Glyphs &bull; Directional Brush Strokes &bull; 2026</div>
+    </div>
+  </div>
+
+  <script>
+    // ═══════════════════════════════════════════
+    // INTERSECTION OBSERVER — scroll reveal
+    // ═══════════════════════════════════════════
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { 
+      threshold: 0.15,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => {
+      observer.observe(el);
+    });
+
+    // Stagger symbol grid cells
+    document.querySelectorAll('.symbol-grid .reveal-scale').forEach((el, i) => {
+      el.style.transitionDelay = `${i * 0.03}s`;
+    });
+
+    // ═══════════════════════════════════════════
+    // NAV DOTS — active state tracking + click
+    // ═══════════════════════════════════════════
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.nav-dot');
+
+    // Click to scroll
+    dots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        const idx = parseInt(dot.dataset.slide);
+        slides[idx].scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    // Track active slide
+    const slideObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const idx = Array.from(slides).indexOf(entry.target);
+          dots.forEach(d => d.classList.remove('active'));
+          if (dots[idx]) dots[idx].classList.add('active');
+        }
+      });
+    }, { threshold: 0.4 });
+
+    slides.forEach(s => slideObserver.observe(s));
+
+    // ═══════════════════════════════════════════
+    // HERO — trigger immediately
+    // ═══════════════════════════════════════════
+    window.addEventListener('load', () => {
+      document.querySelectorAll('.slide-1 .reveal, .slide-1 .reveal-left, .slide-1 .reveal-right').forEach(el => {
+        el.classList.add('visible');
+      });
+    });
+  </script>
+
+</body>
+</html>

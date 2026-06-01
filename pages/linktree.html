@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kai Djuric — Links</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --fg: #e8e4df;
+    --accent: #c8ff00;
+    --muted: #555;
+    --link-bg: transparent;
+    --link-border: #333;
+    --link-hover-bg: #c8ff00;
+    --link-hover-fg: #0a0a0a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'JetBrains Mono', monospace;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px 80px;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* subtle grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  .container {
+    max-width: 480px;
+    width: 100%;
+  }
+
+  /* HEADER */
+  .header {
+    margin-bottom: 48px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--link-border);
+  }
+
+  .name {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .title {
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  .bio {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.5;
+    max-width: 360px;
+  }
+
+  /* SECTIONS */
+  .section {
+    margin-bottom: 32px;
+  }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+    padding-left: 2px;
+  }
+
+  /* LINKS */
+  .link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 18px;
+    border: 1px solid var(--link-border);
+    margin-bottom: 8px;
+    text-decoration: none;
+    color: var(--fg);
+    transition: all 0.15s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .link::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 0;
+    background: var(--link-hover-bg);
+    transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 0;
+  }
+
+  .link:hover::before {
+    width: 100%;
+  }
+
+  .link:hover {
+    color: var(--link-hover-fg);
+    border-color: var(--accent);
+  }
+
+  .link-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .link-icon {
+    font-size: 16px;
+    width: 22px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .link-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .link-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .link-desc {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    color: var(--muted);
+    transition: color 0.15s ease;
+  }
+
+  .link:hover .link-desc {
+    color: #333;
+  }
+
+  .link-arrow {
+    position: relative;
+    z-index: 1;
+    font-size: 14px;
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: all 0.2s ease;
+  }
+
+  .link:hover .link-arrow {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* SOCIAL ROW */
+  .social-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .social-link {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px;
+    border: 1px solid var(--link-border);
+    text-decoration: none;
+    color: var(--fg);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: all 0.15s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .social-link::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 0;
+    background: var(--link-hover-bg);
+    transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 0;
+  }
+
+  .social-link:hover::before {
+    width: 100%;
+  }
+
+  .social-link span {
+    position: relative;
+    z-index: 1;
+  }
+
+  .social-link:hover {
+    color: var(--link-hover-fg);
+    border-color: var(--accent);
+  }
+
+  /* FOOTER */
+  .footer {
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid var(--link-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-text {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .footer-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    animation: pulse 2.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+
+  /* ENTRANCE ANIMATIONS */
+  .header, .section, .footer {
+    opacity: 0;
+    transform: translateY(12px);
+    animation: fadeIn 0.5s ease forwards;
+  }
+  .header { animation-delay: 0.1s; }
+  .section:nth-child(2) { animation-delay: 0.2s; }
+  .section:nth-child(3) { animation-delay: 0.3s; }
+  .section:nth-child(4) { animation-delay: 0.4s; }
+  .footer { animation-delay: 0.5s; }
+
+  @keyframes fadeIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 480px) {
+    .title { font-size: 24px; }
+    .social-link { padding: 12px 8px; font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="name">Kai Djuric</div>
+    <div class="title">Musician. Technologist.<br>Visual Alchemist.</div>
+    <div class="bio">Electronic music · VJ performance · Creative technology · Consciousness frameworks · Ovača, Serbia</div>
+  </div>
+
+  <!-- PROJECTS -->
+  <div class="section">
+    <div class="section-label">Projects</div>
+
+    <a href="#" class="link" target="_blank">
+      <div class="link-content">
+        <div class="link-icon">◈</div>
+        <div class="link-text">
+          <div class="link-title">LUMINARA</div>
+          <div class="link-desc">Audio-reactive visualization platform</div>
+        </div>
+      </div>
+      <div class="link-arrow">→</div>
+    </a>
+
+    <a href="#" class="link" target="_blank">
+      <div class="link-content">
+        <div class="link-icon">⬡</div>
+        <div class="link-text">
+          <div class="link-title">MORPHA Protocol</div>
+          <div class="link-desc">Never cut, only morph</div>
+        </div>
+      </div>
+      <div class="link-arrow">→</div>
+    </a>
+
+    <a href="#" class="link" target="_blank">
+      <div class="link-content">
+        <div class="link-icon">☽</div>
+        <div class="link-text">
+          <div class="link-title">AWAKING</div>
+          <div class="link-desc">Harmonic Zodiac book series</div>
+        </div>
+      </div>
+      <div class="link-arrow">→</div>
+    </a>
+
+    <a href="#" class="link" target="_blank">
+      <div class="link-content">
+        <div class="link-icon">🐾</div>
+        <div class="link-text">
+          <div class="link-title">Kai Jurek</div>
+          <div class="link-desc">Animal whisperer brand</div>
+        </div>
+      </div>
+      <div class="link-arrow">→</div>
+    </a>
+  </div>
+
+  <!-- MUSIC & PERFORMANCE -->
+  <div class="section">
+    <div class="section-label">Music & Performance</div>
+
+    <a href="#" class="link" target="_blank">
+      <div class="link-content">
+        <div class="link-icon">▶</div>
+        <div class="link-text">
+          <div class="link-title">VJ / Live Visuals</div>
+          <div class="link-desc">Club performances across Serbia</div>
+        </div>
+      </div>
+      <div class="link-arrow">→</div>
+    </a>
+
+    <a href="#" class="link" target="_blank">
+      <div class="link-content">
+        <div class="link-icon">♫</div>
+        <div class="link-text">
+          <div class="link-title">Music</div>
+          <div class="link-desc">Electronic production & trumpet</div>
+        </div>
+      </div>
+      <div class="link-arrow">→</div>
+    </a>
+  </div>
+
+  <!-- WRITING -->
+  <div class="section">
+    <div class="section-label">Writing</div>
+
+    <a href="#" class="link" target="_blank">
+      <div class="link-content">
+        <div class="link-icon">▤</div>
+        <div class="link-text">
+          <div class="link-title">Blog</div>
+          <div class="link-desc">Creative tech, AI, consciousness</div>
+        </div>
+      </div>
+      <div class="link-arrow">→</div>
+    </a>
+  </div>
+
+  <!-- SOCIAL -->
+  <div class="section">
+    <div class="section-label">Connect</div>
+    <div class="social-row">
+      <a href="#" class="social-link" target="_blank">
+        <span>LI</span>
+      </a>
+      <a href="#" class="social-link" target="_blank">
+        <span>X</span>
+      </a>
+      <a href="#" class="social-link" target="_blank">
+        <span>IG</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-text">Ovača, RS — 2026</div>
+    <div class="footer-dot"></div>
+  </div>
+
+</div>
+</body>
+</html>
