@@ -1,0 +1,389 @@
+{
+  "schema": "https://luminara-pages.vercel.app/products.schema.json (informal)",
+  "generated_at": "2026-06-01T22:30:00Z",
+  "currency_default": "USD",
+  "status_meaning": {
+    "draft": "Listed in catalog, not for sale. Prices and Gumroad links must be set by the owner.",
+    "live": "For sale, link in gumroad_listing_url",
+    "archived": "Pulled from sale"
+  },
+  "entity_firewall": "All entries are entity='luminara'. KORËNA, Kai Jurek, AWAKING, Point4Brand, SWARM ORACLE products are NOT in this catalog. Add a new entity section when those products ship.",
+  "product_count": 18,
+  "products": [
+    {
+      "slug": "luminara-main",
+      "name": "LUMINARA — Main",
+      "entity": "luminara",
+      "type": "landing_page",
+      "description": "LUMINARA master landing — sovereign-futurism, neon minimalism, brand hub.",
+      "preview_url": "https://luminara-pages.vercel.app/pages/main",
+      "source_path": "pages/main.html",
+      "price_usd": null,
+      "currency": "USD",
+      "status": "draft",
+      "tags": [
+        "web",
+        "sovereign",
+        "static",
+        "html"
+      ],
+      "gumroad_listing_url": null,
+      "shipped": true,
+      "notes": "Currently served as a free public page. No purchase required."
+    },
+    {
+      "slug": "luminara-creator",
+      "name": "LUMINARA — Creator",
+      "entity": "luminara",
+      "type": "page",
+      "description": "Creator portal page. Onboard artists / contributors.",
+      "preview_url": "https://luminara-pages.vercel.app/pages/creator",
+      "source_path": "pages/creator.html",
+      "price_usd": null,
+      "currency": "USD",
+      "status": "draft",
+      "tags": [
+        "web",
+        "portal"
+      ],
+      "gumroad_listing_url": null,
+      "shipped": true,
+      "notes": null
+    },
+    {
+      "slug": "luminara-light-spectrum",
+      "name": "LUMINARA — Light Spectrum",
+      "entity": "luminara",
+      "type": "page",
+      "description": "Visual frequency field — 12-band light spectrum grid.",
+      "preview_url": "https://luminara-pages.vercel.app/pages/light-spectrum",
+      "source_path": "pages/light-spectrum.html",
+      "price_usd": null,
+      "currency": "USD",
+      "status": "draft",
+      "tags": [
+        "web",
+        "visual",
+        "frequency"
+      ],
+      "gumroad_listing_url": null,
+      "shipped": true,
+      "notes": null
+    },
+    {
+      "slug": "luminara-studio",
+      "name": "LUMINARA — Studio",
+      "entity": "luminara",
+      "type": "page",
+      "description": "Workspace / creator studio entry.",
+      "preview_url": "https://luminara-pages.vercel.app/pages/studio",
+      "source_path": "pages/studio.html",
+      "price_usd": null,
+      "currency": "USD",
+      "status": "draft",
+      "tags": [
+        "web",
+        "studio"
+      ],
+      "gumroad_listing_url": null,
+      "shipped": true,
+      "notes": null
+    },
+    {
+      "slug": "luminara-vj",
+      "name": "LUMINARA — VJ",
+      "entity": "luminara",
+      "type": "page",
+      "description": "Live VJ performance page.",
+      "preview_url": "https://luminara-pages.vercel.app/pages/vj",
+      "source_path": "pages/vj.html",
+      "price_usd": null,
+      "currency": "USD",
+      "status": "draft",
+      "tags": [
+        "web",
+        "vj",
+        "performance"
+      ],
+      "gumroad_listing_url": null,
+      "shipped": true,
+      "notes": null
+    },
+    {
+      "slug": "luminara-vysio",
+      "name": "LUMINARA — VYSIO (offline demo)",
+      "entity": "luminara",
+      "type": "page",
+      "description": "VYSIO audio-reactive music video demo, with embedded offline webm.",
+      "preview_url": "https://luminara-pages.vercel.app/pages/vysio",
+      "source_path": "pages/vysio.html",
+      "media_url": "https://luminara-pages.vercel.app/public/media/vysio-offline.webm",
+      "price_usd": null,
+      "currency": "USD",
+      "status": "draft",
+      "tags": [
+        "web",
+        "audio-reactive",
+        "video"
+      ],
+      "gumroad_listing_url": null,
+      "shipped": true,
+      "notes": "Vysio-offline.webm is 2.9 MB, served as a static asset."
+    },
+    {
+      "slug": "luminara-monolith",
+      "name": "LUMINARA — Monolith (single bundle)",
+      "entity": "luminara",
+      "type": "page",
+      "description": "530 KB single-file monolith — the entire LUMINARA experience in one HTML.",
+      "preview_url": "https://luminara-pages.vercel.app/pages/luminara-monolith",
+      "source_path": "pages/luminara-monolith.html",
+      "price_usd": null,
+      "currency": "USD",
+      "status": "draft",
+      "tags": [
+        "web",
+        "monolith",
+        "offline"
+      ],
+      "gumroad_listing_url": null,
+      "shipped": true,
+      "notes": "Good candidate for a downloadable .html product on Gumroad once priced."
+    },
+    {
+      "slug": "luminara-brand-kit-arcana",
+      "name": "LUMINARA — 22 Arcana Icons (SVG)",
+      "entity": "luminara",
+      "type": "digital_asset",
+      "description": "Major Arcana icon set, 22 SVGs, hand-drawn sigil style.",
+      "preview_url": "https://luminara-pages.vercel.app/brand-kit/luminara-complete/graphics/icon-library/arcana/fool.svg",
+      "source_path": "brand-kit/luminara-complete/graphics/icon-library/arcana/",
+      "asset_count": 12,
+      "price_usd": null,
+      "currency": "USD",
+      "status": "draft",
+      "tags": [
+        "svg",
+        "icons",
+        "tarot",
+        "sovereign"
+      ],
+      "gumroad_listing_url": null,
+      "shipped": false,
+      "notes": "Counts in arcana/ dir on disk: 12 SVGs (not 22). '22 Major Arcana' is the canonical codex; only 12 SVGs are present on disk under arcana/. Reconcile before listing."
+    },
+    {
+      "slug": "luminara-brand-kit-mega-symbols",
+      "name": "LUMINARA — Mega Symbols (SVG)",
+      "entity": "luminara",
+      "type": "digital_asset",
+      "description": "Sacred-geometry mega-symbols: flower-of-life, ankh, ouroboros, pentagram, vesica-piscis, seed-of-life, eye-of-horus, chaosphere, caduceus, tree-of-life, hexagram, yin-yang.",
+      "preview_url": "https://luminara-pages.vercel.app/brand-kit/luminara-complete/graphics/mega-symbols/flower-of-life.svg",
+      "source_path": "brand-kit/luminara-complete/graphics/mega-symbols/",
+      "asset_count": 12,
+      "price_usd": null,
+      "currency": "USD",
+      "status": "draft",
+      "tags": [
+        "svg",
+        "sacred-geometry",
+        "symbols"
+      ],
+      "gumroad_listing_url": null,
+      "shipped": false,
+      "notes": "12 SVGs verified on disk."
+    },
+    {
+      "slug": "luminara-brand-kit-dimensions",
+      "name": "LUMINARA — Dimensions (SVG)",
+      "entity": "luminara",
+      "type": "digital_asset",
+      "description": "10 Dimensional Plane icons: vortex, axis-mundi, nexus, chrysalis, corona-dim, abyss, fracture, deep-field, liminal, harmonic.",
+      "source_url_dir": "brand-kit/luminara-complete/graphics/icon-library/dimensions/",
+      "asset_count": 10,
+      "price_usd": null,
+      "currency": "USD",
+      "status": "draft",
+      "tags": [
+        "svg",
+        "dimensions",
+        "morphic"
+      ],
+      "gumroad_listing_url": null,
+      "shipped": false,
+      "notes": "10 SVGs verified."
+    },
+    {
+      "slug": "luminara-brand-kit-personas",
+      "name": "LUMINARA — Personas (SVG)",
+      "entity": "luminara",
+      "type": "digital_asset",
+      "description": "Persona Currents icon set: anax-chaos, cipher, corona, echo-prime, flux-tendon, glyph, herald, ignis-vola, khaos-prima, mirror, morphon, nexara, nomad, null-point, oracle, prism, pulse, root, sentinel, siren, tectona, umbral, velum, void-plenum, warden, weaver.",
+      "source_path": "brand-kit/luminara-complete/graphics/icon-library/personas/",
+      "asset_count": 26,
+      "price_usd": null,
+      "currency": "USD",
+      "status": "draft",
+      "tags": [
+        "svg",
+        "personas",
+        "morphic"
+      ],
+      "gumroad_listing_url": null,
+      "shipped": false,
+      "notes": "26 SVGs verified on disk. Codex claims 26 Persona Currents — match."
+    },
+    {
+      "slug": "luminara-brand-kit-spread",
+      "name": "LUMINARA — Spread positions (SVG)",
+      "entity": "luminara",
+      "type": "digital_asset",
+      "description": "7-position spread icon set: self, crossing, foundation, crown, field, threshold, omega.",
+      "source_path": "brand-kit/luminara-complete/graphics/icon-library/spread/",
+      "asset_count": 7,
+      "price_usd": null,
+      "currency": "USD",
+      "status": "draft",
+      "tags": [
+        "svg",
+        "spread",
+        "tarot"
+      ],
+      "gumroad_listing_url": null,
+      "shipped": false,
+      "notes": "7 SVGs verified."
+    },
+    {
+      "slug": "luminara-brand-kit-suits",
+      "name": "LUMINARA — Suits (SVG)",
+      "entity": "luminara",
+      "type": "digital_asset",
+      "description": "Minor Arcana suits: cups, swords, pentacles, wands.",
+      "source_path": "brand-kit/luminara-complete/graphics/icon-library/suits/",
+      "asset_count": 4,
+      "price_usd": null,
+      "currency": "USD",
+      "status": "draft",
+      "tags": [
+        "svg",
+        "suits",
+        "tarot"
+      ],
+      "gumroad_listing_url": null,
+      "shipped": false,
+      "notes": "4 SVGs verified."
+    },
+    {
+      "slug": "luminara-fonts-glif",
+      "name": "LUMINARA — GLIF Display family (TTF)",
+      "entity": "luminara",
+      "type": "font",
+      "description": "7-weight GLIF Display family: Thin, Light, Regular, Medium, SemiBold, Bold, Black, plus Dingbats. Caps-only display sans with sovereign-futurism feel.",
+      "source_path": "brand-kit/luminara-complete/fonts/",
+      "asset_count": 8,
+      "price_usd": null,
+      "currency": "USD",
+      "status": "draft",
+      "tags": [
+        "ttf",
+        "typeface",
+        "display"
+      ],
+      "gumroad_listing_url": null,
+      "shipped": false,
+      "notes": "8 TTF files verified. NOTE: your export memory lists 'GLIF Display (7-weight family)'. Disk has 7 weights + 1 dingbats = 8 files. Reconcile: bundle as 7 or 8?"
+    },
+    {
+      "slug": "luminara-font-ovaca-mono",
+      "name": "LUMINARA — Ovača Mono (TTF)",
+      "entity": "luminara",
+      "type": "font",
+      "description": "Ovača Mono — Serbian-Cyrillic-friendly monospace. Single weight.",
+      "source_path": "brand-kit/luminara-complete/fonts/Ovaca-Mono-Regular.ttf",
+      "asset_count": 1,
+      "price_usd": null,
+      "currency": "USD",
+      "status": "draft",
+      "tags": [
+        "ttf",
+        "typeface",
+        "mono",
+        "cyrillic"
+      ],
+      "gumroad_listing_url": null,
+      "shipped": false,
+      "notes": "1 TTF verified."
+    },
+    {
+      "slug": "luminara-hyperframe-bundle-launch",
+      "name": "LUMINARA — HyperFrame: Luminara Bundle Launch (mp4)",
+      "entity": "luminara",
+      "type": "video",
+      "description": "1920×1080 GSAP-driven kinetic-type composition, 15s loop, sovereign-futurism default. Source: HeyGen HyperFrames pipeline.",
+      "preview_url": "file:///Users/kajicadjuric/Documents/CreativeUniverse/sovereign-signal-pipeline/luminara-promo/luminara-launch/luminara-bundle/renders/luminara-bundle-launch.mp4",
+      "source_path": "~/Documents/CreativeUniverse/sovereign-signal-pipeline/luminara-promo/luminara-launch/luminara-bundle/renders/luminara-bundle-launch.mp4",
+      "file_size_bytes": 7977532,
+      "duration_seconds": 15,
+      "resolution": "1920x1080",
+      "price_usd": null,
+      "currency": "USD",
+      "status": "draft",
+      "tags": [
+        "mp4",
+        "video",
+        "kinetic-type",
+        "heygen",
+        "hyperframe"
+      ],
+      "gumroad_listing_url": null,
+      "shipped": false,
+      "notes": "NOT deployed to Vercel yet. Awaiting deploy decision."
+    },
+    {
+      "slug": "luminara-hyperframe-sovereign-scale-001",
+      "name": "LUMINARA — HyperFrame: Sovereign Scale 001 (mp4)",
+      "entity": "luminara",
+      "type": "video",
+      "description": "1920×1080 GSAP kinetic-type, 15s, sovereign-futurism. Curriculum asset.",
+      "preview_url": "file:///Users/kajicadjuric/Documents/CreativeUniverse/sovereign-signal-pipeline/curriculum/sovereign-scale-video/sovereign-scale-001/renders/sovereign-scale-001.mp4",
+      "source_path": "~/Documents/CreativeUniverse/sovereign-signal-pipeline/curriculum/sovereign-scale-video/sovereign-scale-001/renders/sovereign-scale-001.mp4",
+      "file_size_bytes": 6546733,
+      "duration_seconds": 15,
+      "resolution": "1920x1080",
+      "price_usd": null,
+      "currency": "USD",
+      "status": "draft",
+      "tags": [
+        "mp4",
+        "video",
+        "kinetic-type",
+        "heygen",
+        "hyperframe",
+        "curriculum"
+      ],
+      "gumroad_listing_url": null,
+      "shipped": false,
+      "notes": "NOT deployed to Vercel yet."
+    },
+    {
+      "slug": "skill-luminara-video-pipeline",
+      "name": "LUMINARA — Video Pipeline (Hermes skill bundle)",
+      "entity": "luminara",
+      "type": "skill",
+      "description": "Hermes .skill bundle for LUMINARA video pipeline. 41 KB.",
+      "source_path": "brand-kit/luminara-video-pipeline.skill",
+      "file_size_bytes": 41494,
+      "price_usd": null,
+      "currency": "USD",
+      "status": "draft",
+      "tags": [
+        "skill",
+        "hermes",
+        "video"
+      ],
+      "gumroad_listing_url": null,
+      "shipped": false,
+      "notes": "Format unknown (not opened). .skill is a Hermes skill bundle, may not be a 'product' — listing as draft for visibility."
+    }
+  ]
+}
