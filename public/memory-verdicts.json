@@ -1,0 +1,222 @@
+{
+  "schema": "memory verdicts (KEEP/SKIP/REWRITE) — flat, one row per fact, no content beyond diff",
+  "generated_at": "2026-06-01",
+  "source_diff": "data/memory-diff.json (in luminara-remotion repo)",
+  "rules": {
+    "KEEP": "Write this fact to fact_store. Use the proposed fact as-is.",
+    "SKIP": "Do not write. Fact is not useful or is duplicate of current memory.",
+    "REWRITE": "I will edit the fact text inline before committing. Use my edited version.",
+    "EDIT": "I will provide a free-form replacement. I will paste the new fact."
+  },
+  "summary": {
+    "total_facts": 19,
+    "verdicts_set": 0,
+    "verdicts_pending": 19
+  },
+  "facts": [
+    {
+      "id": "ENT-01",
+      "category": "user_pref",
+      "proposed_fact": "Kai operates 6 strictly entity-firewalled projects: LUMINARA, SWARM ORACLE, AWAKING, KORËNA, Point4Brand/MONETIZE-BOT, Kai Jurek. No cross-contamination of brand assets or identities.",
+      "verdict_proposed": "CONFIRM",
+      "trust": 0.95,
+      "source": "export conversations_memory + project memories",
+      "verdict": "PENDING",
+      "edited_fact": null
+    },
+    {
+      "id": "ENT-02",
+      "category": "project",
+      "proposed_fact": "Kai Jurek is the animal-whisperer brand, strictly firewalled from LUMINARA / KORËNA / Point4Brand.",
+      "verdict_proposed": "CONFIRM",
+      "trust": 0.95,
+      "source": "export conversations_memory",
+      "verdict": "PENDING",
+      "edited_fact": null
+    },
+    {
+      "id": "ENT-03",
+      "category": "project",
+      "proposed_fact": "KORËNA is a fashion brand. Visual system: Royal Gold/Bronze + Azure Fluid palettes. Rules: mono-material, no seasonal drops, no sale-ever. Launch priority = Serbia first.",
+      "verdict_proposed": "CONFIRM",
+      "trust": 0.85,
+      "source": "export conversations_memory",
+      "verdict": "PENDING",
+      "edited_fact": null
+    },
+    {
+      "id": "PERS-01",
+      "category": "user_pref",
+      "proposed_fact": "Kai Djuric is a solo creative technologist, electronic musician, VJ performer, graphic artist, developer based in Ovača, Central Serbia. Plays trumpet, practices chaos magic alongside Serbian Orthodox tradition, Vajrayana Buddhism, and consciousness exploration. Has a dog named Koreka.",
+      "verdict_proposed": "CONFIRM",
+      "trust": 0.95,
+      "source": "export conversations_memory",
+      "verdict": "PENDING",
+      "edited_fact": null
+    },
+    {
+      "id": "PERS-02",
+      "category": "user_pref",
+      "proposed_fact": "ULUS-recognized graphic artist. Sigilization is a native graphic practice.",
+      "verdict_proposed": "CONFIRM",
+      "trust": 0.9,
+      "source": "export conversations_memory",
+      "verdict": "PENDING",
+      "edited_fact": null
+    },
+    {
+      "id": "OP-01",
+      "category": "user_pref",
+      "proposed_fact": "MORPHA Protocol core axiom: 'Never cut, only morph.' Spiritual bypass test applied to all content: if removing the spiritual element doesn't change the output, it's decorative — flag it.",
+      "verdict_proposed": "CONFIRM",
+      "trust": 0.95,
+      "source": "export conversations_memory + dedicated MORPHA project memory",
+      "verdict": "PENDING",
+      "edited_fact": null
+    },
+    {
+      "id": "OP-02",
+      "category": "user_pref",
+      "proposed_fact": "CRAAP Test (Currency/Relevance/Authority/Accuracy/Purpose) is Kai's source evaluation framework.",
+      "verdict_proposed": "CONFIRM",
+      "trust": 0.9,
+      "source": "export conversations_memory",
+      "verdict": "PENDING",
+      "edited_fact": null
+    },
+    {
+      "id": "OP-03",
+      "category": "user_pref",
+      "proposed_fact": "Priority hierarchy: spiritual integrity → UX → technical elegance → business viability.",
+      "verdict_proposed": "CONFIRM",
+      "trust": 0.9,
+      "source": "export conversations_memory",
+      "verdict": "PENDING",
+      "edited_fact": null
+    },
+    {
+      "id": "OP-04",
+      "category": "user_pref",
+      "proposed_fact": "Known pattern: high project initiation, lower completion. FROZEN.md scope firewall and completion accountability protocols exist to counter this. Cognitive twin mode: match energy, commit to perspectives without hedging, challenge scope creep, help him finish things.",
+      "verdict_proposed": "CONFIRM",
+      "trust": 0.9,
+      "source": "export conversations_memory",
+      "verdict": "PENDING",
+      "edited_fact": null
+    },
+    {
+      "id": "OS-01",
+      "category": "tool",
+      "proposed_fact": "Session OS files live at ~/kai-os/ as 4 files: CLAUDE.md, SESSION.log, SPIRITUAL.md, CURRENT.md. At conversation start, silently read them and auto-map topics. At close, update SESSION.log on disk.",
+      "verdict_proposed": "CONFIRM",
+      "trust": 0.85,
+      "source": "export conversations_memory",
+      "verdict": "PENDING",
+      "edited_fact": null
+    },
+    {
+      "id": "LUM-01",
+      "category": "project",
+      "proposed_fact": "LUMINARA is a frequency-based consciousness toolkit. A=432 Hz tuning (C4=256 Hz), 12 zodiacal archetypal keys, sacred geometry (Platonic solids), bija mantras, voice toning as the primary instrument.",
+      "verdict_proposed": "CONFIRM",
+      "trust": 0.9,
+      "source": "export project 019c20bc",
+      "verdict": "PENDING",
+      "edited_fact": null
+    },
+    {
+      "id": "LUM-02",
+      "category": "project",
+      "proposed_fact": "LUMINARA six named products: VYSIO (audio-reactive music video), LUMINARA Toolkit, Light Spectrum, Studio, VJ Performance, Creator Portal. v3 (current shipped state) uses 16 deployed HTML pages + hyperframe canvas + brand kit.",
+      "verdict_proposed": "CONFIRM",
+      "trust": 0.95,
+      "source": "export + this session's deploy work",
+      "verdict": "PENDING",
+      "edited_fact": null
+    },
+    {
+      "id": "P4B-01",
+      "category": "project",
+      "proposed_fact": "Gumroad digital product line: GLIF Display (7-weight family), Ovača Mono (Serbian Cyrillic), dingbat fonts, SVG icon libraries. LUMINARA shop page lists 15 products.",
+      "verdict_proposed": "CONFIRM",
+      "trust": 0.7,
+      "source": "export conversations_memory",
+      "verdict": "PENDING",
+      "edited_fact": null
+    },
+    {
+      "id": "SWM-01",
+      "category": "project",
+      "proposed_fact": "SWARM ORACLE: swarm intelligence prediction engine. Stack: React + Three.js, Neo4j, TypeScript, pgvector, LLM layer (Ollama qwen2.5:32b primary, OpenAI-compatible cloud burst). Paper trading default, live trading requires explicit flag. MiroFish-inspired. CLAUDE.md exists, FROZEN.md scope firewall.",
+      "verdict_proposed": "CONFIRM",
+      "trust": 0.9,
+      "source": "export + this session's CLAUDE.md scan",
+      "verdict": "PENDING",
+      "edited_fact": null
+    },
+    {
+      "id": "MOR-01",
+      "category": "project",
+      "proposed_fact": "MORPHA Protocol codex: 26 Persona Currents, 25 Dimensional Planes, 22 Major Arcana reframes, 59-icon SVG library, chaos magic integration.",
+      "verdict_proposed": "CONFIRM",
+      "trust": 0.7,
+      "source": "export conversations_memory",
+      "verdict": "PENDING",
+      "edited_fact": null
+    },
+    {
+      "id": "SK-01",
+      "category": "tool",
+      "proposed_fact": "Active skill ecosystem: kai-session-os, sy-cipher (token compression), decision-engine (fast/guided/hybrid modes), epublish-krea (Krea API + publishing), ebook-publishing (KDP/Gumroad/IngramSpark/audiobook via ElevenLabs w/ Serbian support), boris-cherny-claude-code-stack (5-layer monorepo), ai-engineering-patterns, agentic-memory-design, font-maker (variable font pipeline, OTF), luminara-video-pipeline.",
+      "verdict_proposed": "CONFIRM",
+      "trust": 0.85,
+      "source": "export conversations_memory",
+      "verdict": "PENDING",
+      "edited_fact": null
+    },
+    {
+      "id": "AWK-01",
+      "category": "project",
+      "proposed_fact": "AWAKING book series: Harmonic Zodiac system (12 zodiac signs → audio frequencies, mudras, Kuji-In seals, self-initiation protocols). TAM/RAN chapters. References: Steiner, Sacred Geometry, Cathie Grid, Éliphas Lévi. Audiobook pipeline via ElevenLabs/ACX. Target audience: people who feel stuck, lost, or in pain.",
+      "verdict_proposed": "CONFIRM",
+      "trust": 0.8,
+      "source": "export project 019d45fe",
+      "verdict": "PENDING",
+      "edited_fact": null
+    },
+    {
+      "id": "MUS-01",
+      "category": "project",
+      "proposed_fact": "Active Suno AI music production focus: café/lounge instrumental tracks fusing Indian classical structures (alap, gat, jhala, raga terminology, tabla/mridangam percussion) with bossa nova + microhouse aesthetics. Also Suno prompts in 'kai-voice' for Serbian-language content. Project album: Kosmičko Buđenje (12 songs, Serbian).",
+      "verdict_proposed": "CONFIRM",
+      "trust": 0.85,
+      "source": "export conversations_memory + project 0199e612",
+      "verdict": "PENDING",
+      "edited_fact": null
+    },
+    {
+      "id": "INF-01",
+      "category": "tool",
+      "proposed_fact": "Blocked infrastructure: video pipeline (Midjourney + Remotion) has no local render output. Claude Code Remote Control unavailable in Serbia (rollout delay).",
+      "verdict_proposed": "CONFIRM",
+      "trust": 0.8,
+      "source": "export conversations_memory",
+      "verdict": "PENDING",
+      "edited_fact": null
+    }
+  ],
+  "stale_blocks_summary": [
+    {
+      "id": "STL-01",
+      "kind": "abandoned_or_completed",
+      "item_count": 15,
+      "action": "PENDING — review / mark for archive"
+    },
+    {
+      "id": "STL-02",
+      "kind": "duplicated_with_current",
+      "item_count": 4,
+      "action": "PENDING — review / mark for archive"
+    }
+  ]
+}
