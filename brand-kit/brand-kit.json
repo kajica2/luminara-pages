@@ -1,0 +1,28 @@
+{
+  "brandName": "My Brand",
+  "palette": [
+    "#c084fc",
+    "#c0fc84",
+    "#e6fecd",
+    "#e6cdfe",
+    "#8d20fa"
+  ],
+  "typography": {
+    "heading": "Space Grotesk",
+    "body": "Inter",
+    "baseSizePx": 16,
+    "weight": 400,
+    "letterSpacingEm": 0,
+    "lineHeight": 1.6
+  },
+  "logo": {
+    "text": "My Brand",
+    "font": "Space Grotesk",
+    "case": "uppercase",
+    "spacingPx": 4,
+    "color": "#c084fc",
+    "effect": "none",
+    "icon": "diamond",
+    "iconPosition": "left"
+  }
+}

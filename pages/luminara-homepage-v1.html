@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luminara — Sound-based consciousness. 13 frequencies. Daily practice.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=Archivo+Black&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --cream: #E3E2DE;
+            --blue: #1351AA;
+            --black: #141414;
+            --gray-deep: #444343;
+            --gray-muted: #7A7A7A;
+            --gray-border: #C7C7C7;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--cream);
+            color: var(--black);
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            border-bottom: 1px solid var(--gray-border);
+            position: relative;
+            padding: 0;
+        }
+
+        .hero-label {
+            grid-column: 1 / 4;
+            padding: 2rem;
+            border-right: 1px solid var(--gray-border);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .hero-label-top {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--gray-muted);
+        }
+
+        .hero-label-bottom {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--gray-muted);
+            align-self: flex-end;
+        }
+
+        .hero-content {
+            grid-column: 4 / 13;
+            padding: 4rem 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 3rem;
+        }
+
+        .hero-headline {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: clamp(4rem, 12vw, 10rem);
+            line-height: 0.85;
+            letter-spacing: -0.04em;
+            text-transform: uppercase;
+            margin: 0;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .hero-headline span {
+            display: block;
+        }
+
+        .hero-subtext {
+            font-size: 1.125rem;
+            line-height: 1.5;
+            color: var(--gray-deep);
+            max-width: 600px;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s backwards;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s backwards;
+        }
+
+        .btn {
+            padding: 1.25rem 2.5rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s linear;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--blue);
+            color: var(--cream);
+        }
+
+        .btn-primary:hover {
+            background: var(--black);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--black);
+            border: 1px solid var(--black);
+        }
+
+        .btn-secondary:hover {
+            background: var(--black);
+            color: var(--cream);
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            border-bottom: 1px solid var(--gray-border);
+        }
+
+        .section-label {
+            grid-column: 1 / 4;
+            padding: 4rem 2rem;
+            border-right: 1px solid var(--gray-border);
+            position: sticky;
+            top: 0;
+            align-self: start;
+        }
+
+        .section-label h2 {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--gray-muted);
+        }
+
+        .section-content {
+            grid-column: 4 / 13;
+            padding: 4rem 3rem;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
+        }
+
+        .step {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .step:nth-child(1) { animation-delay: 0.1s; }
+        .step:nth-child(2) { animation-delay: 0.2s; }
+        .step:nth-child(3) { animation-delay: 0.3s; }
+
+        .step-number {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 6rem;
+            line-height: 0.9;
+            color: var(--blue);
+            margin-bottom: 1rem;
+        }
+
+        .step h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            line-height: 1.2;
+        }
+
+        .step p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--gray-deep);
+        }
+
+        /* Frequencies Grid */
+        .frequencies {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            border-bottom: 1px solid var(--gray-border);
+        }
+
+        .frequencies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 0;
+        }
+
+        .frequency-card {
+            border: 1px solid var(--gray-border);
+            padding: 2rem;
+            position: relative;
+            transition: all 0.3s linear;
+            background: var(--cream);
+        }
+
+        .frequency-card:hover {
+            background: var(--blue);
+            color: var(--cream);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 0 var(--black);
+        }
+
+        .frequency-card:hover .frequency-number,
+        .frequency-card:hover .frequency-name,
+        .frequency-card:hover .frequency-desc {
+            color: var(--cream);
+        }
+
+        .frequency-number {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 3rem;
+            line-height: 1;
+            color: var(--blue);
+            margin-bottom: 0.5rem;
+            transition: color 0.3s linear;
+        }
+
+        .frequency-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s linear;
+        }
+
+        .frequency-desc {
+            font-size: 0.875rem;
+            line-height: 1.5;
+            color: var(--gray-deep);
+            transition: color 0.3s linear;
+        }
+
+        /* Download Section */
+        .download {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            border-bottom: 1px solid var(--gray-border);
+            background: var(--black);
+            color: var(--cream);
+        }
+
+        .download .section-label {
+            border-right: 1px solid var(--gray-muted);
+        }
+
+        .download .section-label h2 {
+            color: var(--gray-muted);
+        }
+
+        .download-content {
+            grid-column: 4 / 13;
+            padding: 6rem 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .download-headline {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: clamp(3rem, 8vw, 7rem);
+            line-height: 0.9;
+            letter-spacing: -0.03em;
+            text-transform: uppercase;
+        }
+
+        .platform-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .platform-btn {
+            padding: 1rem 2rem;
+            background: var(--cream);
+            color: var(--black);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s linear;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .platform-btn:hover {
+            background: var(--blue);
+            color: var(--cream);
+        }
+
+        /* Footer */
+        .footer {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            padding: 3rem 0;
+        }
+
+        .footer-content {
+            grid-column: 1 / 13;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-logo {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--gray-deep);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: color 0.3s linear;
+        }
+
+        .footer-links a:hover {
+            color: var(--blue);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .hero,
+            .how-it-works,
+            .frequencies,
+            .download,
+            .footer {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-label,
+            .section-label {
+                grid-column: 1;
+                border-right: none;
+                border-bottom: 1px solid var(--gray-border);
+                padding: 2rem;
+            }
+
+            .hero-label-bottom {
+                writing-mode: horizontal-tb;
+                margin-top: 1rem;
+            }
+
+            .hero-content,
+            .section-content,
+            .download-content {
+                grid-column: 1;
+                padding: 2rem;
+            }
+
+            .hero-headline {
+                font-size: 3.5rem;
+            }
+
+            .download-headline {
+                font-size: 3rem;
+            }
+
+            .section-label {
+                position: static;
+            }
+
+            .frequencies-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-label">
+            <div class="hero-label-top">Luminara</div>
+            <div class="hero-label-bottom">Sound / Consciousness / Practice</div>
+        </div>
+        <div class="hero-content">
+            <h1 class="hero-headline">
+                <span>Your voice</span>
+                <span>is the most</span>
+                <span>powerful</span>
+                <span>instrument</span>
+                <span>you have.</span>
+            </h1>
+            <p class="hero-subtext">
+                Luminara is not another meditation app. No guided sessions. No calming voices. 
+                Just you, sound, and 13 specific frequencies designed to shift your state.
+            </p>
+            <div class="hero-cta">
+                <a href="#download" class="btn btn-primary">Download Now</a>
+                <a href="#how" class="btn btn-secondary">How It Works</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how">
+        <div class="section-label">
+            <h2>How It Works</h2>
+        </div>
+        <div class="section-content">
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">01</div>
+                    <h3>Open the app</h3>
+                    <p>No setup. No account required. Just open and start.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">02</div>
+                    <h3>Select a frequency</h3>
+                    <p>Each frequency corresponds to a different state of consciousness. Pick what you need right now.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">03</div>
+                    <h3>Use your voice</h3>
+                    <p>Follow the sound. Feel what happens. 3 minutes. That's it.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Frequencies -->
+    <section class="frequencies" id="frequencies">
+        <div class="section-label">
+            <h2>The 13 Frequencies</h2>
+        </div>
+        <div class="section-content" style="padding: 0;">
+            <div class="frequencies-grid">
+                <div class="frequency-card">
+                    <div class="frequency-number">01</div>
+                    <h3 class="frequency-name">Grounding</h3>
+                    <p class="frequency-desc">When you feel unmoored</p>
+                </div>
+                <div class="frequency-card">
+                    <div class="frequency-number">02</div>
+                    <h3 class="frequency-name">Safety</h3>
+                    <p class="frequency-desc">When the body is on alert</p>
+                </div>
+                <div class="frequency-card">
+                    <div class="frequency-number">03</div>
+                    <h3 class="frequency-name">Creative Flow</h3>
+                    <p class="frequency-desc">When you need to make something</p>
+                </div>
+                <div class="frequency-card">
+                    <div class="frequency-number">04</div>
+                    <h3 class="frequency-name">Heart Opening</h3>
+                    <p class="frequency-desc">When you've been closed too long</p>
+                </div>
+                <div class="frequency-card">
+                    <div class="frequency-number">05</div>
+                    <h3 class="frequency-name">Expression</h3>
+                    <p class="frequency-desc">When the words won't come</p>
+                </div>
+                <div class="frequency-card">
+                    <div class="frequency-number">06</div>
+                    <h3 class="frequency-name">Clarity</h3>
+                    <p class="frequency-desc">When the mind is static</p>
+                </div>
+                <div class="frequency-card">
+                    <div class="frequency-number">07</div>
+                    <h3 class="frequency-name">Connection</h3>
+                    <p class="frequency-desc">When you feel separate</p>
+                </div>
+                <div class="frequency-card">
+                    <div class="frequency-number">08</div>
+                    <h3 class="frequency-name">Release</h3>
+                    <p class="frequency-desc">When you're holding too much</p>
+                </div>
+                <div class="frequency-card">
+                    <div class="frequency-number">09</div>
+                    <h3 class="frequency-name">Integration</h3>
+                    <p class="frequency-desc">After big shifts</p>
+                </div>
+                <div class="frequency-card">
+                    <div class="frequency-number">10</div>
+                    <h3 class="frequency-name">Stillness</h3>
+                    <p class="frequency-desc">When everything is moving too fast</p>
+                </div>
+                <div class="frequency-card">
+                    <div class="frequency-number">11</div>
+                    <h3 class="frequency-name">Vitality</h3>
+                    <p class="frequency-desc">When the energy is low</p>
+                </div>
+                <div class="frequency-card">
+                    <div class="frequency-number">12</div>
+                    <h3 class="frequency-name">Expansion</h3>
+                    <p class="frequency-desc">When you're ready to grow</p>
+                </div>
+                <div class="frequency-card">
+                    <div class="frequency-number">13</div>
+                    <h3 class="frequency-name">Wholeness</h3>
+                    <p class="frequency-desc">When you remember</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download -->
+    <section class="download" id="download">
+        <div class="section-label">
+            <h2>Download</h2>
+        </div>
+        <div class="download-content">
+            <h2 class="download-headline">
+                <span>Available</span>
+                <span>everywhere</span>
+                <span>you are.</span>
+            </h2>
+            <div class="platform-links">
+                <a href="#ios" class="platform-btn">iOS</a>
+                <a href="#android" class="platform-btn">Android</a>
+                <a href="#web" class="platform-btn">Web</a>
+                <a href="#macos" class="platform-btn">macOS</a>
+                <a href="#windows" class="platform-btn">Windows</a>
+            </div>
+            <p style="color: var(--gray-muted); margin-top: 1rem; font-size: 0.875rem;">
+                Free forever. Premium unlocks extended practices and voice playback.
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">Luminara</div>
+            <div class="footer-links">
+                <a href="#privacy">Privacy</a>
+                <a href="#support">Support</a>
+                <a href="#press">Press Kit</a>
+                <a href="mailto:hello@luminara.app">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.step').forEach(step => {
+            observer.observe(step);
+        });
+    </script>
+</body>
+</html>

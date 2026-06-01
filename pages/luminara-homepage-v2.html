@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUMINARA — Where Frequency Meets You</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Libre+Franklin:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bone: #F5F0E8;
+    --ink: #1A1714;
+    --warm-gray: #8A827A;
+    --amber: #C4956A;
+    --amber-dim: #C4956A33;
+    --deep: #2C2620;
+    --cream: #FAF7F2;
+    --rust: #A0634B;
+    --fog: #D4CFC7;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+  }
+
+  body {
+    font-family: 'Libre Franklin', sans-serif;
+    font-weight: 300;
+    background: var(--bone);
+    color: var(--ink);
+    line-height: 1.7;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: var(--amber-dim);
+    color: var(--ink);
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 1.5rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    mix-blend-mode: difference;
+    transition: opacity 0.6s ease;
+  }
+
+  nav .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 1.15rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: #fff;
+  }
+
+  nav .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  nav .nav-links a {
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #fff;
+    text-decoration: none;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+    font-weight: 400;
+  }
+
+  nav .nav-links a:hover {
+    opacity: 1;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 6rem 2rem;
+    position: relative;
+    background: var(--ink);
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 40%, #3A2E2200 0%, #1A171400 100%),
+      radial-gradient(ellipse 40% 40% at 30% 60%, #C4956A08 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 70% 40%, #A0634B06 0%, transparent 70%);
+    animation: heroGlow 12s ease-in-out infinite alternate;
+  }
+
+  @keyframes heroGlow {
+    0% { opacity: 0.6; }
+    100% { opacity: 1; }
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.3s forwards;
+    font-weight: 400;
+  }
+
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--cream);
+    line-height: 1.1;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 1.2s ease 0.5s forwards;
+  }
+
+  .hero-line {
+    width: 60px;
+    height: 1px;
+    background: var(--amber);
+    margin: 0 auto 2.5rem;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.7s forwards;
+  }
+
+  .hero p {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: clamp(1.15rem, 2.5vw, 1.45rem);
+    color: var(--fog);
+    line-height: 1.8;
+    max-width: 520px;
+    margin: 0 auto;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.9s forwards;
+  }
+
+  .scroll-indicator {
+    position: absolute;
+    bottom: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    opacity: 0;
+    animation: fadeUp 1s ease 1.4s forwards;
+  }
+
+  .scroll-indicator span {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+  }
+
+  .scroll-indicator .line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--warm-gray), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; transform: scaleY(1); }
+    50% { opacity: 0.8; transform: scaleY(1.2); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── SECTIONS ─── */
+  section {
+    padding: 8rem 2rem;
+  }
+
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .container-wide {
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+
+  /* ─── PREMISE ─── */
+  .premise {
+    background: var(--cream);
+    border-top: 1px solid var(--fog);
+    border-bottom: 1px solid var(--fog);
+  }
+
+  .premise .container p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.25rem, 2.8vw, 1.6rem);
+    font-weight: 400;
+    line-height: 2;
+    color: var(--deep);
+    margin-bottom: 1.5rem;
+  }
+
+  .premise .container p:last-child {
+    margin-bottom: 0;
+  }
+
+  .premise .container p em {
+    font-style: italic;
+    color: var(--rust);
+  }
+
+  .premise .container p strong {
+    font-weight: 500;
+  }
+
+  /* ─── QUOTE BREAK ─── */
+  .quote-break {
+    background: var(--ink);
+    padding: 6rem 2rem;
+    text-align: center;
+  }
+
+  .quote-break blockquote {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    color: var(--cream);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.9;
+  }
+
+  .quote-break .attribution {
+    margin-top: 2rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--amber);
+    font-family: 'Libre Franklin', sans-serif;
+    font-weight: 400;
+  }
+
+  /* ─── WHAT IT IS ─── */
+  .what-it-is {
+    background: var(--bone);
+  }
+
+  .section-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 3rem;
+    font-weight: 400;
+  }
+
+  .what-it-is h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    color: var(--ink);
+    line-height: 1.3;
+    margin-bottom: 2.5rem;
+    max-width: 500px;
+  }
+
+  .what-it-is .body-text {
+    font-size: 1rem;
+    color: var(--deep);
+    line-height: 1.85;
+    margin-bottom: 1.5rem;
+  }
+
+  .what-it-is .body-text:last-of-type {
+    margin-bottom: 0;
+  }
+
+  /* ─── PILLARS ─── */
+  .pillars {
+    background: var(--cream);
+    border-top: 1px solid var(--fog);
+  }
+
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+    margin-top: 3rem;
+  }
+
+  .pillar {
+    padding: 2.5rem 0;
+    border-top: 1px solid var(--ink);
+  }
+
+  .pillar-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem;
+    color: var(--warm-gray);
+    margin-bottom: 1.5rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+  }
+
+  .pillar h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    font-size: 1.5rem;
+    color: var(--ink);
+    margin-bottom: 1.25rem;
+    line-height: 1.3;
+  }
+
+  .pillar p {
+    font-size: 0.9rem;
+    color: var(--warm-gray);
+    line-height: 1.75;
+  }
+
+  /* ─── THE BOOK ─── */
+  .the-book {
+    background: var(--deep);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .the-book::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, var(--amber-dim) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .book-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .book-info .section-label {
+    color: var(--amber);
+  }
+
+  .book-info h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(2rem, 4vw, 2.6rem);
+    color: var(--cream);
+    line-height: 1.35;
+    margin-bottom: 2rem;
+  }
+
+  .book-info h2 em {
+    font-style: italic;
+    color: var(--amber);
+  }
+
+  .book-info p {
+    font-size: 0.95rem;
+    color: var(--fog);
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+
+  .book-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--amber);
+    text-decoration: none;
+    font-weight: 400;
+    transition: gap 0.3s ease;
+  }
+
+  .book-cta:hover {
+    gap: 1.5rem;
+  }
+
+  .book-cta .arrow {
+    width: 40px;
+    height: 1px;
+    background: var(--amber);
+    position: relative;
+    transition: width 0.3s ease;
+  }
+
+  .book-cta:hover .arrow {
+    width: 55px;
+  }
+
+  .book-cta .arrow::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: -3px;
+    width: 7px;
+    height: 7px;
+    border-top: 1px solid var(--amber);
+    border-right: 1px solid var(--amber);
+    transform: rotate(45deg);
+  }
+
+  .book-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .book-mockup {
+    width: 260px;
+    height: 370px;
+    background: linear-gradient(145deg, #2A2318, #1E1A14);
+    border-radius: 2px 12px 12px 2px;
+    box-shadow:
+      -4px 0 0 #181510,
+      -6px 0 0 #14110D,
+      12px 12px 40px rgba(0,0,0,0.5),
+      0 0 80px var(--amber-dim);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .book-mockup::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+      linear-gradient(135deg, rgba(196,149,106,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 30% 20%, rgba(196,149,106,0.05) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .book-mockup .book-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 1.8rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--amber);
+    position: relative;
+    z-index: 1;
+  }
+
+  .book-mockup .book-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: 0.8rem;
+    color: var(--fog);
+    margin-top: 0.75rem;
+    letter-spacing: 0.1em;
+    position: relative;
+    z-index: 1;
+    opacity: 0.7;
+  }
+
+  .book-mockup .book-author {
+    font-family: 'Libre Franklin', sans-serif;
+    font-weight: 300;
+    font-size: 0.6rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--fog);
+    position: absolute;
+    bottom: 2.5rem;
+    opacity: 0.5;
+  }
+
+  .book-mockup .book-line {
+    width: 30px;
+    height: 1px;
+    background: var(--amber);
+    margin-top: 1.5rem;
+    opacity: 0.5;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ─── TESTIMONIAL ─── */
+  .testimonial {
+    background: var(--bone);
+    text-align: center;
+    padding: 7rem 2rem;
+  }
+
+  .testimonial blockquote {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    font-size: clamp(1.15rem, 2.5vw, 1.4rem);
+    color: var(--deep);
+    max-width: 580px;
+    margin: 0 auto;
+    line-height: 1.9;
+    font-style: italic;
+  }
+
+  .testimonial .reader {
+    margin-top: 2rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    color: var(--warm-gray);
+    font-weight: 400;
+  }
+
+  /* ─── ABOUT ─── */
+  .about {
+    background: var(--cream);
+    border-top: 1px solid var(--fog);
+  }
+
+  .about-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .about-photo {
+    aspect-ratio: 3/4;
+    background: linear-gradient(135deg, var(--fog), var(--bone));
+    position: relative;
+    overflow: hidden;
+  }
+
+  .about-photo::after {
+    content: 'KD';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 4rem;
+    font-weight: 300;
+    color: var(--warm-gray);
+    opacity: 0.2;
+    letter-spacing: 0.2em;
+  }
+
+  .about-text h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+    color: var(--ink);
+    line-height: 1.3;
+    margin-bottom: 2rem;
+  }
+
+  .about-text p {
+    font-size: 0.95rem;
+    color: var(--deep);
+    line-height: 1.85;
+    margin-bottom: 1.5rem;
+  }
+
+  /* ─── SUBSCRIBE ─── */
+  .subscribe {
+    background: var(--ink);
+    text-align: center;
+    padding: 7rem 2rem;
+  }
+
+  .subscribe h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+    color: var(--cream);
+    margin-bottom: 1rem;
+  }
+
+  .subscribe .sub-desc {
+    font-size: 0.9rem;
+    color: var(--warm-gray);
+    margin-bottom: 2.5rem;
+    line-height: 1.7;
+  }
+
+  .subscribe-form {
+    display: flex;
+    gap: 0;
+    max-width: 440px;
+    margin: 0 auto;
+  }
+
+  .subscribe-form input {
+    flex: 1;
+    padding: 1rem 1.25rem;
+    border: 1px solid #3A352E;
+    background: transparent;
+    color: var(--cream);
+    font-family: 'Libre Franklin', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+
+  .subscribe-form input::placeholder {
+    color: #5A544D;
+  }
+
+  .subscribe-form input:focus {
+    border-color: var(--amber);
+  }
+
+  .subscribe-form button {
+    padding: 1rem 2rem;
+    background: var(--amber);
+    color: var(--ink);
+    border: 1px solid var(--amber);
+    font-family: 'Libre Franklin', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .subscribe-form button:hover {
+    background: transparent;
+    color: var(--amber);
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--deep);
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+
+  footer .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 0.9rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--fog);
+    opacity: 0.4;
+    margin-bottom: 1.5rem;
+  }
+
+  footer p {
+    font-size: 0.7rem;
+    color: var(--warm-gray);
+    opacity: 0.4;
+    letter-spacing: 0.1em;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    nav {
+      padding: 1.25rem 1.5rem;
+    }
+
+    nav .nav-links {
+      gap: 1.5rem;
+    }
+
+    section {
+      padding: 5rem 1.5rem;
+    }
+
+    .pillars-grid {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    .book-layout {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      text-align: center;
+    }
+
+    .book-visual {
+      order: -1;
+    }
+
+    .book-mockup {
+      width: 200px;
+      height: 285px;
+    }
+
+    .about-layout {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    .about-photo {
+      max-width: 300px;
+    }
+
+    .subscribe-form {
+      flex-direction: column;
+    }
+
+    .subscribe-form button {
+      padding: 1rem;
+    }
+  }
+
+  /* ─── FADE IN ON SCROLL ─── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Luminara</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#book">The Book</a></li>
+    <li><a href="#subscribe">Connect</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">A system by Kai Djuric</div>
+    <h1>Luminara</h1>
+    <div class="hero-line"></div>
+    <p>Your external world is a mirror of your internal frequency. Not sometimes. Always.</p>
+  </div>
+  <div class="scroll-indicator">
+    <span>Scroll</span>
+    <div class="line"></div>
+  </div>
+</section>
+
+<!-- PREMISE -->
+<section class="premise">
+  <div class="container fade-in">
+    <p>You already know something is off.</p>
+    <p>Not broken. Not wrong. Just... <em>misaligned</em>. The same patterns keep showing up. The same feelings follow you from room to room, city to city, year to year.</p>
+    <p>You have tried to think your way out. Meditate your way out. Work your way out.</p>
+    <p><strong>LUMINARA starts somewhere else entirely.</strong></p>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<section class="quote-break">
+  <blockquote class="fade-in">
+    "Change the signal, and the reflections change."
+  </blockquote>
+  <div class="attribution fade-in">— Kai Djuric</div>
+</section>
+
+<!-- WHAT IT IS -->
+<section class="what-it-is" id="about">
+  <div class="container">
+    <div class="section-label fade-in">What Luminara Is</div>
+    <h2 class="fade-in">Not a method.<br>A way of meeting yourself through sound.</h2>
+    <p class="body-text fade-in">LUMINARA is a system built on one principle: frequency is not a metaphor. It is measurable. It is physical. And it changes everything — your nervous system, your relationships, your experience of being alive.</p>
+    <p class="body-text fade-in">This is not about positive thinking. Not about affirmations taped to your mirror. It is about learning to work with the signal your body is already emitting — and tuning it, deliberately, through the oldest instrument you have.</p>
+    <p class="body-text fade-in">Your voice.</p>
+  </div>
+</section>
+
+<!-- PILLARS -->
+<section class="pillars">
+  <div class="container-wide">
+    <div class="section-label fade-in">Three Foundations</div>
+    <div class="pillars-grid">
+      <div class="pillar fade-in">
+        <div class="pillar-number">01</div>
+        <h3>Frequency</h3>
+        <p>Everything vibrates. Your thoughts, your cells, your words. LUMINARA teaches you to read frequency like a language — in your body, your voice, your relationships. Not as metaphor. As fact.</p>
+      </div>
+      <div class="pillar fade-in">
+        <div class="pillar-number">02</div>
+        <h3>Voice</h3>
+        <p>Your voice is the most powerful instrument you have. Full stop. It bypasses the mind and reaches the nervous system directly. LUMINARA shows you how to use it — not to perform, but to heal.</p>
+      </div>
+      <div class="pillar fade-in">
+        <div class="pillar-number">03</div>
+        <h3>Resonance</h3>
+        <p>When your internal frequency shifts, your external world rearranges. Not through force. Through coherence. The relationships, situations, and feelings that follow you everywhere — they are not random. They are resonant.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE BOOK -->
+<section class="the-book" id="book">
+  <div class="container-wide">
+    <div class="book-layout">
+      <div class="book-info">
+        <div class="section-label fade-in">The Book</div>
+        <h2 class="fade-in"><em>The Resonance of Wholeness</em></h2>
+        <p class="fade-in">This is not a self-help book. It will not tell you to think positive or hustle harder. It will ask you to listen. To your body. To the signal beneath the noise.</p>
+        <p class="fade-in">Part science, part practice, part confrontation — it walks you through the LUMINARA system from the ground up. By the end, you will not just understand frequency. You will feel it.</p>
+        <a href="#" class="book-cta fade-in">
+          Read the first chapter
+          <span class="arrow"></span>
+        </a>
+      </div>
+      <div class="book-visual fade-in">
+        <div class="book-mockup">
+          <div class="book-title">Luminara</div>
+          <div class="book-line"></div>
+          <div class="book-subtitle">The Resonance of Wholeness</div>
+          <div class="book-author">Kai Djuric</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="testimonial">
+  <blockquote class="fade-in">
+    "I read it expecting theory. Instead, I got something that made my body respond before my mind could catch up. I have never experienced a book like this."
+  </blockquote>
+  <div class="reader fade-in">— Early reader</div>
+</section>
+
+<!-- ABOUT KAI -->
+<section class="about" id="kai">
+  <div class="container-wide">
+    <div class="about-layout">
+      <div class="about-photo fade-in"></div>
+      <div class="about-text">
+        <div class="section-label fade-in">About</div>
+        <h2 class="fade-in">Kai Djuric</h2>
+        <p class="fade-in">Kai does not call himself a healer, a guru, or a teacher. He builds systems. LUMINARA came from years of personal work — from sitting with grief, from learning to listen to the body, from discovering that sound could do what willpower never could.</p>
+        <p class="fade-in">He writes the way he speaks: direct, spare, and without apology. His work sits at the intersection of frequency science, consciousness, and the lived experience of being human. No fluff. No borrowed wisdom. Just what is true, said plainly.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUBSCRIBE -->
+<section class="subscribe" id="subscribe">
+  <div class="container fade-in">
+    <h2>Stay close.</h2>
+    <p class="sub-desc">New writing, practices, and frequency work — delivered when it matters.</p>
+    <form class="subscribe-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent = 'You\'re in.'; this.querySelector('input').disabled = true;">
+      <input type="email" placeholder="Your email" required>
+      <button type="submit">Subscribe</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Luminara</div>
+  <p>&copy; 2026 Kai Djuric. All rights reserved.</p>
+</footer>
+
+<script>
+  // Fade-in on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, {
+    threshold: 0.15,
+    rootMargin: '0px 0px -40px 0px'
+  });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

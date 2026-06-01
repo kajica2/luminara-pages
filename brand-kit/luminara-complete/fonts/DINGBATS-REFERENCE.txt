@@ -1,0 +1,58 @@
+GLIF DINGBATS — Symbol Reference
+══════════════════════════════════
+
+Type the letter/number to get the symbol.
+
+LETTERS → ESOTERIC SYMBOLS
+────────────────────────────
+A = Pentagram (5-pointed star)
+B = Hexagram (Seal of Solomon)
+C = Circle (Ouroboros ring)
+D = Triangle Up (Fire / Ascending)
+E = Triangle Down (Water / Descending)
+F = Square (Earth element)
+G = Diamond (Rhombus)
+H = Cross (Equal-armed)
+I = Ankh (Key of Life)
+J = Eye (of Horus / Providence)
+K = Crescent (Moon)
+L = Sun (with 8 rays)
+M = Arrow Up (Ascension)
+N = Arrow Right (Direction)
+O = Infinity (Lemniscate)
+P = Spiral (Golden ratio)
+Q = Chaos Star (8-pointed)
+R = Merkaba (Star tetrahedron)
+S = Vesica Piscis (sacred geometry)
+T = Triskelion (Triple spiral)
+U = Pyramid (with eye)
+V = Chalice (Grail / Cup)
+W = Sword (Blade / Will)
+X = Key (Unlocking / Knowledge)
+Y = Hourglass (Time / Saturn)
+Z = Lightning (Power / Zeus)
+
+NUMBERS → GEOMETRIC POLYGONS
+────────────────────────────
+0 = Decagon (10 sides)
+1 = Dot (Point / Monad)
+2 = Line (Dyad / Duality)
+3 = Triangle (Triad / Trinity)
+4 = Square (Tetrad / Elements)
+5 = Pentagon (Quintessence)
+6 = Hexagon (Harmony)
+7 = Heptagon (Mystery)
+8 = Octagon (Regeneration)
+9 = Enneagon (Completion)
+
+USAGE TIPS
+────────────────────────────
+• Best used at 48px+ for display
+• Combine with GLIF Display text for headers
+• Use number row as decorative geometric elements
+• Type words to generate sigil-like symbol sequences
+  Example: "CHAOS" → ☾✶△◯✡ (approximate)
+• Layer with transparency for overlay effects
+
+────────────────────────────
+© 2026 Kai Djuric / LUMINARA

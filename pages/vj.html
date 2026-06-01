@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>VJ — LUMINARA</title>
+<style>/* === LUMINARA SHARED DESIGN SYSTEM === */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Outfit:wght@200;300;400;500;600;700&display=swap');
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-deep: #06060e;
+  --bg-mid: #0a0a18;
+  --bg-card: rgba(255,255,255,0.02);
+  --bg-card-hover: rgba(255,255,255,0.05);
+  --purple-dark: #1a0a2e;
+  --purple: #6b2fa0;
+  --purple-light: #a855f7;
+  --teal: #2dd4bf;
+  --teal-dark: #0d9488;
+  --gold: #f59e0b;
+  --gold-light: #fbbf24;
+  --silver: #94a3b8;
+  --white: #f1f5f9;
+  --text-dim: #64748b;
+  --border-subtle: rgba(255,255,255,0.06);
+  --border-hover: rgba(168,85,247,0.2);
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Outfit', system-ui, sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg-deep);
+  color: var(--white);
+  overflow-x: hidden;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* NAV */
+.lum-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 1.2rem 3rem;
+  display: flex; justify-content: space-between; align-items: center;
+  background: linear-gradient(to bottom, rgba(6,6,14,0.95), rgba(6,6,14,0.8));
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  transition: all 0.4s;
+}
+.lum-nav.scrolled { padding: 0.7rem 3rem; box-shadow: 0 1px 40px rgba(107,47,160,0.08); }
+.lum-nav-logo {
+  font-family: var(--font-display); font-size: 1.5rem; font-weight: 300;
+  letter-spacing: 0.3em; color: var(--white); text-decoration: none;
+}
+.lum-nav-logo span { color: var(--teal); }
+.lum-nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+.lum-nav-links a {
+  font-size: 0.72rem; font-weight: 400; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--silver); text-decoration: none;
+  transition: color 0.3s; position: relative;
+}
+.lum-nav-links a::after {
+  content: ''; position: absolute; bottom: -3px; left: 0;
+  width: 0; height: 1px; background: var(--teal); transition: width 0.3s;
+}
+.lum-nav-links a:hover { color: var(--white); }
+.lum-nav-links a:hover::after { width: 100%; }
+.lum-nav-links a.active { color: var(--teal); }
+
+/* MOBILE NAV */
+.nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; }
+.nav-toggle span { display: block; width: 22px; height: 1.5px; background: var(--silver); margin: 5px 0; transition: 0.3s; }
+
+/* HERO COMMON */
+.page-hero {
+  min-height: 85vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center;
+  padding: 8rem 3rem 4rem; position: relative;
+}
+.page-hero-badge {
+  display: inline-block; font-size: 0.65rem; letter-spacing: 0.3em;
+  text-transform: uppercase; padding: 0.45rem 1.4rem; border-radius: 100px;
+  margin-bottom: 2.5rem; opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+}
+.page-hero h1 {
+  font-family: var(--font-display); font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 300; letter-spacing: 0.1em; line-height: 1.05;
+  margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 1s 0.4s forwards;
+}
+.page-hero-sub {
+  font-family: var(--font-display); font-size: clamp(1rem, 2.2vw, 1.5rem);
+  font-weight: 300; font-style: italic; color: var(--silver);
+  max-width: 550px; margin: 0 auto 2rem; opacity: 0; animation: fadeUp 1s 0.6s forwards;
+}
+.page-hero-cta {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  font-size: 0.78rem; font-weight: 500; letter-spacing: 0.15em;
+  text-transform: uppercase; text-decoration: none; padding: 0.9rem 2.2rem;
+  border-radius: 100px; transition: all 0.4s; opacity: 0; animation: fadeUp 0.8s 0.9s forwards;
+}
+
+/* SECTIONS */
+.lum-section {
+  position: relative; z-index: 1; padding: 6rem 3rem;
+}
+.lum-section-center { text-align: center; display: flex; flex-direction: column; align-items: center; }
+.section-label {
+  font-size: 0.68rem; letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--teal); margin-bottom: 1.5rem;
+}
+.section-title {
+  font-family: var(--font-display); font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 300; line-height: 1.3; max-width: 700px; margin-bottom: 1.5rem;
+}
+.section-text {
+  color: var(--silver); font-weight: 300; font-size: 1rem;
+  line-height: 1.8; max-width: 600px;
+}
+
+/* FEATURE GRID */
+.feature-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem; max-width: 1100px; width: 100%; margin-top: 3rem;
+}
+.feature-card {
+  background: var(--bg-card); border: 1px solid var(--border-subtle);
+  border-radius: 16px; padding: 2.5rem 2rem; transition: all 0.4s;
+  position: relative; overflow: hidden;
+}
+.feature-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 2px; opacity: 0; transition: opacity 0.4s;
+}
+.feature-card:hover {
+  background: var(--bg-card-hover); border-color: var(--border-hover);
+  transform: translateY(-4px);
+}
+.feature-card:hover::before { opacity: 1; }
+.feature-icon { font-size: 2rem; margin-bottom: 1.2rem; display: block; }
+.feature-card h3 {
+  font-family: var(--font-display); font-size: 1.3rem; font-weight: 400;
+  margin-bottom: 0.6rem;
+}
+.feature-card p { color: var(--text-dim); font-size: 0.88rem; font-weight: 300; line-height: 1.7; }
+
+/* SPECS TABLE */
+.specs-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem; max-width: 900px; width: 100%; margin-top: 3rem;
+}
+.spec-item {
+  padding: 1.8rem 1.4rem; border-radius: 12px;
+  background: var(--bg-card); border: 1px solid var(--border-subtle);
+  text-align: center; transition: all 0.3s;
+}
+.spec-item:hover { border-color: rgba(45,212,191,0.15); transform: translateY(-2px); }
+.spec-value {
+  font-family: var(--font-display); font-size: 2rem; font-weight: 300;
+  margin-bottom: 0.3rem;
+}
+.spec-label {
+  font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+/* CTA BANNER */
+.cta-banner {
+  text-align: center; padding: 6rem 3rem;
+  background: radial-gradient(ellipse at center, rgba(107,47,160,0.12), transparent 60%);
+}
+.cta-banner h2 {
+  font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 300; margin-bottom: 1rem;
+}
+.cta-banner p { color: var(--silver); font-weight: 300; margin-bottom: 2.5rem; max-width: 450px; margin-left: auto; margin-right: auto; }
+.cta-btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font-size: 0.78rem; font-weight: 500; letter-spacing: 0.15em;
+  text-transform: uppercase; padding: 0.9rem 2.5rem; border-radius: 100px;
+  text-decoration: none; border: none; cursor: pointer; transition: all 0.4s;
+}
+.cta-btn-primary {
+  background: linear-gradient(135deg, var(--purple), var(--teal-dark));
+  color: var(--white);
+}
+.cta-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 40px rgba(107,47,160,0.3); }
+.cta-btn-outline {
+  background: transparent; border: 1px solid rgba(45,212,191,0.3); color: var(--teal);
+}
+.cta-btn-outline:hover { background: rgba(45,212,191,0.08); transform: translateY(-2px); }
+
+/* FOOTER */
+.lum-footer {
+  position: relative; z-index: 1; padding: 4rem 3rem 3rem;
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+.footer-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr auto; gap: 3rem; align-items: start;
+}
+.footer-brand { font-family: var(--font-display); font-size: 1.1rem; font-weight: 300; letter-spacing: 0.3em; color: var(--text-dim); margin-bottom: 0.5rem; }
+.footer-tagline { font-size: 0.75rem; font-style: italic; font-family: var(--font-display); color: var(--text-dim); }
+.footer-links { display: flex; gap: 2rem; flex-wrap: wrap; }
+.footer-links a { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); text-decoration: none; transition: color 0.3s; }
+.footer-links a:hover { color: var(--teal); }
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(25px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* CANVAS */
+.bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+
+/* GLOW TEXT */
+.glow {
+  background: linear-gradient(135deg, var(--purple-light), var(--teal), var(--gold-light));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse-glow { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+@keyframes rotate-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .lum-nav { padding: 1rem 1.5rem; }
+  .lum-nav-links { display: none; }
+  .nav-toggle { display: block; }
+  .lum-nav-links.open { display: flex; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: rgba(6,6,14,0.97); padding: 2rem; gap: 1.5rem; border-bottom: 1px solid var(--border-subtle); }
+  .lum-section, .page-hero { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .feature-grid { grid-template-columns: 1fr; }
+  .specs-grid { grid-template-columns: 1fr 1fr; }
+  .footer-inner { grid-template-columns: 1fr; }
+  .footer-links { flex-direction: column; gap: 1rem; }
+}
+
+
+.vj-hero { background: radial-gradient(ellipse at 40% 70%, rgba(13,148,136,.2), transparent 55%); }
+.vj-stage { max-width:1000px; width:100%; margin:3rem auto 0; display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+.vj-stage-card { background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:16px; padding:2rem; transition:all .4s; }
+.vj-stage-card:hover { border-color:rgba(45,212,191,.2); transform:translateY(-3px); }
+.vj-stage-card h4 { font-family:var(--font-display); font-size:1.2rem; margin-bottom:.5rem; }
+.vj-stage-card p { font-size:.85rem; color:var(--text-dim); font-weight:300; line-height:1.7; }
+.vj-stage-card .ico { font-size:1.5rem; margin-bottom:.8rem; display:block; }
+@media(max-width:768px){ .vj-stage{grid-template-columns:1fr;} }
+</style></head>
+<body>
+<canvas id="bgCanvas" class="bg-canvas"></canvas>
+<nav class="lum-nav">
+  <a href="index.html" class="lum-nav-logo">LUMINAR<span>A</span></a>
+  <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+  <ul class="lum-nav-links">
+<a href="index.html">Platform</a>
+<a href="vysio.html">Vysio</a>
+<a href="vj.html" class="active">VJ</a>
+<a href="studio.html">Studio</a>
+<a href="creator.html">Creator</a>
+<a href="press.html">Press</a>
+<a href="light-spectrum.html">Light Spectrum</a>
+</ul>
+</nav>
+
+<section class="page-hero vj-hero">
+  <div class="page-hero-badge" style="border-color:rgba(45,212,191,.3);color:var(--teal);">LUMINARA VJ</div>
+  <h1><span class="glow">VJ</span></h1>
+  <p class="page-hero-sub">Real-time live visuals for venues, clubs, and festivals. Your phone is the controller.</p>
+  <a href="#features" class="page-hero-cta cta-btn cta-btn-primary">See the Setup</a>
+</section>
+
+<section class="lum-section lum-section-center" id="features">
+  <div class="reveal">
+    <p class="section-label">Live Tested</p>
+    <h2 class="section-title">Built on stages, not in theory</h2>
+    <p class="section-text">LUMINARA VJ has been tested in real Serbian clubs and venues. Audio-reactive visuals controlled from a mobile device, responding to the music in real time. No laptop required on stage.</p>
+  </div>
+</section>
+
+<section class="lum-section lum-section-center">
+  <div class="reveal">
+    <p class="section-label">Setup</p>
+    <h2 class="section-title">Stage-ready in minutes</h2>
+  </div>
+  <div class="vj-stage reveal">
+    <div class="vj-stage-card"><span class="ico">📱</span><h4>Mobile Control</h4><p>Touch-based parameter mixing from your phone. Swipe through visual presets, adjust intensity, trigger effects — all wireless.</p></div>
+    <div class="vj-stage-card"><span class="ico">🎹</span><h4>MIDI / OSC</h4><p>Full hardware controller support. Map any knob, fader, or pad to visual parameters. Works with Akai, Novation, and any MIDI device.</p></div>
+    <div class="vj-stage-card"><span class="ico">🎙️</span><h4>Audio Input</h4><p>Direct line-in or microphone capture. LUMINARA VJ listens to the room and responds instantly — no pre-mapping needed.</p></div>
+    <div class="vj-stage-card"><span class="ico">🖥️</span><h4>Multi-Output</h4><p>Drive projectors, LED walls, and screens. Browser-native means any device with Chrome becomes an output node.</p></div>
+    <div class="vj-stage-card"><span class="ico">⚡</span><h4>GLSL Shaders</h4><p>Custom visual effects library with GPU-accelerated rendering. Smooth 60fps even on mid-range hardware.</p></div>
+    <div class="vj-stage-card"><span class="ico">🌐</span><h4>Zero Install</h4><p>Open a URL. That's the setup. No software downloads, no dongles, no licensing headaches.</p></div>
+  </div>
+</section>
+
+<section class="cta-banner">
+  <div class="reveal">
+    <h2>Book a <span class="glow">live demo</span></h2>
+    <p>See LUMINARA VJ in action at your venue. Pilot programs available across Serbia and the Balkans.</p>
+    <a href="index.html#connect" class="cta-btn cta-btn-primary">Book Demo</a>
+  </div>
+</section>
+
+<footer class="lum-footer"><div class="footer-inner">
+  <div><div class="footer-brand">LUMINARA</div><p class="footer-tagline">Transcend. Create. Illuminate.</p></div>
+  <div class="footer-links">
+    <a href="index.html">Platform</a><a href="vysio.html">Vysio</a><a href="vj.html">VJ</a>
+    <a href="studio.html">Studio</a><a href="creator.html">Creator</a><a href="press.html">Press</a>
+    <a href="light-spectrum.html">Light Spectrum</a>
+  </div>
+</div></footer>
+
+<script>
+// Nav scroll
+const nav=document.querySelector('.lum-nav');
+window.addEventListener('scroll',()=>nav&&nav.classList.toggle('scrolled',scrollY>60));
+// Mobile toggle
+document.querySelector('.nav-toggle')?.addEventListener('click',()=>document.querySelector('.lum-nav-links')?.classList.toggle('open'));
+// Reveal
+const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible')}),{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+// Particles
+const cv=document.getElementById('bgCanvas');
+if(cv){const c=cv.getContext('2d');let w,h,ps=[];
+function rs(){w=cv.width=innerWidth;h=cv.height=innerHeight}rs();addEventListener('resize',rs);
+class P{constructor(){this.r()}r(){this.x=Math.random()*w;this.y=Math.random()*h;this.s=Math.random()*1.2+0.3;this.sx=(Math.random()-.5)*.12;this.sy=(Math.random()-.5)*.12;this.o=Math.random()*.4+.1;this.p=Math.random()*6.28;this.ps=Math.random()*.008+.004;const cs=['168,85,247','45,212,191','241,245,249','245,158,11'];this.c=cs[Math.floor(Math.random()*cs.length)]}u(){this.x+=this.sx;this.y+=this.sy;this.p+=this.ps;if(this.x<-5||this.x>w+5||this.y<-5||this.y>h+5)this.r()}d(){const a=this.o*(.6+Math.sin(this.p)*.4);c.beginPath();c.arc(this.x,this.y,this.s,0,6.28);c.fillStyle=`rgba(${this.c},${a})`;c.fill()}}
+const n=Math.min(140,Math.floor(w*h/10000));for(let i=0;i<n;i++)ps.push(new P);
+(function a(){c.clearRect(0,0,w,h);ps.forEach(p=>{p.u();p.d()});for(let i=0;i<ps.length;i++)for(let j=i+1;j<ps.length;j++){const dx=ps[i].x-ps[j].x,dy=ps[i].y-ps[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<100){c.beginPath();c.moveTo(ps[i].x,ps[i].y);c.lineTo(ps[j].x,ps[j].y);c.strokeStyle=`rgba(107,47,160,${(1-d/100)*.06})`;c.lineWidth=.5;c.stroke()}}requestAnimationFrame(a)})()}
+</script>
+</body></html>
