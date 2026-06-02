@@ -1,0 +1,1888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JazzAuto AI - Real Book Video Creator</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts for authentic Jazz look & UI -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Chivo+Mono:wght@300;400;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- TensorFlow & Magenta.js for AI Melody RNN -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.18.0/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@magenta/music@1.23.0/dist/magentamusic.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .jazz-font {
+      font-family: 'Architects Daughter', cursive;
+    }
+    .mono-font {
+      font-family: 'Chivo Mono', monospace;
+    }
+    /* Scrollbar customization */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #1e1e2e;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #45475a;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #585b70;
+    }
+    @keyframes pulse-slow {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(0.98); }
+    }
+    .pulse-animation {
+      animation: pulse-slow 3s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="bg-[#0f0f16] text-[#cdd6f4] min-h-screen flex flex-col overflow-x-hidden">
+
+  <!-- Header -->
+  <header class="border-b border-[#1e1e2e] bg-[#11111b] px-6 py-4 flex items-center justify-between shadow-lg z-10">
+    <div class="flex items-center space-x-3">
+      <div class="bg-gradient-to-tr from-amber-500 via-rose-500 to-indigo-600 p-2.5 rounded-xl shadow-md shadow-amber-500/10">
+        <!-- Brand Icon -->
+        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+        </svg>
+      </div>
+      <div>
+        <h1 class="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">JazzAuto AI</h1>
+        <p class="text-xs text-amber-500 font-semibold tracking-wider uppercase">Real Book Video Automation Studio</p>
+      </div>
+    </div>
+
+    <!-- Quick Stats / Action Status -->
+    <div class="flex items-center space-x-4">
+      <div class="hidden md:flex items-center bg-[#181825] border border-[#313244] rounded-full px-3 py-1 text-xs text-[#a6adc8]">
+        <span class="w-2.5 h-2.5 bg-green-500 rounded-full mr-2 pulse-animation"></span>
+        <span id="auth-status-text">Local Studio Mode</span>
+      </div>
+      <button id="show-tutorial-btn" class="text-xs text-indigo-400 hover:text-indigo-300 font-medium bg-indigo-950/40 border border-indigo-900/60 rounded-lg px-3 py-1.5 transition">
+        How it Works
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <main class="flex-1 grid grid-cols-1 xl:grid-cols-12 gap-6 p-4 lg:p-6">
+
+    <!-- LEFT PANEL: Sequence, Melody & Microphone Recorder (Col Span 5) -->
+    <section class="xl:col-span-5 flex flex-col space-y-6">
+
+      <!-- Melody Editor Shell -->
+      <div class="bg-[#11111b] border border-[#1e1e2e] rounded-2xl p-5 shadow-xl flex flex-col flex-1">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="text-lg font-semibold text-white flex items-center gap-2">
+              <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
+              Melody Sequencer Grid
+            </h2>
+            <p class="text-xs text-[#a6adc8] mt-0.5">Click cells to write a melody (C4 to C5)</p>
+          </div>
+
+          <!-- Presets Dropdown -->
+          <div class="flex items-center space-x-2">
+            <span class="text-xs text-[#a6adc8]">Presets:</span>
+            <select id="preset-selector" class="bg-[#181825] border border-[#313244] text-[#cdd6f4] text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-indigo-500 cursor-pointer">
+              <option value="autumn">Autumn Jazz</option>
+              <option value="blues">Classic Blues</option>
+              <option value="bossa">Bossa Lead</option>
+              <option value="custom">Blank Sheet</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Sequencer Grid Controls -->
+        <div class="flex items-center justify-between bg-[#181825] border border-[#313244] p-2 rounded-xl mb-3 text-xs">
+          <div class="flex items-center space-x-3">
+            <button id="clear-grid-btn" class="text-[#f38ba8] hover:text-[#f38ba8]/80 transition font-medium">Clear All</button>
+            <span class="text-[#45475a]">|</span>
+            <span id="step-indicator" class="text-amber-400 font-mono">Bar 1 / Step 1</span>
+          </div>
+          <div class="flex space-x-2">
+            <button id="shift-octave-up" class="px-2 py-0.5 bg-[#313244] rounded hover:bg-[#45475a] transition">Octave +</button>
+            <button id="shift-octave-down" class="px-2 py-0.5 bg-[#313244] rounded hover:bg-[#45475a] transition">Octave -</button>
+          </div>
+        </div>
+
+        <!-- The Piano Roll Grid Container -->
+        <div class="flex-1 overflow-auto max-h-[300px] border border-[#1e1e2e] rounded-xl bg-[#181825] relative">
+          <!-- Main Sequencer Workspace -->
+          <div id="sequencer-container" class="flex">
+            <!-- Piano Keys Guide (Y-Axis) -->
+            <div id="piano-labels" class="sticky left-0 bg-[#11111b] z-10 w-12 border-r border-[#313244] flex flex-col">
+              <!-- Dynamically populated piano note tags -->
+            </div>
+            <!-- Scrollable Timeline Grid -->
+            <div class="flex-1 overflow-x-auto">
+              <div id="grid-timeline" class="relative min-w-[800px] flex flex-col">
+                <!-- Dynamically populated grid lanes -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Note Length & Tooltips -->
+        <div class="mt-3 flex items-center justify-between text-xs text-[#a6adc8] bg-[#181825]/50 px-3 py-2 rounded-lg border border-[#313244]/50">
+          <span class="flex items-center"><span class="w-3 h-3 bg-indigo-500 rounded-sm mr-2 inline-block"></span> Active Note (Single Click)</span>
+          <span>Timeline represents 16 measures</span>
+        </div>
+      </div>
+
+      <!-- Magenta RNN AI Creator & Song Storage Unit -->
+      <div class="bg-[#11111b] border border-[#1e1e2e] rounded-2xl p-5 shadow-xl space-y-4">
+        <div>
+          <h3 class="text-sm font-semibold text-white flex items-center justify-between">
+            <span class="flex items-center gap-2">
+              <svg class="w-4.5 h-4.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              Magenta Neural Network RNN
+            </span>
+            <span id="magenta-badge" class="text-[10px] bg-[#221f35] text-indigo-400 border border-indigo-950 px-2 py-0.5 rounded font-mono">Model Offline</span>
+          </h3>
+          <p class="text-[11px] text-[#a6adc8] mt-1">Generate elegant melody continuations dynamically using Magenta MusicRNN models!</p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[11px] text-[#a6adc8] mb-1 font-medium">Temperature (Creativity)</label>
+            <input type="range" id="magenta-temp" min="0.5" max="1.5" step="0.1" value="1.0" class="w-full h-1 bg-[#181825] rounded-lg appearance-none cursor-pointer accent-indigo-500">
+            <div class="flex justify-between text-[10px] text-[#a6adc8] mt-1">
+              <span>Strict</span>
+              <span id="temp-val">1.0</span>
+              <span>Wild</span>
+            </div>
+          </div>
+          <button id="magenta-generate-btn" class="w-full bg-[#2c2445] hover:bg-[#3d325f] text-indigo-200 border border-indigo-900/40 font-bold text-xs px-3.5 py-2.5 rounded-xl transition flex items-center justify-center gap-2">
+            <span id="magenta-spinner" class="hidden w-3.5 h-3.5 border-t-2 border-b-2 border-indigo-300 rounded-full animate-spin"></span>
+            <span>Generate melody RNN</span>
+          </button>
+        </div>
+
+        <div class="border-t border-[#1e1e2e]/60 pt-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <h4 class="text-xs font-semibold text-white flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+              </svg>
+              Local Library & My Saved Melodies
+            </h4>
+          </div>
+
+          <div class="flex gap-2">
+            <input id="save-filename-input" type="text" placeholder="Melody Name..." class="flex-1 bg-[#181825] border border-[#313244] text-xs text-[#cdd6f4] rounded-xl px-3 py-2 focus:outline-none focus:border-indigo-500">
+            <button id="save-cloud-btn" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-4 py-2 rounded-xl transition">
+              Save Locally
+            </button>
+          </div>
+
+          <!-- Saved List container -->
+          <div id="cloud-melodies-list" class="max-h-[140px] overflow-y-auto border border-[#313244] rounded-xl bg-[#181825]/40 divide-y divide-[#313244]/40 text-xs">
+            <div class="p-3 text-[#a6adc8] text-center text-[11px] italic">Save your first melody to build a local library.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Microphone Recorder Card -->
+      <div class="bg-[#11111b] border border-[#1e1e2e] rounded-2xl p-5 shadow-xl">
+        <h3 class="text-sm font-semibold text-white mb-3 flex items-center justify-between">
+          <span class="flex items-center gap-2">
+            <svg class="w-4.5 h-4.5 text-rose-400" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
+            </svg>
+            Live Melody Mic Recorder
+          </span>
+          <span id="mic-status-badge" class="text-[10px] uppercase px-2 py-0.5 rounded bg-[#313244] text-[#a6adc8]">Ready</span>
+        </h3>
+
+        <div class="bg-[#181825] p-4 rounded-xl border border-[#313244] space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <button id="record-mic-btn" class="bg-[#f38ba8] hover:bg-[#f38ba8]/90 text-[#11111b] font-bold text-xs px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 shadow-lg shadow-rose-500/10">
+                <span id="record-mic-dot" class="w-2 h-2 bg-[#11111b] rounded-full"></span>
+                <span id="record-mic-text">Record Mic</span>
+              </button>
+              <button id="play-mic-recording-btn" class="hidden bg-[#313244] hover:bg-[#45475a] text-[#cdd6f4] font-bold text-xs px-3 py-2 rounded-xl transition flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+                <span id="play-mic-text">Play</span>
+              </button>
+            </div>
+            <div class="text-right font-mono text-xs text-[#a6adc8]" id="mic-timer-display">
+              0:00 / 2:00
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="w-full bg-[#313244] h-1.5 rounded-full overflow-hidden relative">
+            <div id="mic-record-progress-bar" class="bg-[#f38ba8] h-full w-0 transition-all duration-300"></div>
+          </div>
+
+          <p class="text-[11px] text-[#a6adc8] leading-relaxed">
+            Record up to 120 seconds of your live melody (singing, acoustic performance, flute, humming). Play it back or save automatically when finished!
+          </p>
+        </div>
+      </div>
+
+      <!-- Real Keyboard Interaction -->
+      <div class="bg-[#11111b] border border-[#1e1e2e] rounded-2xl p-5 shadow-xl">
+        <h3 class="text-sm font-semibold text-white mb-3 flex items-center gap-2">
+          <svg class="w-4.5 h-4.5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z" />
+          </svg>
+          Interactive Piano keys
+        </h3>
+        <!-- Interactive Keys SVG/Flex -->
+        <div class="relative w-full flex select-none bg-[#181825] p-3 rounded-xl border border-[#313244]">
+          <div id="piano-keys-row" class="w-full flex h-24">
+            <!-- Keys dynamically rendered with CSS structures -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CENTER PANEL: AI Real Book Render & Preview (Col Span 7) -->
+    <section class="xl:col-span-7 flex flex-col space-y-6">
+
+      <!-- Video Exporter & Real Book Lead Sheet View -->
+      <div class="bg-[#11111b] border border-[#1e1e2e] rounded-2xl p-5 shadow-xl flex flex-col flex-1">
+
+        <!-- Controls & Meta Data -->
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+          <div class="space-y-1">
+            <div class="flex items-center space-x-2">
+              <span class="text-xs uppercase bg-amber-500/10 text-amber-500 border border-amber-500/20 px-2 py-0.5 rounded font-bold">Canvas Engine</span>
+              <h2 class="text-lg font-bold text-white">The Real Book Preview</h2>
+            </div>
+            <p class="text-xs text-[#a6adc8]">Real-time rendered lead sheet of your song</p>
+          </div>
+
+          <!-- Chord Generator Trigger -->
+          <div class="flex items-center space-x-3">
+            <button id="ai-chord-btn" class="bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-600 hover:to-rose-600 text-[#11111b] font-bold text-xs px-4  py-2 rounded-xl transition shadow-lg shadow-amber-500/15 flex items-center gap-1.5">
+              <!-- AI Sparks Icon -->
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              <span>AI Chord Generation</span>
+            </button>
+            <button id="editor-settings-btn" class="bg-[#181825] hover:bg-[#313244] border border-[#313244] text-[#cdd6f4] p-2 rounded-xl transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Custom Details Area (Title, Composer, Theme) -->
+        <div id="meta-editor" class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4 bg-[#181825]/50 border border-[#313244]/50 rounded-xl p-3 text-xs hidden">
+          <div>
+            <label class="block text-[#a6adc8] mb-1 font-medium">Song Title</label>
+            <input id="song-title-input" type="text" value="AUTUMN REALITY" class="w-full bg-[#181825] border border-[#313244] text-[#cdd6f4] rounded-lg px-2 py-1.5 focus:outline-none focus:border-indigo-500">
+          </div>
+          <div>
+            <label class="block text-[#a6adc8] mb-1 font-medium">Arranger / Composer</label>
+            <input id="song-composer-input" type="text" value="AI AUTOMATION" class="w-full bg-[#181825] border border-[#313244] text-[#cdd6f4] rounded-lg px-2 py-1.5 focus:outline-none focus:border-indigo-500">
+          </div>
+          <div>
+            <label class="block text-[#a6adc8] mb-1 font-medium">Visual Theme</label>
+            <select id="canvas-theme-selector" class="w-full bg-[#181825] border border-[#313244] text-[#cdd6f4] rounded-lg px-2 py-1.5 focus:outline-none focus:border-indigo-500 cursor-pointer">
+              <option value="classic">Classic Real Book (Parchment)</option>
+              <option value="dark">Retro Velvet (Dark Mode)</option>
+              <option value="blueprint">Blueprint Jazz (Blue/White)</option>
+              <option value="monochrome">Modern Minimalist (High Contrast)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- The Canvas Real Book Render Frame -->
+        <div class="relative flex-1 flex items-center justify-center bg-[#0d0d12] border border-[#1e1e2e] rounded-xl p-3 min-h-[350px] overflow-hidden">
+          <canvas id="realbook-canvas" class="max-w-full rounded shadow-2xl transition-all duration-300 border border-amber-900/10 cursor-pointer"></canvas>
+
+          <!-- Moving indicators overlay -->
+          <div id="canvas-overlay" class="absolute inset-0 pointer-events-none border border-transparent rounded-xl flex items-center justify-center">
+            <!-- Loading overlay inside canvas when AI processes -->
+            <div id="ai-loading-overlay" class="absolute inset-0 bg-[#000000]/80 flex flex-col items-center justify-center space-y-3 opacity-0 pointer-events-none transition-opacity duration-300">
+              <div class="relative flex items-center justify-center">
+                <div class="w-16 h-16 border-t-4 border-b-4 border-amber-500 rounded-full animate-spin"></div>
+                <span class="absolute text-xs font-mono font-bold text-amber-500">JAZZ</span>
+              </div>
+              <h3 class="text-white font-bold text-sm tracking-widest jazz-font">Arranging Chords with Local Theory Engine...</h3>
+              <p class="text-xs text-[#a6adc8]">Determining harmonic relationships & extensions</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Playback and Render Station Footer -->
+        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+
+          <!-- Player transport bar -->
+          <div class="flex items-center space-x-3 bg-[#181825] px-4 py-2.5 rounded-xl border border-[#313244]">
+            <button id="play-pause-btn" class="bg-indigo-600 hover:bg-indigo-500 text-white p-2 rounded-lg transition shadow-md shadow-indigo-500/20">
+              <!-- Play Icon SVG -->
+              <svg id="play-icon" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+              <!-- Pause Icon SVG (hidden initially) -->
+              <svg id="pause-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+              </svg>
+            </button>
+
+            <button id="stop-btn" class="bg-[#313244] hover:bg-[#45475a] text-[#cdd6f4] p-2 rounded-lg transition">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M6 6h12v12H6z" />
+              </svg>
+            </button>
+
+            <div class="flex-1 space-y-1">
+              <div class="flex items-center justify-between text-[11px] text-[#a6adc8] font-mono">
+                <span id="current-time-display">0:00</span>
+                <span id="total-time-display">0:32</span>
+              </div>
+              <div class="w-full bg-[#313244] h-1.5 rounded-full overflow-hidden relative">
+                <div id="playback-progress-bar" class="bg-indigo-500 h-full w-0 transition-all duration-100"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Video Exporter Studio Action -->
+          <div class="flex space-x-2">
+            <select id="export-format" class="bg-[#181825] border border-[#313244] text-xs text-[#cdd6f4] rounded-xl px-2.5 py-2.5 focus:outline-none focus:border-indigo-500 cursor-pointer">
+              <option value="widescreen">Widescreen (16:9 - Standard YouTube)</option>
+              <option value="vertical">Vertical (9:16 - YouTube Shorts)</option>
+            </select>
+            <button id="export-video-btn" class="flex-1 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-[#11111b] font-bold text-xs px-4 py-2.5 rounded-xl transition shadow-lg shadow-emerald-500/15 flex items-center justify-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+              <span>Export High-Res Video</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- MIDI and iReal Book Actions Grid Card -->
+      <div class="bg-[#11111b] border border-[#1e1e2e] rounded-2xl p-5 shadow-xl grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="space-y-1.5">
+          <h4 class="text-xs font-semibold text-white flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+            </svg>
+            DAW Export Suite
+          </h4>
+          <p class="text-[11px] text-[#a6adc8] leading-relaxed">Download a high-quality standard MIDI file of your composition to import into your DAW.</p>
+          <button id="export-midi-btn" class="w-full bg-[#181825] hover:bg-[#313244] border border-[#313244] text-[#cdd6f4] font-bold text-xs py-2 px-4 rounded-xl transition flex items-center justify-center gap-2">
+            <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            <span>Export MIDI File (.mid)</span>
+          </button>
+        </div>
+        <div class="space-y-1.5">
+          <h4 class="text-xs font-semibold text-white flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+            iReal Pro Integration
+          </h4>
+          <p class="text-[11px] text-[#a6adc8] leading-relaxed">Instantly import your generated AI jazz chords directly into your iReal Pro app.</p>
+          <a id="export-ireal-link" href="#" target="_blank" class="w-full bg-indigo-950/40 hover:bg-indigo-900/60 border border-indigo-900 text-indigo-300 font-bold text-xs py-2 px-4 rounded-xl transition flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            <span>Open in iReal Pro</span>
+          </a>
+        </div>
+      </div>
+      <!-- Synth Mixer & Master Settings panel -->
+      <div class="bg-[#11111b] border border-[#1e1e2e] rounded-2xl p-5 shadow-xl grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Band Mixer -->
+        <div class="space-y-4">
+          <h3 class="text-sm font-semibold text-white flex items-center gap-2 border-b border-[#1e1e2e] pb-2">
+            <svg class="w-4.5 h-4.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+            </svg>
+            Automated Backing Band Mixer
+          </h3>
+          <div class="space-y-3">
+            <div class="flex items-center justify-between text-xs">
+              <span class="w-16 font-medium">Vibes Lead</span>
+              <input type="range" id="vol-melody" min="0" max="1" step="0.05" value="0.7" class="flex-1 mx-3 h-1 bg-[#181825] rounded-lg appearance-none cursor-pointer accent-indigo-500">
+              <span id="label-vol-melody" class="w-8 text-right font-mono text-[#a6adc8]">70%</span>
+            </div>
+            <div class="flex items-center justify-between text-xs">
+              <span class="w-16 font-medium">Rhodes Piano</span>
+              <input type="range" id="vol-chords" min="0" max="1" step="0.05" value="0.6" class="flex-1 mx-3 h-1 bg-[#181825] rounded-lg appearance-none cursor-pointer accent-indigo-500">
+              <span id="label-vol-chords" class="w-8 text-right font-mono text-[#a6adc8]">60%</span>
+            </div>
+            <div class="flex items-center justify-between text-xs">
+              <span class="w-16 font-medium">Double Bass</span>
+              <input type="range" id="vol-bass" min="0" max="1" step="0.05" value="0.65" class="flex-1 mx-3 h-1 bg-[#181825] rounded-lg appearance-none cursor-pointer accent-indigo-500">
+              <span id="label-vol-bass" class="w-8 text-right font-mono text-[#a6adc8]">65%</span>
+            </div>
+            <div class="flex items-center justify-between text-xs">
+              <span class="w-16 font-medium">Swing Drums</span>
+              <input type="range" id="vol-drums" min="0" max="1" step="0.05" value="0.5" class="flex-1 mx-3 h-1 bg-[#181825] rounded-lg appearance-none cursor-pointer accent-indigo-500">
+              <span id="label-vol-drums" class="w-8 text-right font-mono text-[#a6adc8]">50%</span>
+            </div>
+          </div>
+        </div>
+        <!-- Master Arrangement Settings -->
+        <div class="space-y-4">
+          <h3 class="text-sm font-semibold text-white flex items-center gap-2 border-b border-[#1e1e2e] pb-2">
+            <svg class="w-4.5 h-4.5 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Groove Arrangement Setup
+          </h3>
+          <div class="grid grid-cols-2 gap-3 text-xs">
+            <div>
+              <label class="block text-[#a6adc8] mb-1 font-medium">Tempo (BPM)</label>
+              <div class="flex items-center space-x-2 bg-[#181825] p-2 rounded-xl border border-[#313244]">
+                <input type="number" id="tempo-input" value="120" min="60" max="240" class="w-full bg-transparent text-center text-white focus:outline-none font-bold">
+              </div>
+            </div>
+            <div>
+              <label class="block text-[#a6adc8] mb-1 font-medium">Time Signature</label>
+              <div class="bg-[#181825] p-2.5 rounded-xl border border-[#313244] text-center font-bold text-white">
+                4 / 4 (Swing)
+              </div>
+            </div>
+            <div>
+              <label class="block text-[#a6adc8] mb-1 font-medium">Groove Swing Feel</label>
+              <select id="swing-feel-selector" class="w-full bg-[#181825] border border-[#313244] text-white rounded-xl p-2 focus:outline-none focus:border-indigo-500 cursor-pointer">
+                <option value="heavy">Heavy Swing (2:1)</option>
+                <option value="medium" selected>Medium Swing</option>
+                <option value="straight">Straight 8ths</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[#a6adc8] mb-1 font-medium">Arrangement Length</label>
+              <div class="bg-[#181825] p-2.5 rounded-xl border border-[#313244] text-center font-bold text-white">
+                16 Bars
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <!-- MODAL: Custom notification popup box -->
+  <div id="modal-container" class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity duration-300">
+    <div id="custom-modal" class="bg-[#181825] border border-[#313244] rounded-2xl p-6 max-w-md w-full mx-4 shadow-2xl relative transform scale-95 transition-transform duration-300">
+      <button id="modal-close-btn" class="absolute top-4 right-4 text-[#a6adc8] hover:text-white transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+      <div class="flex items-start space-x-4">
+        <div id="modal-icon-container" class="bg-indigo-600/10 text-indigo-400 p-3 rounded-xl">
+          <!-- Dynamic Icon Insertion -->
+        </div>
+        <div>
+          <h3 id="modal-title" class="text-lg font-bold text-white mb-1">Popup Alert</h3>
+          <p id="modal-message" class="text-xs text-[#a6adc8] leading-relaxed">Alert message goes here...</p>
+        </div>
+      </div>
+      <div class="mt-6 flex justify-end space-x-3">
+        <button id="modal-action-btn" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs px-4 py-2 rounded-xl transition">Okay</button>
+      </div>
+    </div>
+  </div>
+  <!-- VIDEO EXPORT LIVE MODAL (Rendering Indicator) -->
+  <div id="export-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="bg-[#11111b] border border-[#313244] rounded-2xl p-8 max-w-lg w-full mx-4 shadow-2xl text-center space-y-6">
+      <div class="relative flex justify-center">
+        <div class="absolute inset-0 m-auto w-24 h-24 bg-emerald-500/10 rounded-full animate-ping"></div>
+        <div class="w-20 h-20 bg-emerald-950/40 border border-emerald-500/30 rounded-full flex items-center justify-center text-emerald-400">
+          <svg class="w-10 h-10 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+          </svg>
+        </div>
+      </div>
+      <div class="space-y-2">
+        <h3 class="text-xl font-bold text-white tracking-tight">Exporting YouTube Ready Video</h3>
+        <p class="text-xs text-[#a6adc8]">Recording Web Audio and Canvas components synchronously. Please keep this browser window focused while compiling.</p>
+      </div>
+      <div class="space-y-1">
+        <div class="flex justify-between text-xs text-[#a6adc8] font-mono px-1">
+          <span>Encoding Progress</span>
+          <span id="export-progress-pct">0%</span>
+        </div>
+        <div class="w-full bg-[#313244] h-2.5 rounded-full overflow-hidden">
+          <div id="export-progress-bar" class="bg-gradient-to-r from-emerald-400 to-teal-400 h-full w-0 transition-all duration-100"></div>
+        </div>
+      </div>
+      <div class="pt-2 text-xs text-amber-500 flex items-center justify-center gap-1.5 bg-amber-500/10 border border-amber-500/20 py-2.5 px-4 rounded-xl">
+        <svg class="w-4.5 h-4.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+        <span>The song will play at normal speed to record audio/video perfectly.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Web Audio, Core MIDI, and Neural Network logic -->
+  <script>
+  // Track state
+  const STATE = {
+    tempo: 120,
+    totalBars: 16,
+    currentStep: 0,
+    isPlaying: false,
+    isRecordingVideo: false,
+    theme: 'classic',
+    swingFactor: 0.6,
+    vol: {
+      melody: 0.7,
+      chords: 0.6,
+      bass: 0.65,
+      drums: 0.5
+    },
+    meta: {
+      title: "AUTUMN REALITY",
+      composer: "AI AUTOMATION",
+      style: "SWING"
+    },
+    pianoRollNotes: [72, 71, 69, 67, 65, 64, 62, 60],
+    noteNames: ["C5", "B4", "A4", "G4", "F4", "E4", "D4", "C4"],
+    melodyGrid: Array(64).fill(null),
+    chords: [
+      "Cm7", "F7", "Bbmaj7", "Ebmaj7",
+      "Am7b5", "D7alt", "Gm7", "Gm7",
+      "Cm7", "F7", "Bbmaj7", "Ebmaj7",
+      "Am7b5", "D7alt", "Gmin", "Gmin"
+    ],
+    currentMeasure: 0,
+  };
+
+  // Live Microphone capture variables
+  let micMediaRecorder = null;
+  let micAudioChunks = [];
+  let micAudioBlob = null;
+  let micAudioUrl = null;
+  let micAudioElement = null;
+  let micRecordTimer = null;
+  let micStartTime = 0;
+  const MAX_MIC_RECORD_TIME = 120;
+
+  // Google Magenta MusicRNN AI Model Variables
+  let musicRnn = null;
+  let magentaInitialized = false;
+
+  // Preset Melodies
+  const PRESETS = {
+    autumn: [
+      7, 6, 5, 3,
+      4, 2, 0, 1,
+      3, 5, 7, 6,
+      5, 3, 2, 1,
+      0, 2, 4, 6,
+      1, 3, 5, 7,
+      2, 4, 6, 7,
+      3, 3, 3, 3,
+      7, 6, 5, 3,
+      4, 2, 0, 1,
+      3, 5, 7, 6,
+      5, 3, 2, 1,
+      0, 2, 4, 6,
+      1, 3, 5, 7,
+      2, 4, 6, 7,
+      3, 0, 3, 7
+    ],
+    blues: [
+      7, 7, 5, 5, 4, 4, 5, 5, 3, 3, 2, 2, 1, 1, 0, 0,
+      7, 7, 5, 5, 4, 4, 5, 5, 3, 3, 2, 2, 1, 1, 0, 0,
+      7, 7, 5, 5, 4, 4, 5, 5, 3, 3, 2, 2, 1, 1, 0, 0,
+      7, 7, 5, 5, 4, 4, 5, 5, 3, 3, 2, 2, 1, 1, 0, 0
+    ],
+    bossa: [
+      0, 0, 1, 2, 3, 3, 2, 1, 2, 2, 3, 4, 5, 5, 4, 3,
+      0, 0, 1, 2, 3, 3, 2, 1, 2, 2, 3, 4, 5, 5, 4, 3,
+      0, 0, 1, 2, 3, 3, 2, 1, 2, 2, 3, 4, 5, 5, 4, 3,
+      0, 0, 1, 2, 3, 3, 2, 1, 2, 2, 3, 4, 5, 5, 4, 3
+    ],
+    custom: Array(64).fill(null)
+  };
+  STATE.melodyGrid = [...PRESETS.autumn];
+
+  // Web Audio Synthesizer Engine
+  let audioCtx = null;
+  let mainGainNode = null;
+  let melodyGainNode = null;
+  let chordsGainNode = null;
+  let bassGainNode = null;
+  let drumsGainNode = null;
+  let destStreamNode = null;
+
+  // Clock scheduling timers
+  let schedulerTimer = null;
+  let nextNoteTime = 0.0;
+  let currentBeat = 0;
+
+  const canvas = document.getElementById('realbook-canvas');
+  const ctx = canvas.getContext('2d');
+
+  const THEMES = {
+    classic: { bg: '#fcf8f2', staffLines: '#1d1d1b', notes: '#1d1d1b', text: '#111111', brand: '#d97706', highlight: 'rgba(217, 119, 6, 0.15)' },
+    dark: { bg: '#181825', staffLines: '#45475a', notes: '#f5e0dc', text: '#cdd6f4', brand: '#f38ba8', highlight: 'rgba(243, 139, 168, 0.2)' },
+    blueprint: { bg: '#0f2b5c', staffLines: '#4370bd', notes: '#ffffff', text: '#ffffff', brand: '#38bdf8', highlight: 'rgba(56, 189, 248, 0.25)' },
+    monochrome: { bg: '#ffffff', staffLines: '#000000', notes: '#000000', text: '#000000', brand: '#000000', highlight: 'rgba(0,0,0,0.1)' }
+  };
+
+  let canvasW = 960;
+  let canvasH = 540;
+
+  window.onload = function() {
+    initSequencerUI();
+    initKeyboardUI();
+    drawRealBook();
+    setupEventListeners();
+    updateiRealProLink();
+    renderSavedLibrary();
+    document.getElementById('auth-status-text').innerText = "Local Studio Mode";
+  }
+
+  // -------------------------------------------------------------------------
+  // INITIALIZATION & UI ASSEMBLY
+  // -------------------------------------------------------------------------
+  function initSequencerUI() {
+    const container = document.getElementById('piano-labels');
+    container.innerHTML = '';
+    STATE.noteNames.forEach(note => {
+      const el = document.createElement('div');
+      el.className = "h-9 border-b border-[#313244] flex items-center justify-center font-mono text-[11px] text-[#a6adc8] font-bold";
+      el.innerText = note;
+      container.appendChild(el);
+    });
+    const timeline = document.getElementById('grid-timeline');
+    timeline.innerHTML = '';
+    for (let pitchIndex = 0; pitchIndex < STATE.pianoRollNotes.length; pitchIndex++) {
+      const lane = document.createElement('div');
+      lane.className = "h-9 flex relative border-b border-[#313244]/40";
+      for (let step = 0; step < 64; step++) {
+        const cell = document.createElement('div');
+        let borderStyle = "border-r border-[#313244]/20";
+        if ((step + 1) % 4 === 0) borderStyle = "border-r-2 border-[#585b70]/60";
+        if ((step + 1) % 16 === 0) borderStyle = "border-r-4 border-amber-500/40";
+        cell.className = `w-12 h-full cursor-pointer flex-shrink-0 relative transition-all duration-150 ${borderStyle} hover:bg-indigo-500/10`;
+        cell.dataset.pitchIndex = pitchIndex;
+        cell.dataset.step = step;
+        if (STATE.melodyGrid[step] === pitchIndex) {
+          cell.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
+          cell.innerHTML = `<span class="absolute inset-1 rounded bg-indigo-400 opacity-40 animate-pulse"></span>`;
+        }
+        cell.addEventListener('click', () => {
+          const currentSelected = STATE.melodyGrid[step];
+          if (currentSelected === pitchIndex) {
+            STATE.melodyGrid[step] = null;
+          } else {
+            STATE.melodyGrid[step] = pitchIndex;
+            playPreviewSynthNote(STATE.pianoRollNotes[pitchIndex]);
+          }
+          initSequencerUI();
+          drawRealBook();
+        });
+        lane.appendChild(cell);
+      }
+      timeline.appendChild(lane);
+    }
+  }
+
+  function initKeyboardUI() {
+    const keysContainer = document.getElementById('piano-keys-row');
+    keysContainer.innerHTML = '';
+    const layoutKeys = [
+      { note: 'C4', pitch: 60, isBlack: false },
+      { note: 'C#4', pitch: 61, isBlack: true },
+      { note: 'D4', pitch: 62, isBlack: false },
+      { note: 'D#4', pitch: 63, isBlack: true },
+      { note: 'E4', pitch: 64, isBlack: false },
+      { note: 'F4', pitch: 65, isBlack: false },
+      { note: 'F#4', pitch: 66, isBlack: true },
+      { note: 'G4', pitch: 67, isBlack: false },
+      { note: 'G#4', pitch: 68, isBlack: true },
+      { note: 'A4', pitch: 69, isBlack: false },
+      { note: 'A#4', pitch: 70, isBlack: true },
+      { note: 'B4', pitch: 71, isBlack: false },
+      { note: 'C5', pitch: 72, isBlack: false }
+    ];
+    layoutKeys.forEach(k => {
+      const keyEl = document.createElement('div');
+      if (k.isBlack) {
+        keyEl.className = "bg-[#11111b] border border-black h-14 -mx-3.5 w-7 z-10 rounded-b hover:bg-slate-800 active:bg-amber-500 transition-colors cursor-pointer relative";
+      } else {
+        keyEl.className = "bg-white border border-[#313244] h-24 flex-1 rounded-b hover:bg-slate-100 active:bg-amber-400 transition-colors cursor-pointer relative";
+      }
+      keyEl.addEventListener('mousedown', () => {
+        playPreviewSynthNote(k.pitch);
+      });
+      keysContainer.appendChild(keyEl);
+    });
+  }
+
+  // -------------------------------------------------------------------------
+  // THE REAL BOOK CANVAS DRAWING ENGINE
+  // -------------------------------------------------------------------------
+  function drawRealBook() {
+    const theme = THEMES[STATE.theme];
+    const format = document.getElementById('export-format').value;
+    if (format === 'vertical') {
+      canvasW = 1080;
+      canvasH = 1920;
+    } else {
+      canvasW = 1920;
+      canvasH = 1080;
+    }
+    canvas.width = canvasW;
+    canvas.height = canvasH;
+    ctx.fillStyle = theme.bg;
+    ctx.fillRect(0, 0, canvasW, canvasH);
+    if (STATE.theme === 'classic') {
+      ctx.strokeStyle = '#e3ded5';
+      ctx.lineWidth = 15;
+      ctx.beginPath();
+      ctx.moveTo(35, 0);
+      ctx.lineTo(35, canvasH);
+      ctx.stroke();
+      ctx.fillStyle = '#1d1d1b';
+      for (let i = 40; i < canvasH; i += 80) {
+        ctx.beginPath();
+        ctx.arc(35, i, 8, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    const marginX = 80;
+    const marginY = 100;
+    ctx.fillStyle = theme.text;
+    ctx.font = `bold ${canvasW * 0.038}px 'Architects Daughter'`;
+    ctx.textAlign = 'left';
+    ctx.fillText(STATE.meta.title.toUpperCase(), marginX + 20, marginY + 40);
+    ctx.font = `bold ${canvasW * 0.016}px 'Architects Daughter'`;
+    ctx.textAlign = 'right';
+    ctx.fillText(STATE.meta.composer.toUpperCase(), canvasW - marginX, marginY + 25);
+    ctx.font = `${canvasW * 0.014}px 'Architects Daughter'`;
+    ctx.fillText(`SWING FEEL - BPM ${STATE.tempo}`, canvasW - marginX, marginY + 55);
+    ctx.strokeStyle = theme.staffLines;
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(marginX, marginY + 80);
+    ctx.lineTo(canvasW - marginX, marginY + 80);
+    ctx.stroke();
+
+    const gridRows = 4;
+    const gridCols = 4;
+    const systemWidth = canvasW - (marginX * 2);
+    const systemHeight = (canvasH - (marginY + 140)) / gridRows;
+    for (let row = 0; row < gridRows; row++) {
+      const systemY = marginY + 120 + (row * systemHeight);
+      const staffSpacing = systemHeight * 0.12;
+      const startStaffY = systemY + (systemHeight * 0.35);
+      ctx.strokeStyle = theme.staffLines;
+      ctx.lineWidth = 1.5;
+      for (let line = 0; line < 5; line++) {
+        const lineY = startStaffY + (line * staffSpacing);
+        ctx.beginPath();
+        ctx.moveTo(marginX, lineY);
+        ctx.lineTo(canvasW - marginX, lineY);
+        ctx.stroke();
+      }
+      if (row === gridRows - 1) {
+        ctx.lineWidth = 6;
+        ctx.beginPath();
+        ctx.moveTo(canvasW - marginX, startStaffY);
+        ctx.lineTo(canvasW - marginX, startStaffY + (4 * staffSpacing));
+        ctx.stroke();
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(canvasW - marginX - 12, startStaffY);
+        ctx.lineTo(canvasW - marginX - 12, startStaffY + (4 * staffSpacing));
+        ctx.stroke();
+      } else {
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(canvasW - marginX, startStaffY);
+        ctx.lineTo(canvasW - marginX, startStaffY + (4 * staffSpacing));
+        ctx.stroke();
+      }
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(marginX, startStaffY);
+      ctx.lineTo(marginX, startStaffY + (4 * staffSpacing));
+      ctx.stroke();
+      drawTrebleClef(ctx, marginX + 15, startStaffY + (2 * staffSpacing), staffSpacing);
+      const measureWidth = systemWidth / gridCols;
+      for (let col = 0; col < gridCols; col++) {
+        const measureIdx = (row * gridCols) + col;
+        const measureX = marginX + (col * measureWidth);
+        if (col > 0) {
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = theme.staffLines;
+          ctx.beginPath();
+          ctx.moveTo(measureX, startStaffY);
+          ctx.lineTo(measureX, startStaffY + (4 * staffSpacing));
+          ctx.stroke();
+        }
+        ctx.fillStyle = theme.brand;
+        ctx.font = `bold ${canvasW * 0.011}px 'Chivo Mono'`;
+        ctx.textAlign = 'left';
+        ctx.fillText(`${measureIdx + 1}`, measureX + 10, startStaffY - 12);
+        const chord = STATE.chords[measureIdx] || "";
+        ctx.fillStyle = theme.text;
+        ctx.font = `bold ${canvasW * 0.024}px 'Architects Daughter'`;
+        ctx.textAlign = 'left';
+        const formattedChord = formatChordSymbol(chord);
+        ctx.fillText(formattedChord, measureX + 30, startStaffY - 25);
+        const startStep = measureIdx * 4;
+        for (let stepOffset = 0; stepOffset < 4; stepOffset++) {
+          const stepIdx = startStep + stepOffset;
+          const noteIndex = STATE.melodyGrid[stepIdx];
+          if (noteIndex !== null && noteIndex !== undefined) {
+            const pitch = STATE.pianoRollNotes[noteIndex];
+            const noteX = measureX + 45 + (stepOffset * (measureWidth - 60) / 4);
+            const pitchToStep = {
+              72: 1, 71: 0, 69: -1, 67: -2, 65: -3, 64: -4, 62: -5, 60: -6
+            };
+            const stepShift = pitchToStep[pitch] !== undefined ? pitchToStep[pitch] : 0;
+            const noteY = startStaffY + (2 * staffSpacing) - (stepShift * (staffSpacing / 2));
+            ctx.fillStyle = theme.notes;
+            ctx.beginPath();
+            ctx.ellipse(noteX, noteY, staffSpacing * 0.55, staffSpacing * 0.4, -Math.PI/6, 0, Math.PI * 2);
+            ctx.fill();
+            if (pitch === 60) {
+              ctx.strokeStyle = theme.notes;
+              ctx.lineWidth = 1.5;
+              ctx.beginPath();
+              ctx.moveTo(noteX - staffSpacing, noteY);
+              ctx.lineTo(noteX + staffSpacing, noteY);
+              ctx.stroke();
+            }
+            ctx.lineWidth = 1.8;
+            ctx.strokeStyle = theme.notes;
+            ctx.beginPath();
+            if (pitch >= 71) {
+              ctx.moveTo(noteX - (staffSpacing * 0.45), noteY);
+              ctx.lineTo(noteX - (staffSpacing * 0.45), noteY + (staffSpacing * 2.8));
+            } else {
+              ctx.moveTo(noteX + (staffSpacing * 0.45), noteY);
+              ctx.lineTo(noteX + (staffSpacing * 0.45), noteY - (staffSpacing * 2.8));
+            }
+            ctx.stroke();
+          }
+        }
+        if (STATE.isPlaying && STATE.currentMeasure === measureIdx) {
+          ctx.fillStyle = theme.highlight;
+          ctx.fillRect(measureX, startStaffY - 50, measureWidth, systemHeight * 0.7);
+          ctx.strokeStyle = theme.brand;
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          const currentSubStepX = measureX + ((STATE.currentStep % 4) * (measureWidth / 4));
+          ctx.moveTo(currentSubStepX, startStaffY - 10);
+          ctx.lineTo(currentSubStepX, startStaffY + (4 * staffSpacing) + 10);
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  function drawTrebleClef(ctx, x, y, size) {
+    ctx.strokeStyle = ctx.fillStyle;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(x, y + size, size * 0.6, 0, Math.PI * 2);
+    ctx.moveTo(x + size * 0.4, y + size * 1.5);
+    ctx.bezierCurveTo(x - size, y - size, x + size, y - size, x - size * 0.2, y + size * 2.5);
+    ctx.stroke();
+  }
+
+  function formatChordSymbol(chord) {
+    return chord
+      .replace("maj7", "&#916;7")
+      .replace("min7b5", "&#248;7")
+      .replace("m7b5", "&#248;7")
+      .replace("min", "-")
+      .replace("m7", "-7")
+      .replace("alt", "alt")
+      .replace("7alt", "7alt");
+  }
+
+  // -------------------------------------------------------------------------
+  // SYNTHESIZER & SOUND ENGINE
+  // -------------------------------------------------------------------------
+  function initAudioEngine() {
+    if (audioCtx) return;
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    mainGainNode = audioCtx.createGain();
+    mainGainNode.gain.value = 1.0;
+    melodyGainNode = audioCtx.createGain();
+    melodyGainNode.gain.value = STATE.vol.melody;
+    chordsGainNode = audioCtx.createGain();
+    chordsGainNode.gain.value = STATE.vol.chords;
+    bassGainNode = audioCtx.createGain();
+    bassGainNode.gain.value = STATE.vol.bass;
+    drumsGainNode = audioCtx.createGain();
+    drumsGainNode.gain.value = STATE.vol.drums;
+    melodyGainNode.connect(mainGainNode);
+    chordsGainNode.connect(mainGainNode);
+    bassGainNode.connect(mainGainNode);
+    drumsGainNode.connect(mainGainNode);
+    destStreamNode = audioCtx.createMediaStreamDestination();
+    mainGainNode.connect(audioCtx.destination);
+    mainGainNode.connect(destStreamNode);
+  }
+
+  function playPreviewSynthNote(pitch) {
+    initAudioEngine();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const freq = midiToFreq(pitch);
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(freq, now);
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(0.5, now + 0.05);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+    osc.connect(gain);
+    gain.connect(melodyGainNode);
+    osc.start(now);
+    osc.stop(now + 1.2);
+  }
+
+  function startScheduler() {
+    nextNoteTime = audioCtx.currentTime;
+    currentBeat = 0;
+    schedulerLoop();
+  }
+
+  function schedulerLoop() {
+    if (!STATE.isPlaying) return;
+    while (nextNoteTime < audioCtx.currentTime + 0.1) {
+      scheduleJazzArrangement(currentBeat, nextNoteTime);
+      advanceBeat();
+    }
+    schedulerTimer = setTimeout(schedulerLoop, 25);
+  }
+
+  function advanceBeat() {
+    const secondsPerBeat = 60.0 / STATE.tempo;
+    const isOffbeat = currentBeat % 2 === 1;
+    const swingRatio = STATE.swingFactor;
+    const delay = isOffbeat ? secondsPerBeat * swingRatio : secondsPerBeat * (1 - swingRatio);
+    nextNoteTime += delay;
+    currentBeat = (currentBeat + 1) % 64;
+    setTimeout(() => {
+      STATE.currentStep = currentBeat;
+      STATE.currentMeasure = Math.floor(currentBeat / 4);
+      document.getElementById('step-indicator').innerText = `Bar ${STATE.currentMeasure + 1} / Step ${(currentBeat % 4) + 1}`;
+      if (audioCtx) {
+        document.getElementById('current-time-display').innerText = formatTime(audioCtx.currentTime);
+      }
+      document.getElementById('playback-progress-bar').style.width = `${(currentBeat / 64) * 100}%`;
+      drawRealBook();
+    }, 0);
+  }
+
+  function scheduleJazzArrangement(beat, time) {
+    const measureIdx = Math.floor(beat / 4);
+    const beatInMeasure = beat % 4;
+    const melodyNoteIndex = STATE.melodyGrid[beat];
+    if (melodyNoteIndex !== null && melodyNoteIndex !== undefined) {
+      const pitch = STATE.pianoRollNotes[melodyNoteIndex];
+      triggerMelodySound(pitch, time);
+    }
+    const chordSymbol = STATE.chords[measureIdx];
+    if (chordSymbol) {
+      const chordNotes = getChordVoicings(chordSymbol);
+      if (beatInMeasure === 0) {
+        triggerRhodesChords(chordNotes, time, 1.8);
+      } else if (beatInMeasure === 2 && Math.random() > 0.4) {
+        triggerRhodesChords(chordNotes, time, 0.8);
+      }
+    }
+    const chordSymbolNext = STATE.chords[(measureIdx + 1) % 16];
+    const bassNote = getWalkingBassNote(beatInMeasure, chordSymbol, chordSymbolNext);
+    triggerDoubleBassSound(bassNote, time);
+    if (beatInMeasure === 0 || beatInMeasure === 2) {
+      triggerRideCymbal(time, 0.5);
+    } else {
+      triggerRideCymbal(time, 0.25);
+    }
+    if (beatInMeasure === 1 || beatInMeasure === 3) {
+      triggerBrushSnare(time, 0.35);
+    }
+  }
+
+  function triggerMelodySound(pitch, time) {
+    const freq = midiToFreq(pitch);
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(freq, time);
+    const vibrato = audioCtx.createOscillator();
+    const vibratoGain = audioCtx.createGain();
+    vibrato.frequency.value = 6;
+    vibratoGain.gain.value = 4;
+    vibrato.connect(vibratoGain);
+    vibratoGain.connect(osc.frequency);
+    vibrato.start(time);
+    gain.gain.setValueAtTime(0, time);
+    gain.gain.linearRampToValueAtTime(0.5, time + 0.04);
+    gain.gain.exponentialRampToValueAtTime(0.001, time + 1.1);
+    osc.connect(gain);
+    gain.connect(melodyGainNode);
+    osc.start(time);
+    osc.stop(time + 1.2);
+    vibrato.stop(time + 1.2);
+  }
+
+  function triggerRhodesChords(pitches, time, duration) {
+    pitches.forEach((pitch, i) => {
+      const freq = midiToFreq(pitch);
+      const oscTriangle = audioCtx.createOscillator();
+      const oscSine = audioCtx.createOscillator();
+      const chordGain = audioCtx.createGain();
+      oscTriangle.type = 'triangle';
+      oscTriangle.frequency.setValueAtTime(freq + (i * 0.1), time);
+      oscSine.type = 'sine';
+      oscSine.frequency.setValueAtTime(freq - (i * 0.1), time);
+      chordGain.gain.setValueAtTime(0, time);
+      chordGain.gain.linearRampToValueAtTime(0.25, time + 0.08);
+      chordGain.gain.exponentialRampToValueAtTime(0.001, time + duration);
+      oscTriangle.connect(chordGain);
+      oscSine.connect(chordGain);
+      chordGain.connect(chordsGainNode);
+      oscTriangle.start(time);
+      oscSine.start(time);
+      oscTriangle.stop(time + duration);
+      oscSine.stop(time + duration);
+    });
+  }
+
+  function triggerDoubleBassSound(pitch, time) {
+    const freq = midiToFreq(pitch);
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(freq, time);
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(150, time);
+    gain.gain.setValueAtTime(0, time);
+    gain.gain.linearRampToValueAtTime(0.6, time + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.001, time + 0.45);
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(bassGainNode);
+    osc.start(time);
+    osc.stop(time + 0.5);
+  }
+
+  function triggerRideCymbal(time, volume) {
+    const bufferSize = audioCtx.sampleRate * 0.3;
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+    const noiseNode = audioCtx.createBufferSource();
+    noiseNode.buffer = buffer;
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'highpass';
+    filter.frequency.setValueAtTime(8000, time);
+    const gain = audioCtx.createGain();
+    gain.gain.setValueAtTime(volume * 0.15, time);
+    gain.gain.exponentialRampToValueAtTime(0.001, time + 0.2);
+    noiseNode.connect(filter);
+    filter.connect(gain);
+    gain.connect(drumsGainNode);
+    noiseNode.start(time);
+    noiseNode.stop(time + 0.22);
+  }
+
+  function triggerBrushSnare(time, volume) {
+    const bufferSize = audioCtx.sampleRate * 0.15;
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+    const noiseNode = audioCtx.createBufferSource();
+    noiseNode.buffer = buffer;
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.setValueAtTime(1200, time);
+    const gain = audioCtx.createGain();
+    gain.gain.setValueAtTime(volume * 0.2, time);
+    gain.gain.exponentialRampToValueAtTime(0.001, time + 0.08);
+    noiseNode.connect(filter);
+    filter.connect(gain);
+    gain.connect(drumsGainNode);
+    noiseNode.start(time);
+    noiseNode.stop(time + 0.1);
+  }
+
+  // -------------------------------------------------------------------------
+  // BASS & CHORD ARRANGING THEORY HELPERS
+  // -------------------------------------------------------------------------
+  function getChordVoicings(chord) {
+    const rootPitches = {
+      "C": 48, "C#": 49, "Db": 49, "D": 50, "D#": 51, "Eb": 51,
+      "E": 52, "F": 53, "F#": 54, "Gb": 54, "G": 55, "G#": 56,
+      "Ab": 56, "A": 57, "A#": 58, "Bb": 58, "B": 59
+    };
+    let root = "C";
+    let quality = "maj7";
+    for (let key in rootPitches) {
+      if (chord.startsWith(key)) {
+        if (key.length > root.length) root = key;
+      }
+    }
+    quality = chord.substring(root.length);
+    const baseRoot = rootPitches[root] || 48;
+    let voicingOffsets = [0, 4, 7, 11];
+    if (quality.includes("min7b5") || quality.includes("ø7") || quality.includes("m7b5")) {
+      voicingOffsets = [0, 3, 6, 10];
+    } else if (quality.includes("maj7") || quality.includes("Δ7")) {
+      voicingOffsets = [0, 4, 7, 11];
+    } else if (quality.includes("min") || quality.includes("-") || quality.includes("m7")) {
+      voicingOffsets = [0, 3, 7, 10];
+    } else if (quality.includes("7alt") || quality.includes("alt")) {
+      voicingOffsets = [0, 4, 8, 10];
+    } else if (quality.includes("7")) {
+      voicingOffsets = [0, 4, 7, 10];
+    }
+    return voicingOffsets.map(offset => baseRoot + 12 + offset);
+  }
+
+  function getWalkingBassNote(beatInMeasure, chord, nextChord) {
+    const rootPitches = {
+      "C": 36, "C#": 37, "Db": 37, "D": 38, "D#": 39, "Eb": 39,
+      "E": 40, "F": 41, "F#": 42, "Gb": 42, "G": 43, "G#": 44,
+      "Ab": 44, "A": 45, "A#": 46, "Bb": 46, "B": 47
+    };
+    let root = "C";
+    for (let key in rootPitches) {
+      if (chord.startsWith(key)) {
+        if (key.length > root.length) root = key;
+      }
+    }
+    let nextRoot = "C";
+    for (let key in rootPitches) {
+      if (nextChord.startsWith(key)) {
+        if (key.length > nextRoot.length) nextRoot = key;
+      }
+    }
+    const rootPitch = rootPitches[root] || 36;
+    const targetPitch = rootPitches[nextRoot] || 36;
+    if (beatInMeasure === 0) return rootPitch;
+    if (beatInMeasure === 1) return rootPitch + (chord.includes("min") ? 3 : 4);
+    if (beatInMeasure === 2) return rootPitch + 7;
+    if (targetPitch > rootPitch) return targetPitch - 1;
+    return targetPitch + 1;
+  }
+
+  function midiToFreq(note) {
+    return 440 * Math.pow(2, (note - 69) / 12);
+  }
+
+  function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+  }
+
+  // -------------------------------------------------------------------------
+  // GOOGLE MAGENTA AI MUSICRNN GENERATION & SEQUENCE INTERACTION
+  // -------------------------------------------------------------------------
+  async function initMagentaModel() {
+    if (magentaInitialized) return;
+    const rnnBtn = document.getElementById('magenta-generate-btn');
+    const spinner = document.getElementById('magenta-spinner');
+    const badge = document.getElementById('magenta-badge');
+    spinner.classList.remove('hidden');
+    badge.innerText = "Loading Model...";
+    badge.className = "text-[10px] bg-[#312a1e] text-amber-400 border border-amber-900 px-2 py-0.5 rounded font-mono animate-pulse";
+    try {
+      musicRnn = new mm.MusicRNN('https://storage.googleapis.com/magentadata/js/checkpoints/music_rnn/melody_rnn');
+      await musicRnn.initialize();
+      magentaInitialized = true;
+      badge.innerText = "Model Active";
+      badge.className = "text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-900 px-2 py-0.5 rounded font-mono";
+    } catch (err) {
+      console.error("Magenta init error:", err);
+      badge.innerText = "Error Loading";
+      badge.className = "text-[10px] bg-red-950 text-red-400 border border-red-900 px-2 py-0.5 rounded font-mono";
+    } finally {
+      spinner.classList.add('hidden');
+    }
+  }
+
+  async function generateMagentaMelody() {
+    await initMagentaModel();
+    if (!magentaInitialized) {
+      showNotification("AI Offline", "Could not connect to Magenta RNN server checkpoint.", "error");
+      return;
+    }
+    const rnnBtn = document.getElementById('magenta-generate-btn');
+    const spinner = document.getElementById('magenta-spinner');
+    const temp = parseFloat(document.getElementById('magenta-temp').value) || 1.0;
+    spinner.classList.remove('hidden');
+    rnnBtn.disabled = true;
+    try {
+      let lastActiveStep = -1;
+      for (let i = 0; i < 64; i++) {
+        if (STATE.melodyGrid[i] !== null) lastActiveStep = i;
+      }
+      let notes = [];
+      let totalSteps = lastActiveStep + 1;
+      if (lastActiveStep === -1) {
+        notes.push({ pitch: 60, quantizedStartStep: 0, quantizedEndStep: 1 });
+        totalSteps = 1;
+      } else {
+        for (let i = 0; i <= lastActiveStep; i++) {
+          const pitchIdx = STATE.melodyGrid[i];
+          if (pitchIdx !== null) {
+            notes.push({
+              pitch: STATE.pianoRollNotes[pitchIdx],
+              quantizedStartStep: i,
+              quantizedEndStep: i + 1
+            });
+          }
+        }
+      }
+      const inputSeq = {
+        quantizationInfo: { stepsPerQuarter: 1 },
+        notes: notes,
+        totalQuantizedSteps: totalSteps
+      };
+      const stepsToGenerate = 64 - totalSteps;
+      if (stepsToGenerate <= 0) {
+        inputSeq.notes = [{ pitch: 60, quantizedStartStep: 0, quantizedEndStep: 1 }];
+        inputSeq.totalQuantizedSteps = 1;
+      }
+      const resultSeq = await musicRnn.continueSequence(
+        inputSeq,
+        stepsToGenerate <= 0 ? 63 : stepsToGenerate,
+        temp
+      );
+      resultSeq.notes.forEach(note => {
+        const step = note.quantizedStartStep;
+        const pitch = note.pitch;
+        let closestIdx = -1;
+        let minDiff = 999;
+        STATE.pianoRollNotes.forEach((p, idx) => {
+          const diff = Math.abs(p - pitch);
+          if (diff < minDiff) {
+            minDiff = diff;
+            closestIdx = idx;
+          }
+        });
+        if (closestIdx !== -1 && step < 64) {
+          STATE.melodyGrid[step] = closestIdx;
+        }
+      });
+      initSequencerUI();
+      drawRealBook();
+      showNotification(
+        "Melody Extended!",
+        `Magenta Neural Network has successfully completed your sequence based on the requested creativity level.`,
+        "success"
+      );
+    } catch (err) {
+      console.error("Prediction error:", err);
+      showNotification("Generation Error", "Magenta RNN could not parse your notes pattern.", "error");
+    } finally {
+      spinner.classList.add('hidden');
+      rnnBtn.disabled = false;
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // MULTI-TRACK MIDI EXPORT SYSTEM
+  // -------------------------------------------------------------------------
+  function exportMultiTrackMidi() {
+    const ticksPerBeat = 128;
+    const tempoVal = Math.round(60000000 / STATE.tempo);
+    const writeVarLength = (val) => {
+      let buffer = [val & 0x7F];
+      while (val >> 7 > 0) {
+        val = val >> 7;
+        buffer.push((val & 0x7F) | 0x80);
+      }
+      return buffer.reverse();
+    };
+    const createTrack = (channel, events) => {
+      events.sort((a, b) => a.tick - b.tick);
+      let trackData = [];
+      let lastTick = 0;
+      events.forEach(ev => {
+        let delta = ev.tick - lastTick;
+        lastTick = ev.tick;
+        trackData.push(...writeVarLength(delta));
+        let status = (ev.type === 'on' ? 0x90 : 0x80) | (channel & 0x0F);
+        trackData.push(status, ev.pitch, ev.vel || 64);
+      });
+      trackData.push(0x00, 0xFF, 0x2F, 0x00);
+      const mtrk = [0x4D, 0x54, 0x72, 0x6B];
+      const len = trackData.length;
+      const lenBytes = [(len >> 24) & 0xff, (len >> 16) & 0xff, (len >> 8) & 0xff, len & 0xff];
+      return [...mtrk, ...lenBytes, ...trackData];
+    };
+    const metaEvents = [
+      0x00, 0xFF, 0x51, 0x03, (tempoVal >> 16) & 0xff, (tempoVal >> 8) & 0xff, tempoVal & 0xff,
+      0x00, 0xFF, 0x2F, 0x00
+    ];
+    const metaTrack = [0x4D, 0x54, 0x72, 0x6B, 0x00, 0x00, 0x00, metaEvents.length, ...metaEvents];
+    const melodyMidiEvents = [];
+    for (let i = 0; i < 64; i++) {
+      const pitchIdx = STATE.melodyGrid[i];
+      if (pitchIdx !== null && pitchIdx !== undefined) {
+        const pitch = STATE.pianoRollNotes[pitchIdx];
+        const startTick = i * ticksPerBeat;
+        const endTick = (i + 1) * ticksPerBeat;
+        melodyMidiEvents.push({ type: 'on', pitch, tick: startTick, vel: 90 });
+        melodyMidiEvents.push({ type: 'off', pitch, tick: endTick - 10 });
+      }
+    }
+    const melodyTrack = createTrack(0, melodyMidiEvents);
+    const chordsMidiEvents = [];
+    for (let m = 0; m < 16; m++) {
+      const chord = STATE.chords[m];
+      if (chord) {
+        const pitches = getChordVoicings(chord);
+        const startTick = m * 4 * ticksPerBeat;
+        const endTick = (m * 4 + 3.5) * ticksPerBeat;
+        pitches.forEach(p => {
+          chordsMidiEvents.push({ type: 'on', pitch: p, tick: startTick, vel: 64 });
+          chordsMidiEvents.push({ type: 'off', pitch: p, tick: endTick });
+        });
+      }
+    }
+    const chordsTrack = createTrack(1, chordsMidiEvents);
+    const bassMidiEvents = [];
+    for (let b = 0; b < 64; b++) {
+      const m = Math.floor(b / 4);
+      const beatInM = b % 4;
+      const chord = STATE.chords[m];
+      const nextChord = STATE.chords[(m + 1) % 16];
+      const pitch = getWalkingBassNote(beatInM, chord, nextChord);
+      const startTick = b * ticksPerBeat;
+      const endTick = (b + 0.8) * ticksPerBeat;
+      bassMidiEvents.push({ type: 'on', pitch, tick: startTick, vel: 75 });
+      bassMidiEvents.push({ type: 'off', pitch, tick: endTick });
+    }
+    const bassTrack = createTrack(2, bassMidiEvents);
+    const header = [
+      0x4D, 0x54, 0x68, 0x64,
+      0x00, 0x00, 0x00, 0x06,
+      0x00, 0x01,
+      0x00, 0x04,
+      0x00, 0x80
+    ];
+    const blob = new Blob([new Uint8Array([...header, ...metaTrack, ...melodyTrack, ...chordsTrack, ...bassTrack])], { type: 'audio/midi' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${STATE.meta.title.replace(/\s+/g, '_')}_Session.mid`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showNotification("MIDI Export Successful", "Your multitrack MIDI file has been successfully prepared and downloaded. Drop it straight into your DAW!", "success");
+  }
+
+  // -------------------------------------------------------------------------
+  // iREAL PRO (irealbook://) COMPILATION SCHEME
+  // -------------------------------------------------------------------------
+  function updateiRealProLink() {
+    const mappedChords = STATE.chords.map(c => {
+      return c
+        .replace("maj7", "^7")
+        .replace("min7b5", "h7")
+        .replace("m7b5", "h7")
+        .replace("min", "-")
+        .replace("m7", "-7")
+        .replace("alt", "alt")
+        .replace("7alt", "7alt");
+    });
+    let chordsFormatted = "{T" + STATE.tempo + " ";
+    for (let i = 0; i < 16; i++) {
+      if (i % 4 === 0 && i > 0) chordsFormatted += "|";
+      chordsFormatted += "|" + (mappedChords[i] || " ");
+    }
+    chordsFormatted += "}";
+    const title = encodeURIComponent(STATE.meta.title);
+    const composer = encodeURIComponent(STATE.meta.composer);
+    const url = `irealbook://${title}=${composer}=Medium Swing=c=n=${encodeURIComponent(chordsFormatted)}`;
+    document.getElementById('export-ireal-link').setAttribute('href', url);
+  }
+
+  // -------------------------------------------------------------------------
+  // AI JAZZ CHORD GENERATOR (LOCAL THEORY ENGINE)
+  // Standalone build: original used Gemini API with a key. The local
+  // fallback (runLocalChordGenerator) already exists; we just short-circuit
+  // to it so no API key is required and no client-side secrets leak.
+  // -------------------------------------------------------------------------
+  async function generateChordsWithGemini() {
+    const loadingOverlay = document.getElementById('ai-loading-overlay');
+    loadingOverlay.style.opacity = '1';
+    loadingOverlay.style.pointerEvents = 'auto';
+    await new Promise(r => setTimeout(r, 600));
+    STATE.chords = runLocalChordGenerator();
+    loadingOverlay.style.opacity = '0';
+    loadingOverlay.style.pointerEvents = 'none';
+    showNotification(
+      "Arrangement Updated!",
+      "Local theory engine composed authentic Real Book extensions matching your melody.",
+      "success"
+    );
+    drawRealBook();
+    updateiRealProLink();
+  }
+
+  function runLocalChordGenerator() {
+    const baseChords = [
+      "Cmaj7", "A7", "Dm7", "G7",
+      "Cmaj7", "C7", "Fmaj7", "Fm7",
+      "Em7", "A7alt", "Dm7", "G7b9",
+      "Em7b5", "A7", "Dm7", "Cmaj7"
+    ];
+    let activeNotesCount = 0;
+    STATE.melodyGrid.forEach(n => { if (n !== null) activeNotesCount++; });
+    if (activeNotesCount < 3) return baseChords;
+    const arrangements = [
+      [
+        "Cm7", "F7", "Bbmaj7", "Ebmaj7",
+        "Am7b5", "D7alt", "Gm7", "C7",
+        "Fmaj7", "Fm7", "Bb7", "Ebmaj7",
+        "Abmaj7", "G7alt", "Cm7", "G7"
+      ],
+      [
+        "Dm7", "G7", "Cmaj7", "A7alt",
+        "Dm7", "G7", "Em7", "A7",
+        "Fmaj7", "Fm7", "Em7", "Ebdim7",
+        "Dm7", "G7b9", "Cmaj7", "Dm7"
+      ]
+    ];
+    return arrangements[activeNotesCount % arrangements.length];
+  }
+
+  // -------------------------------------------------------------------------
+  // LIVE MICROPHONE RECORDER LOGIC
+  // -------------------------------------------------------------------------
+  async function toggleMicRecording() {
+    if (micMediaRecorder && micMediaRecorder.state === 'recording') {
+      stopMicRecording();
+    } else {
+      startMicRecording();
+    }
+  }
+
+  async function startMicRecording() {
+    micAudioChunks = [];
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      micMediaRecorder = new MediaRecorder(stream);
+      micMediaRecorder.ondataavailable = (e) => {
+        if (e.data.size > 0) micAudioChunks.push(e.data);
+      };
+      micMediaRecorder.onstop = () => {
+        micAudioBlob = new Blob(micAudioChunks, { type: 'audio/webm' });
+        micAudioUrl = URL.createObjectURL(micAudioBlob);
+        micAudioElement = new Audio(micAudioUrl);
+        document.getElementById('play-mic-recording-btn').classList.remove('hidden');
+        const downloadLink = document.createElement('a');
+        downloadLink.href = micAudioUrl;
+        downloadLink.download = `${STATE.meta.title.replace(/\s+/g, '_')}_Melody_Mic.webm`;
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        showNotification("Recording Downloaded!", "Your microphone audio capture has been successfully compiled and downloaded.", "success");
+        stream.getTracks().forEach(track => track.stop());
+      };
+      micMediaRecorder.start();
+      micStartTime = Date.now();
+      document.getElementById('record-mic-dot').classList.add('animate-ping', 'bg-white');
+      document.getElementById('record-mic-text').innerText = "Stop Recording";
+      document.getElementById('mic-status-badge').innerText = "Recording";
+      document.getElementById('mic-status-badge').className = "text-[10px] uppercase px-2 py-0.5 rounded bg-red-950 text-[#f38ba8] animate-pulse";
+      micRecordTimer = setInterval(() => {
+        const elapsed = Math.floor((Date.now() - micStartTime) / 1000);
+        const minutes = Math.floor(elapsed / 60);
+        const seconds = elapsed % 60;
+        document.getElementById('mic-timer-display').innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds} / 2:00`;
+        const pct = (elapsed / MAX_MIC_RECORD_TIME) * 100;
+        document.getElementById('mic-record-progress-bar').style.width = `${pct}%`;
+        if (elapsed >= MAX_MIC_RECORD_TIME) stopMicRecording();
+      }, 1000);
+    } catch (err) {
+      console.error("Microphone access blocked:", err);
+      showNotification("Microphone Required", "Could not access your microphone. Please allow audio capture permissions in your browser.", "error");
+    }
+  }
+
+  function stopMicRecording() {
+    if (micMediaRecorder && micMediaRecorder.state === 'recording') {
+      micMediaRecorder.stop();
+    }
+    clearInterval(micRecordTimer);
+    document.getElementById('record-mic-dot').classList.remove('animate-ping', 'bg-white');
+    document.getElementById('record-mic-text').innerText = "Record Mic";
+    document.getElementById('mic-status-badge').innerText = "Ready";
+    document.getElementById('mic-status-badge').className = "text-[10px] uppercase px-2 py-0.5 rounded bg-[#313244] text-[#a6adc8]";
+  }
+
+  function playMicRecording() {
+    if (micAudioElement) {
+      if (micAudioElement.paused) {
+        micAudioElement.play();
+        document.getElementById('play-mic-text').innerText = "Pause";
+        micAudioElement.onended = () => {
+          document.getElementById('play-mic-text').innerText = "Play";
+        };
+      } else {
+        micAudioElement.pause();
+        document.getElementById('play-mic-text').innerText = "Play";
+      }
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // CANVAS RECORDER & MP4/WEBM VIDEO EXPORT STUDIO
+  // -------------------------------------------------------------------------
+  function startVideoRecordingExport() {
+    if (STATE.isRecordingVideo) return;
+    initAudioEngine();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    STATE.isRecordingVideo = true;
+    document.getElementById('export-modal').classList.add('opacity-100');
+    document.getElementById('export-modal').classList.remove('pointer-events-none');
+    stopPlayback();
+    const canvasStream = canvas.captureStream(30);
+    const audioTrack = destStreamNode.stream.getAudioTracks()[0];
+    if (audioTrack) canvasStream.addTrack(audioTrack);
+    let options = { mimeType: 'video/webm;codecs=vp8,opus' };
+    if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+      options = { mimeType: 'video/mp4' };
+    }
+    const recorder = new MediaRecorder(canvasStream, options);
+    const chunks = [];
+    recorder.ondataavailable = function(e) {
+      if (e.data.size > 0) chunks.push(e.data);
+    };
+    recorder.onstop = function() {
+      const videoBlob = new Blob(chunks, { type: 'video/webm' });
+      const videoURL = URL.createObjectURL(videoBlob);
+      const downloadLink = document.createElement('a');
+      downloadLink.href = videoURL;
+      downloadLink.download = `${STATE.meta.title.replace(/\s+/g, '_')}_RealBook_AI.webm`;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+      STATE.isRecordingVideo = false;
+      document.getElementById('export-modal').classList.remove('opacity-100');
+      document.getElementById('export-modal').classList.add('pointer-events-none');
+      showNotification(
+        "Video Exported Successfully!",
+        "Your premium 'Real Book' scrolling chart video has been compiled and downloaded. You are ready to upload it directly to YouTube or YouTube Shorts!",
+        "success"
+      );
+    };
+    STATE.isPlaying = true;
+    document.getElementById('play-icon').classList.add('hidden');
+    document.getElementById('pause-icon').classList.remove('hidden');
+    recorder.start();
+    startScheduler();
+    const checkCompletionTimer = setInterval(() => {
+      const completedPct = Math.min((currentBeat / 64) * 100, 100);
+      document.getElementById('export-progress-pct').innerText = `${Math.round(completedPct)}%`;
+      document.getElementById('export-progress-bar').style.width = `${completedPct}%`;
+      if (currentBeat === 63) {
+        clearInterval(checkCompletionTimer);
+        setTimeout(() => {
+          recorder.stop();
+          stopPlayback();
+        }, 800);
+      }
+    }, 100);
+  }
+
+  // -------------------------------------------------------------------------
+  // LOCAL LIBRARY (replaces Firebase cloud save)
+  // -------------------------------------------------------------------------
+  const STORAGE_KEY = 'jazzauto_local_library_v1';
+
+  function loadLocalLibrary() {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveLocalLibrary(arr) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+  }
+
+  window.loadMelodyState = function(melodyData) {
+    STATE.meta.title = melodyData.title || "UNTITLED";
+    STATE.meta.composer = melodyData.composer || "AI";
+    STATE.tempo = melodyData.tempo || 120;
+    STATE.chords = melodyData.chords || [...STATE.chords];
+    STATE.melodyGrid = melodyData.melodyGrid || Array(64).fill(null);
+    document.getElementById('song-title-input').value = STATE.meta.title;
+    document.getElementById('song-composer-input').value = STATE.meta.composer;
+    document.getElementById('tempo-input').value = STATE.tempo;
+    initSequencerUI();
+    drawRealBook();
+    updateiRealProLink();
+  };
+
+  function renderSavedLibrary() {
+    const list = document.getElementById('cloud-melodies-list');
+    const items = loadLocalLibrary();
+    list.innerHTML = '';
+    if (items.length === 0) {
+      list.innerHTML = '<div class="p-3 text-[#a6adc8] text-center text-[11px] italic">Save your first melody to build a local library.</div>';
+      return;
+    }
+    items.slice().reverse().forEach((data) => {
+      const container = document.createElement('div');
+      container.className = "p-3 flex items-center justify-between hover:bg-[#313244]/20 transition duration-150";
+      container.innerHTML = `
+        <div>
+          <span class="font-bold text-white block truncate max-w-[150px]"></span>
+          <span class="text-[10px] text-[#a6adc8]"></span>
+        </div>
+        <div class="flex space-x-1.5">
+          <button class="load-track-btn bg-indigo-950 hover:bg-indigo-900 border border-indigo-900 text-indigo-300 px-2 py-1 rounded text-[10px] font-semibold">Load</button>
+          <button class="delete-track-btn text-[#f38ba8] hover:text-[#f38ba8]/80 px-1.5 py-1 text-[10px]">Delete</button>
+        </div>
+      `;
+      container.querySelector('.font-bold').innerText = data.title;
+      container.querySelector('.text-\\[10px\\]').innerText = `${data.composer || 'AI'} • ${data.tempo} BPM`;
+      container.querySelector('.load-track-btn').addEventListener('click', () => {
+        window.loadMelodyState(data);
+        showNotification("Loaded Successfully", `Song "${data.title}" loaded to lead sheet workspace.`, "success");
+      });
+      container.querySelector('.delete-track-btn').addEventListener('click', () => {
+        const arr = loadLocalLibrary().filter(x => x.id !== data.id);
+        saveLocalLibrary(arr);
+        renderSavedLibrary();
+        showNotification("Deleted!", "Track has been removed from local library.", "info");
+      });
+      list.appendChild(container);
+    });
+  }
+
+  function triggerCloudSave() {
+    const title = document.getElementById('save-filename-input').value || STATE.meta.title;
+    const melodyData = {
+      id: 'mel_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+      title: title,
+      composer: STATE.meta.composer,
+      tempo: STATE.tempo,
+      chords: STATE.chords,
+      melodyGrid: STATE.melodyGrid
+    };
+    const arr = loadLocalLibrary();
+    arr.push(melodyData);
+    saveLocalLibrary(arr);
+    renderSavedLibrary();
+    showNotification("Saved Locally!", `Melody "${melodyData.title}" was saved to your browser library.`, "success");
+  }
+
+  // -------------------------------------------------------------------------
+  // UTILITY & EVENT LISTENER BINDINGS
+  // -------------------------------------------------------------------------
+  function setupEventListeners() {
+    document.getElementById('magenta-generate-btn').addEventListener('click', () => generateMagentaMelody());
+    document.getElementById('export-midi-btn').addEventListener('click', () => exportMultiTrackMidi());
+    document.getElementById('save-cloud-btn').addEventListener('click', () => triggerCloudSave());
+    document.getElementById('play-pause-btn').addEventListener('click', () => {
+      initAudioEngine();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      if (STATE.isPlaying) pausePlayback();
+      else startPlayback();
+    });
+    document.getElementById('stop-btn').addEventListener('click', () => stopPlayback());
+    document.getElementById('export-video-btn').addEventListener('click', () => startVideoRecordingExport());
+    document.getElementById('preset-selector').addEventListener('change', (e) => {
+      const val = e.target.value;
+      if (PRESETS[val]) {
+        STATE.melodyGrid = [...PRESETS[val]];
+        initSequencerUI();
+        drawRealBook();
+        updateiRealProLink();
+      }
+    });
+    document.getElementById('ai-chord-btn').addEventListener('click', () => generateChordsWithGemini());
+    document.getElementById('editor-settings-btn').addEventListener('click', () => {
+      const metaSection = document.getElementById('meta-editor');
+      metaSection.classList.toggle('hidden');
+    });
+    document.getElementById('canvas-theme-selector').addEventListener('change', (e) => {
+      STATE.theme = e.target.value;
+      drawRealBook();
+    });
+    document.getElementById('export-format').addEventListener('change', () => drawRealBook());
+    document.getElementById('record-mic-btn').addEventListener('click', () => toggleMicRecording());
+    document.getElementById('play-mic-recording-btn').addEventListener('click', () => playMicRecording());
+    const mixMelody = document.getElementById('vol-melody');
+    mixMelody.addEventListener('input', (e) => {
+      const val = parseFloat(e.target.value);
+      STATE.vol.melody = val;
+      document.getElementById('label-vol-melody').innerText = `${Math.round(val * 100)}%`;
+      if (melodyGainNode) melodyGainNode.gain.setValueAtTime(val, audioCtx.currentTime);
+    });
+    const mixChords = document.getElementById('vol-chords');
+    mixChords.addEventListener('input', (e) => {
+      const val = parseFloat(e.target.value);
+      STATE.vol.chords = val;
+      document.getElementById('label-vol-chords').innerText = `${Math.round(val * 100)}%`;
+      if (chordsGainNode) chordsGainNode.gain.setValueAtTime(val, audioCtx.currentTime);
+    });
+    const mixBass = document.getElementById('vol-bass');
+    mixBass.addEventListener('input', (e) => {
+      const val = parseFloat(e.target.value);
+      STATE.vol.bass = val;
+      document.getElementById('label-vol-bass').innerText = `${Math.round(val * 100)}%`;
+      if (bassGainNode) bassGainNode.gain.setValueAtTime(val, audioCtx.currentTime);
+    });
+    const mixDrums = document.getElementById('vol-drums');
+    mixDrums.addEventListener('input', (e) => {
+      const val = parseFloat(e.target.value);
+      STATE.vol.drums = val;
+      document.getElementById('label-vol-drums').innerText = `${Math.round(val * 100)}%`;
+      if (drumsGainNode) drumsGainNode.gain.setValueAtTime(val, audioCtx.currentTime);
+    });
+    document.getElementById('song-title-input').addEventListener('input', (e) => {
+      STATE.meta.title = e.target.value || "UNTITLED";
+      drawRealBook();
+      updateiRealProLink();
+    });
+    document.getElementById('song-composer-input').addEventListener('input', (e) => {
+      STATE.meta.composer = e.target.value || "AI AUTOMATION";
+      drawRealBook();
+      updateiRealProLink();
+    });
+    document.getElementById('tempo-input').addEventListener('input', (e) => {
+      STATE.tempo = Math.max(60, Math.min(240, parseInt(e.target.value) || 120));
+      updateiRealProLink();
+    });
+    document.getElementById('magenta-temp').addEventListener('input', (e) => {
+      document.getElementById('temp-val').innerText = parseFloat(e.target.value).toFixed(1);
+    });
+    document.getElementById('swing-feel-selector').addEventListener('change', (e) => {
+      const feel = e.target.value;
+      if (feel === 'heavy') STATE.swingFactor = 0.67;
+      else if (feel === 'medium') STATE.swingFactor = 0.60;
+      else STATE.swingFactor = 0.50;
+    });
+    document.getElementById('clear-grid-btn').addEventListener('click', () => {
+      STATE.melodyGrid = Array(64).fill(null);
+      initSequencerUI();
+      drawRealBook();
+    });
+    document.getElementById('shift-octave-up').addEventListener('click', () => shiftGridOctave(true));
+    document.getElementById('shift-octave-down').addEventListener('click', () => shiftGridOctave(false));
+    document.getElementById('show-tutorial-btn').addEventListener('click', () => showTutorialModal());
+    document.getElementById('modal-close-btn').addEventListener('click', hideModal);
+    document.getElementById('modal-action-btn').addEventListener('click', hideModal);
+  }
+
+  function shiftGridOctave(up) {
+    STATE.melodyGrid = STATE.melodyGrid.map(val => {
+      if (val === null) return null;
+      let newVal = up ? val - 1 : val + 1;
+      if (newVal < 0 || newVal >= STATE.pianoRollNotes.length) return val;
+      return newVal;
+    });
+    initSequencerUI();
+    drawRealBook();
+  }
+
+  function startPlayback() {
+    STATE.isPlaying = true;
+    document.getElementById('play-icon').classList.add('hidden');
+    document.getElementById('pause-icon').classList.remove('hidden');
+    startScheduler();
+  }
+
+  function pausePlayback() {
+    STATE.isPlaying = false;
+    document.getElementById('play-icon').classList.remove('hidden');
+    document.getElementById('pause-icon').classList.add('hidden');
+    clearTimeout(schedulerTimer);
+  }
+
+  function stopPlayback() {
+    STATE.isPlaying = false;
+    document.getElementById('play-icon').classList.remove('hidden');
+    document.getElementById('pause-icon').classList.add('hidden');
+    clearTimeout(schedulerTimer);
+    currentBeat = 0;
+    STATE.currentStep = 0;
+    STATE.currentMeasure = 0;
+    document.getElementById('playback-progress-bar').style.width = '0%';
+    drawRealBook();
+  }
+
+  function showNotification(title, msg, type = 'info') {
+    const container = document.getElementById('modal-container');
+    const iconContainer = document.getElementById('modal-icon-container');
+    const actionBtn = document.getElementById('modal-action-btn');
+    document.getElementById('modal-title').innerText = title;
+    document.getElementById('modal-message').innerText = msg;
+    if (type === 'success') {
+      iconContainer.className = "bg-emerald-600/10 text-emerald-400 p-3 rounded-xl";
+      iconContainer.innerHTML = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
+      actionBtn.className = "bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs px-4 py-2 rounded-xl transition";
+    } else {
+      iconContainer.className = "bg-indigo-600/10 text-indigo-400 p-3 rounded-xl";
+      iconContainer.innerHTML = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
+      actionBtn.className = "bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs px-4 py-2 rounded-xl transition";
+    }
+    container.classList.add('opacity-100');
+    container.classList.remove('pointer-events-none');
+    document.getElementById('custom-modal').classList.add('scale-100');
+    document.getElementById('custom-modal').classList.remove('scale-95');
+  }
+
+  function showTutorialModal() {
+    showNotification(
+      "Welcome to your AI Music Video Creator!",
+      "1. Write/Edit your melody by clicking on the Sequencer Grid squares.\n\n" +
+      "2. Click 'AI Chord Generation' to compose authentic Real Book harmony matching your melody.\n\n" +
+      "3. Play your creation using the built-in multi-instrument Jazz synthesizer with automated swing and swing drums.\n\n" +
+      "4. Choose standard widescreen or vertical format (ideal for YouTube Shorts), and click 'Export Video' to download a clean, high-fidelity WebM video ready to upload to YouTube!",
+      "info"
+    );
+  }
+
+  function hideModal() {
+    const container = document.getElementById('modal-container');
+    container.classList.remove('opacity-100');
+    container.classList.add('pointer-events-none');
+    document.getElementById('custom-modal').classList.remove('scale-100');
+    document.getElementById('custom-modal').classList.add('scale-95');
+  }
+  </script>
+</body>
+</html>

@@ -17,7 +17,7 @@
     {
       "id": "ENT-01",
       "category": "user_pref",
-      "proposed_fact": "Kai operates 6 strictly entity-firewalled projects: LUMINARA, SWARM ORACLE, AWAKING, KORËNA, Point4Brand/MONETIZE-BOT, Kai Jurek. No cross-contamination of brand assets or identities.",
+      "proposed_fact": "Kai operates 6 strictly entity-firewalled projects: LUMINARA, SWARM ORACLE, AWAKING, KORËNA, Point4Brand/MONETIZE-BOT, Kai Djuric. No cross-contamination of brand assets or identities.",
       "verdict_proposed": "CONFIRM",
       "trust": 0.95,
       "source": "export conversations_memory + project memories",
@@ -27,7 +27,7 @@
     {
       "id": "ENT-02",
       "category": "project",
-      "proposed_fact": "Kai Jurek is the animal-whisperer brand, strictly firewalled from LUMINARA / KORËNA / Point4Brand.",
+      "proposed_fact": "Kai Djuric is the animal-whisperer brand, strictly firewalled from LUMINARA / KORËNA / Point4Brand.",
       "verdict_proposed": "CONFIRM",
       "trust": 0.95,
       "source": "export conversations_memory",
