@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Repos Verdicts — Kai Portfolio · Hour 1 of 6</title>
+<style>
+  :root{--bg:#07090d;--fg:#e7f6ff;--dim:#7a8aa0;--accent:#2dd4bf;--magenta:#a855f7;--gold:#f59e0b;--warn:#ff2bd6;--muted:#64748b;--card:#0c1117;--border:#1a2330;--keep:#22c55e;--skip:#ef4444;--rewrite:#f59e0b;--edit:#a855f7;--off:#ff2bd6}
+  *{box-sizing:border-box}
+  body{margin:0;font:13px/1.5 -apple-system,system-ui,Segoe UI,sans-serif;background:var(--bg);color:var(--fg);min-height:100vh}
+  main{max-width:1180px;margin:32px auto;padding:0 20px}
+  h1{font-size:24px;letter-spacing:.16em;margin:0 0 4px;text-transform:uppercase}
+  h1 span{color:var(--accent)}
+  .sub{color:var(--dim);margin:0 0 18px;font-size:13px}
+  .plan{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin:14px 0 22px}
+  .plan .step{padding:8px 10px;border:1px solid var(--border);background:var(--card);border-radius:4px;font-family:ui-monospace,SFMono-Regular,monospace;font-size:11px;color:var(--dim);text-align:center;letter-spacing:.06em}
+  .plan .step.now{color:var(--accent);border-color:var(--accent);background:rgba(45,212,191,0.08)}
+  .toolbar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding:12px 14px;border:1px solid var(--border);background:var(--card);border-radius:6px;margin-bottom:14px;position:sticky;top:0;z-index:5}
+  .toolbar button{background:transparent;color:var(--fg);border:1px solid var(--border);padding:5px 10px;border-radius:3px;cursor:pointer;font:inherit;letter-spacing:.04em;font-size:12px}
+  .toolbar button:hover{border-color:var(--accent);color:var(--accent)}
+  .toolbar button.active{background:var(--accent);color:#06060e;border-color:var(--accent)}
+  .toolbar .sep{width:1px;height:20px;background:var(--border);margin:0 4px}
+  .toolbar .count{color:var(--dim);font-family:ui-monospace,SFMono-Regular,monospace;font-size:11px;margin-left:auto}
+  .toolbar .count b{color:var(--accent);font-weight:600}
+  .legend{display:flex;gap:12px;flex-wrap:wrap;padding:8px 14px;border:1px solid var(--border);background:var(--card);border-radius:6px;margin-bottom:14px;font-size:12px;color:var(--dim)}
+  .legend .swatch{display:inline-block;width:10px;height:10px;border-radius:2px;vertical-align:middle;margin-right:4px}
+  .row{border:1px solid var(--border);background:var(--card);border-radius:5px;padding:10px 14px;margin-bottom:6px;display:grid;grid-template-columns:minmax(180px,260px) 1fr auto;gap:12px;align-items:center}
+  .row.hidden{display:none}
+  .row[data-verdict="KEEP"]{border-left:3px solid var(--keep)}
+  .row[data-verdict="SKIP"]{border-left:3px solid var(--skip);opacity:.65}
+  .row[data-verdict="REWRITE"]{border-left:3px solid var(--rewrite)}
+  .row[data-off="true"]{background:rgba(255,43,214,0.04);border-left:3px solid var(--off) !important}
+  .row .left .name{font-weight:600;font-size:14px;color:var(--fg);display:flex;align-items:center;gap:8px}
+  .row .left .name a{color:inherit;text-decoration:none}
+  .row .left .name a:hover{color:var(--accent)}
+  .row .left .badges{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+  .row .left .badge{font-family:ui-monospace,SFMono-Regular,monospace;font-size:10px;letter-spacing:.1em;padding:2px 6px;border-radius:2px;border:1px solid var(--border);color:var(--dim);text-transform:uppercase}
+  .row .left .badge.priv{color:var(--magenta);border-color:var(--magenta)}
+  .row .left .badge.pub{color:var(--accent);border-color:var(--accent)}
+  .row .left .badge.fork{color:var(--gold);border-color:var(--gold)}
+  .row .left .badge.lang{color:var(--dim)}
+  .row .left .badge.off{color:var(--off);border-color:var(--off)}
+  .row .middle .desc{color:var(--dim);font-size:12px;line-height:1.5;margin:0 0 4px}
+  .row .middle .meta{color:var(--muted);font-family:ui-monospace,SFMono-Regular,monospace;font-size:10px}
+  .row .middle .off-reason{color:var(--off);font-size:11px;margin-top:4px;font-style:italic}
+  .row .middle .entity-row{margin-top:6px;display:flex;gap:6px;align-items:center}
+  .row .middle .entity-row select{background:#06060e;color:var(--fg);border:1px solid var(--border);border-radius:3px;padding:3px 6px;font:11px ui-monospace,SFMono-Regular,monospace}
+  .row .middle .edit-area{margin-top:6px;display:none}
+  .row[data-verdict="REWRITE"] .middle .edit-area{display:block}
+  .row .middle .edit-area textarea{width:100%;min-height:50px;background:#06060e;color:var(--fg);border:1px solid var(--border);border-radius:3px;padding:6px;font:12px inherit;line-height:1.4;resize:vertical}
+  .row .actions{display:flex;flex-direction:column;gap:4px;align-items:stretch;min-width:120px}
+  .vbtn{background:transparent;color:var(--fg);border:1px solid var(--border);padding:4px 8px;border-radius:3px;cursor:pointer;font:11px/1 inherit;letter-spacing:.04em;text-align:center}
+  .vbtn:hover{border-color:var(--accent)}
+  .vbtn.keep.active{background:var(--keep);color:#06060e;border-color:var(--keep)}
+  .vbtn.skip.active{background:var(--skip);color:#fff;border-color:var(--skip)}
+  .vbtn.rewrite.active{background:var(--rewrite);color:#06060e;border-color:var(--rewrite)}
+  .export-bar{position:sticky;bottom:0;background:var(--card);border:1px solid var(--border);border-radius:6px;padding:14px;margin-top:18px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .export-bar textarea{width:100%;min-height:140px;background:#06060e;color:var(--fg);border:1px solid var(--border);border-radius:3px;padding:8px;font:11px/1.5 ui-monospace,SFMono-Regular,monospace;resize:vertical}
+  .export-bar .copy{background:var(--accent);color:#06060e;border:none;padding:8px 14px;border-radius:3px;cursor:pointer;font:600 12px/1 inherit;letter-spacing:.08em}
+  .export-bar .reset{background:transparent;color:var(--dim);border:1px solid var(--border);padding:8px 12px;border-radius:3px;cursor:pointer;font:inherit}
+  .note{color:var(--muted);font-size:11px;font-style:italic;margin-top:6px}
+  @media (max-width: 760px){
+    .row{grid-template-columns:1fr;gap:8px}
+    .row .actions{flex-direction:row;flex-wrap:wrap}
+  }
+</style>
+</head>
+<body>
+<main>
+<h1>REPO<span>·</span>VERDICTS</h1>
+<p class="sub">Hour 1 of 6: per-repo allow-list for the Kai portfolio. Mark each repo KEEP / SKIP / REWRITE. When done, copy the JSON below and paste it back to me — I'll proceed to hours 2–4 with your verdicts as input.</p>
+
+<div class="plan">
+  <div class="step now">H1 · ALLOW-LIST</div>
+  <div class="step">H2 · CATALOG</div>
+  <div class="step">H3 · PORTFOLIO REPO</div>
+  <div class="step">H4 · DEPLOY</div>
+  <div class="step">H5 · ABOUT PAGE</div>
+  <div class="step">H6 · LINK & SHIP</div>
+</div>
+
+<div class="toolbar">
+  <button data-filter="ALL" class="active">All</button>
+  <button data-filter="PENDING">Pending</button>
+  <button data-filter="KEEP">Keep</button>
+  <button data-filter="SKIP">Skip</button>
+  <button data-filter="REWRITE">Rewrite</button>
+  <div class="sep"></div>
+  <button data-vis="ALL">All vis</button>
+  <button data-vis="public">Public</button>
+  <button data-vis="private">Private</button>
+  <div class="sep"></div>
+  <button data-bulk="KEEP_PUBLIC">Bulk: KEEP all public</button>
+  <button data-bulk="SKIP_FORKS">Bulk: SKIP all forks</button>
+  <button data-bulk="SKIP_PRIVATE">Bulk: SKIP all private</button>
+  <span class="count"><b id="cnt-keep">0</b> keep · <b id="cnt-skip">4</b> skip · <b id="cnt-rw">0</b> rewrite · <b id="cnt-pending">91</b> pending</span>
+</div>
+
+<div class="legend">
+  <div><span class="swatch" style="background:var(--off)"></span>off-limits (default SKIP, locked)</div>
+  <div><span class="swatch" style="background:var(--keep)"></span>KEEP</div>
+  <div><span class="swatch" style="background:var(--skip)"></span>SKIP</div>
+  <div><span class="swatch" style="background:var(--rewrite)"></span>REWRITE</div>
+  <div><span class="swatch" style="background:var(--accent)"></span>public</div>
+  <div><span class="swatch" style="background:var(--magenta)"></span>private</div>
+  <div><span class="swatch" style="background:var(--gold)"></span>fork</div>
+</div>
+
+<div id="rows"></div>
+
+<div class="export-bar">
+  <div style="flex:1 1 100%">
+    <div style="color:var(--dim);font-size:11px;letter-spacing:.1em;margin-bottom:6px">VERDICTS JSON — copy and paste back</div>
+    <textarea id="export" readonly></textarea>
+    <div class="note">Off-limits repos are excluded from this export (already hard-locked to SKIP). Verdicts for them cannot be changed in this UI.</div>
+  </div>
+  <button class="copy" id="copy-btn">COPY JSON</button>
+  <button class="reset" id="reset-btn">RESET</button>
+</div>
+
+<p style="margin-top:18px;color:var(--dim);font-size:12px"><a href="/" style="color:var(--accent)">back to index</a> · <a href="/memory-verdicts" style="color:var(--accent)">memory verdicts</a></p>
+
+</main>
+
+<script>
+// Embedded data — mirrors /public/repos-verdicts.json but loaded inline so the page
+// is fully self-contained (works even if the JSON fetch fails).
+const REPOS = [
+{"name":"chaos_magick","url":"https://github.com/kajica2/chaos_magick","description":"private astro vault — strict off-limits per memory","language":"Astro","visibility":"private","is_fork":false,"pushed_at":"2026-05-24T09:33:03Z","is_off_limits":true,"off_limits_reason":"explicit per memory: 'DO NOT touch without explicit instruction'","verdict":"SKIP","locked":true},
+{"name":"-luminara_all","url":"https://github.com/kajica2/-luminara_all","description":"private hub","language":"JavaScript","visibility":"private","is_fork":false,"pushed_at":"2026-04-24T09:50:51Z","is_off_limits":true,"off_limits_reason":"explicit per memory + private hub behind luminara-three.vercel.app","verdict":"SKIP","locked":true},
+{"name":"point4brand","url":"https://github.com/kajica2/point4brand","description":"revenue engine","language":"PHP","visibility":"private","is_fork":false,"pushed_at":"2025-07-22T21:15:59Z","is_off_limits":true,"off_limits_reason":"revenue engine (Point4Brand), treat with care","verdict":"SKIP","locked":true},
+{"name":"kais-vault","url":"https://github.com/kajica2/kais-vault","description":"private astro vault","language":"Astro","visibility":"private","is_fork":false,"pushed_at":"2026-06-01T13:15:16Z","is_off_limits":true,"off_limits_reason":"private Astro vault — content unknown","verdict":"SKIP","locked":true},
+{"name":"luminara-media","url":"https://github.com/kajica2/luminara-media","description":"","language":"","visibility":"public","is_fork":false,"pushed_at":"2026-06-01T14:27:03Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"luminara-pages","url":"https://github.com/kajica2/luminara-pages","description":"Static LUMINARA pages — sovereign-futurism HTML, deployed on Vercel","language":"HTML","visibility":"public","is_fork":false,"pushed_at":"2026-06-02T05:09:00Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"luminara-remotion","url":"https://github.com/kajica2/luminara-remotion","description":"LUMINARA Remotion component (VectorScene) + Vitest unit tests","language":"TypeScript","visibility":"public","is_fork":false,"pushed_at":"2026-06-01T22:35:23Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"harmonic-study-engine","url":"https://github.com/kajica2/harmonic-study-engine","description":"","language":"TypeScript","visibility":"public","is_fork":false,"pushed_at":"2026-05-24T15:31:25Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"binary-ring-credits-system","url":"https://github.com/kajica2/binary-ring-credits-system","description":"","language":"HTML","visibility":"public","is_fork":false,"pushed_at":"2026-05-24T08:24:16Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"artists-script","url":"https://github.com/kajica2/artists-script","description":"","language":"TypeScript","visibility":"public","is_fork":false,"pushed_at":"2026-05-18T00:46:16Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"The-artist-script","url":"https://github.com/kajica2/The-artist-script","description":"","language":"TypeScript","visibility":"public","is_fork":false,"pushed_at":"2026-05-18T00:11:19Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"image-to-3ds","url":"https://github.com/kajica2/image-to-3ds","description":"","language":"TypeScript","visibility":"public","is_fork":false,"pushed_at":"2026-05-13T20:53:18Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"image-to-3d","url":"https://github.com/kajica2/image-to-3d","description":"","language":"TypeScript","visibility":"public","is_fork":false,"pushed_at":"2026-05-13T20:34:02Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"vercel-ai-gateway-demo","url":"https://github.com/kajica2/vercel-ai-gateway-demo","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2026-04-02T09:40:19Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"v0-nano-banana-pro-playground","url":"https://github.com/kajica2/v0-nano-banana-pro-playground","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2026-03-24T01:43:01Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"chronosapace","url":"https://github.com/kajica2/chronosapace","description":"","language":"","visibility":"private","is_fork":false,"pushed_at":"2026-02-28T23:28:45Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"Vibecode-prompt-converter","url":"https://github.com/kajica2/Vibecode-prompt-converter","description":"","language":"TypeScript","visibility":"public","is_fork":false,"pushed_at":"2026-02-28T00:40:29Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"28day-ushakable","url":"https://github.com/kajica2/28day-ushakable","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2026-02-27T01:26:34Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"Persona-hashtags","url":"https://github.com/kajica2/Persona-hashtags","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2026-02-26T01:31:59Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"grid","url":"https://github.com/kajica2/grid","description":"","language":"","visibility":"public","is_fork":false,"pushed_at":"2026-02-23T13:49:58Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"sounf-frquency","url":"https://github.com/kajica2/sounf-frquency","description":"","language":"","visibility":"public","is_fork":false,"pushed_at":"2026-02-21T20:18:44Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"Astro-vyzor","url":"https://github.com/kajica2/Astro-vyzor","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2025-12-25T11:56:54Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"envelope-astro","url":"https://github.com/kajica2/envelope-astro","description":"","language":"Astro","visibility":"public","is_fork":false,"pushed_at":"2025-12-22T16:32:26Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"morpha-protocol","url":"https://github.com/kajica2/morpha-protocol","description":"","language":"JavaScript","visibility":"public","is_fork":false,"pushed_at":"2025-12-19T09:36:26Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"nanio-fashion-architect","url":"https://github.com/kajica2/nanio-fashion-architect","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2025-12-15T10:21:49Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"advanced-multiagent-saas","url":"https://github.com/kajica2/advanced-multiagent-saas","description":"","language":"","visibility":"public","is_fork":false,"pushed_at":"2025-12-13T06:19:05Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"portfolio_kai_djuric","url":"https://github.com/kajica2/portfolio_kai_djuric","description":"","language":"TypeScript","visibility":"public","is_fork":false,"pushed_at":"2025-12-11T23:33:12Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"velocity","url":"https://github.com/kajica2/velocity","description":"","language":"","visibility":"public","is_fork":false,"pushed_at":"2025-12-11T23:14:23Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"nextjs","url":"https://github.com/kajica2/nextjs","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2025-12-11T09:50:47Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"unlock-the-magic-","url":"https://github.com/kajica2/unlock-the-magic-","description":"","language":"","visibility":"private","is_fork":false,"pushed_at":"2025-12-11T00:32:54Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"mochrome","url":"https://github.com/kajica2/mochrome","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2025-12-11T00:17:29Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"monochrome_muse","url":"https://github.com/kajica2/monochrome_muse","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2025-12-08T02:35:08Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"motionflick","url":"https://github.com/kajica2/motionflick","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2025-12-04T07:35:52Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"v0-serverless-architecture-recommendationretret","url":"https://github.com/kajica2/v0-serverless-architecture-recommendationretret","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2025-12-04T01:21:28Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"Spectra_mutator","url":"https://github.com/kajica2/Spectra_mutator","description":"","language":"","visibility":"private","is_fork":false,"pushed_at":"2025-12-04T00:37:55Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"visual-mind","url":"https://github.com/kajica2/visual-mind","description":"","language":"","visibility":"private","is_fork":false,"pushed_at":"2025-11-28T03:50:55Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"music-pub","url":"https://github.com/kajica2/music-pub","description":"","language":"TypeScript","visibility":"public","is_fork":false,"pushed_at":"2025-11-24T21:46:21Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"gyromorph","url":"https://github.com/kajica2/gyromorph","description":"","language":"TypeScript","visibility":"public","is_fork":false,"pushed_at":"2025-11-24T21:27:15Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"oasis-in-motion","url":"https://github.com/kajica2/oasis-in-motion","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2025-11-24T17:19:08Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"inner-bloom","url":"https://github.com/kajica2/inner-bloom","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2025-11-23T23:05:37Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"Astro-vyzor-main","url":"https://github.com/kajica2/Astro-vyzor-main","description":"","language":"TypeScript","visibility":"public","is_fork":false,"pushed_at":"2025-11-23T18:09:52Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"futurecreator","url":"https://github.com/kajica2/futurecreator","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2025-11-22T20:01:52Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"spectra_vault","url":"https://github.com/kajica2/spectra_vault","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2025-11-22T10:07:18Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"FastWritter","url":"https://github.com/kajica2/FastWritter","description":"","language":"TypeScript","visibility":"public","is_fork":false,"pushed_at":"2025-11-21T07:48:57Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"react-video-recorder-buffer","url":"https://github.com/kajica2/react-video-recorder-buffer","description":"","language":"TypeScript","visibility":"public","is_fork":false,"pushed_at":"2025-11-20T21:20:22Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"build-aps-tensor","url":"https://github.com/kajica2/build-aps-tensor","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2025-11-13T21:17:24Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"cognicare_routine-helper","url":"https://github.com/kajica2/cognicare_routine-helper","description":"","language":"TypeScript","visibility":"public","is_fork":false,"pushed_at":"2025-11-13T03:49:10Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"creator-","url":"https://github.com/kajica2/creator-","description":"","language":"TypeScript","visibility":"public","is_fork":false,"pushed_at":"2025-11-13T01:32:36Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"pattern-tools-","url":"https://github.com/kajica2/pattern-tools-","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2025-11-12T23:30:39Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"hub-glow","url":"https://github.com/kajica2/hub-glow","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2025-11-11T10:33:26Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"ADHD-Strategie-app-ecplored","url":"https://github.com/kajica2/ADHD-Strategie-app-ecplored","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2025-11-10T22:19:34Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"tagds","url":"https://github.com/kajica2/tagds","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2025-11-09T05:37:24Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"dayly-astro-lov","url":"https://github.com/kajica2/dayly-astro-lov","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2025-11-09T01:36:49Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"path-of-the-spheres","url":"https://github.com/kajica2/path-of-the-spheres","description":"","language":"TypeScript","visibility":"public","is_fork":false,"pushed_at":"2025-11-06T07:22:30Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"musical-giggle","url":"https://github.com/kajica2/musical-giggle","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2025-11-05T04:08:22Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"affirmations","url":"https://github.com/kajica2/affirmations","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2025-10-31T23:48:32Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"v0-linear-card-interaction","url":"https://github.com/kajica2/v0-linear-card-interaction","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2025-10-31T20:16:27Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"splash","url":"https://github.com/kajica2/splash","description":"","language":"","visibility":"private","is_fork":false,"pushed_at":"2025-10-30T22:01:09Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"v0-cliste-website-navigation","url":"https://github.com/kajica2/v0-cliste-website-navigation","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2025-10-30T21:48:53Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"sound-creator","url":"https://github.com/kajica2/sound-creator","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2025-10-15T10:38:09Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"RhythmColorizer","url":"https://github.com/kajica2/RhythmColorizer","description":"","language":"","visibility":"private","is_fork":false,"pushed_at":"2025-10-14T19:31:04Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"angular_video","url":"https://github.com/kajica2/angular_video","description":"","language":"","visibility":"private","is_fork":false,"pushed_at":"2025-10-08T03:59:24Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"tag_cloud_flight","url":"https://github.com/kajica2/tag_cloud_flight","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2025-10-08T03:03:11Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"sonic-weaver","url":"https://github.com/kajica2/sonic-weaver","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2025-09-29T01:37:49Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"vr","url":"https://github.com/kajica2/vr","description":"","language":"HTML","visibility":"public","is_fork":false,"pushed_at":"2025-09-24T07:55:48Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"glyph-whisperer-tool","url":"https://github.com/kajica2/glyph-whisperer-tool","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2025-09-10T16:04:33Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"docu-render-export","url":"https://github.com/kajica2/docu-render-export","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2025-09-03T13:47:04Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"next-js-saas-starter","url":"https://github.com/kajica2/next-js-saas-starter","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2025-09-02T22:15:14Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"ai-agents-for-beginners","url":"https://github.com/kajica2/ai-agents-for-beginners","description":"upstream fork","language":"Jupyter Notebook","visibility":"public","is_fork":true,"pushed_at":"2025-07-23T09:58:24Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"EVobvR","url":"https://github.com/kajica2/EVobvR","description":"","language":"Python","visibility":"private","is_fork":false,"pushed_at":"2025-07-01T16:34:56Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"my-dashboard","url":"https://github.com/kajica2/my-dashboard","description":"","language":"","visibility":"private","is_fork":false,"pushed_at":"2025-06-18T17:57:01Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"v0-add-mutate-function","url":"https://github.com/kajica2/v0-add-mutate-function","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2025-06-17T22:14:32Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"chatbot","url":"https://github.com/kajica2/chatbot","description":"","language":"TypeScript","visibility":"public","is_fork":false,"pushed_at":"2025-06-16T20:41:41Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"sveltekit-boilerplate","url":"https://github.com/kajica2/sveltekit-boilerplate","description":"","language":"Svelte","visibility":"private","is_fork":false,"pushed_at":"2025-06-16T20:20:34Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"YourChoice","url":"https://github.com/kajica2/YourChoice","description":"upstream fork","language":"","visibility":"public","is_fork":true,"pushed_at":"2025-06-16T19:27:06Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"nextjs-ai-chatbot","url":"https://github.com/kajica2/nextjs-ai-chatbot","description":"","language":"TypeScript","visibility":"private","is_fork":false,"pushed_at":"2025-06-16T14:38:32Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"headlesclaude-wp","url":"https://github.com/kajica2/headlesclaude-wp","description":"","language":"","visibility":"private","is_fork":false,"pushed_at":"2025-06-11T03:50:16Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"glide","url":"https://github.com/kajica2/glide","description":"upstream fork","language":"JavaScript","visibility":"public","is_fork":true,"pushed_at":"2024-11-22T12:01:07Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"scripts","url":"https://github.com/kajica2/scripts","description":"","language":"Jupyter Notebook","visibility":"private","is_fork":false,"pushed_at":"2024-11-16T00:25:03Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"sorterry","url":"https://github.com/kajica2/sorterry","description":"","language":"","visibility":"public","is_fork":false,"pushed_at":"2024-06-27T18:46:11Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"Advanced-administration-handbook","url":"https://github.com/kajica2/Advanced-administration-handbook","description":"upstream fork","language":"","visibility":"public","is_fork":true,"pushed_at":"2024-06-04T22:33:43Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"project_handwriting_recognition","url":"https://github.com/kajica2/project_handwriting_recognition","description":"upstream fork","language":"Jupyter Notebook","visibility":"public","is_fork":true,"pushed_at":"2023-08-11T06:04:40Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"solvok1","url":"https://github.com/kajica2/solvok1","description":"","language":"JavaScript","visibility":"public","is_fork":false,"pushed_at":"2021-01-18T23:12:52Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"solvok-games","url":"https://github.com/kajica2/solvok-games","description":"","language":"JavaScript","visibility":"public","is_fork":false,"pushed_at":"2021-01-11T12:20:23Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"trumpetkai","url":"https://github.com/kajica2/trumpetkai","description":"","language":"JavaScript","visibility":"public","is_fork":false,"pushed_at":"2021-01-11T12:07:31Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"moving-media","url":"https://github.com/kajica2/moving-media","description":"","language":"Sass","visibility":"public","is_fork":false,"pushed_at":"2021-01-09T03:21:48Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"timbre.js","url":"https://github.com/kajica2/timbre.js","description":"upstream fork","language":"JavaScript","visibility":"public","is_fork":true,"pushed_at":"2018-05-12T14:35:03Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"lab","url":"https://github.com/kajica2/lab","description":"upstream fork","language":"CoffeeScript","visibility":"public","is_fork":true,"pushed_at":"2018-01-26T19:40:48Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"WaveServer","url":"https://github.com/kajica2/WaveServer","description":"","language":"PHP","visibility":"private","is_fork":false,"pushed_at":"2016-11-21T14:14:10Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"WaveAdmin","url":"https://github.com/kajica2/WaveAdmin","description":"","language":"CSS","visibility":"private","is_fork":false,"pushed_at":"2016-11-21T13:59:01Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false},
+{"name":"WaveMusic","url":"https://github.com/kajica2/WaveMusic","description":"","language":"PHP","visibility":"private","is_fork":false,"pushed_at":"2016-11-18T10:53:04Z","is_off_limits":false,"off_limits_reason":null,"verdict":"PENDING","locked":false}
+];
+
+const state = {};
+REPOS.forEach(r => {
+  state[r.name] = {verdict: r.verdict, entity: r.entity, edited_desc: null};
+});
+
+function escapeHtml(s) { return String(s||"").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c])); }
+
+function render() {
+  const root = document.getElementById("rows");
+  root.innerHTML = "";
+  // Order: off-limits first (locked SKIP), then the rest
+  const ordered = REPOS.slice().sort((a,b) => {
+    if (a.is_off_limits && !b.is_off_limits) return -1;
+    if (!a.is_off_limits && b.is_off_limits) return 1;
+    return 0;
+  });
+  ordered.forEach(r => {
+    const s = state[r.name];
+    const div = document.createElement("div");
+    div.className = "row";
+    div.dataset.id = r.name;
+    div.dataset.verdict = s.verdict;
+    if (r.is_off_limits) div.dataset.off = "true";
+
+    const visBadge = r.visibility === "private"
+      ? '<span class="badge priv">private</span>'
+      : '<span class="badge pub">public</span>';
+    const forkBadge = r.is_fork ? '<span class="badge fork">fork</span>' : '';
+    const offBadge = r.is_off_limits ? '<span class="badge off">OFF-LIMITS</span>' : '';
+    const langBadge = r.language && r.language !== "" ? `<span class="badge lang">${escapeHtml(r.language)}</span>` : '';
+
+    const buttons = r.locked
+      ? '<span class="vbtn skip active" style="cursor:not-allowed">LOCKED · SKIP</span>'
+      : `
+        <button class="vbtn keep" data-v="KEEP">KEEP</button>
+        <button class="vbtn skip" data-v="SKIP">SKIP</button>
+        <button class="vbtn rewrite" data-v="REWRITE">REWRITE</button>
+      `;
+
+    const entityOptions = ["luminara","korena","kai-djuric","awaking","point4brand","swarm-oracle","kais-vault","kajica2-lab","monochrome","music","visual","unknown"]
+      .map(e => `<option value="${e}"${e===s.entity?" selected":""}>${e}</option>`).join("");
+
+    div.innerHTML = `
+      <div class="left">
+        <div class="name">
+          <a href="${escapeHtml(r.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(r.name)}</a>
+        </div>
+        <div class="badges">
+          ${visBadge}${forkBadge}${offBadge}${langBadge}
+        </div>
+      </div>
+      <div class="middle">
+        <p class="desc">${escapeHtml(r.description || "(no description on GitHub)")}</p>
+        <div class="meta">pushed ${(r.pushed_at || "").slice(0,19).replace("T"," ")}</div>
+        ${r.off_limits_reason ? `<div class="off-reason">⚠ ${escapeHtml(r.off_limits_reason)}</div>` : ""}
+        <div class="entity-row">
+          <span style="color:var(--dim);font-size:11px">entity:</span>
+          <select data-entity ${r.locked ? "disabled" : ""}>${entityOptions}</select>
+        </div>
+        <div class="edit-area">
+          <textarea placeholder="Edit the description for the portfolio page...">${escapeHtml(s.edited_desc || r.description || "")}</textarea>
+        </div>
+      </div>
+      <div class="actions">${buttons}</div>
+    `;
+    root.appendChild(div);
+  });
+  refreshButtons();
+  applyFilter();
+  updateExport();
+}
+
+function refreshButtons() {
+  document.querySelectorAll(".row").forEach(div => {
+    const id = div.dataset.id;
+    const v = state[id].verdict;
+    div.querySelectorAll(".vbtn").forEach(b => {
+      if (b.dataset.v) b.classList.toggle("active", b.dataset.v === v);
+    });
+  });
+  const counts = {KEEP:0, SKIP:0, REWRITE:0, PENDING:0};
+  Object.values(state).forEach(s => counts[s.verdict]++);
+  document.getElementById("cnt-keep").textContent = counts.KEEP;
+  document.getElementById("cnt-skip").textContent = counts.SKIP;
+  document.getElementById("cnt-rw").textContent = counts.REWRITE;
+  document.getElementById("cnt-pending").textContent = counts.PENDING;
+}
+
+document.addEventListener("click", e => {
+  const t = e.target;
+  if (t.matches(".vbtn[data-v]")) {
+    const div = t.closest(".row");
+    const id = div.dataset.id;
+    const repo = REPOS.find(r => r.name === id);
+    if (repo.locked) return;
+    const v = t.dataset.v;
+    state[id].verdict = v;
+    div.dataset.verdict = v;
+    const ta = div.querySelector(".edit-area textarea");
+    if (ta && v === "REWRITE") state[id].edited_desc = ta.value.trim();
+    refreshButtons();
+    applyFilter();
+    updateExport();
+  }
+  if (t.matches("[data-filter]")) {
+    document.querySelectorAll("[data-filter]").forEach(b => b.classList.remove("active"));
+    t.classList.add("active");
+    applyFilter();
+  }
+  if (t.matches("[data-vis]")) {
+    document.querySelectorAll("[data-vis]").forEach(b => b.classList.remove("active"));
+    t.classList.add("active");
+    applyFilter();
+  }
+  if (t.matches("[data-bulk]")) {
+    const action = t.dataset.bulk;
+    const target = action === "KEEP_PUBLIC" ? "public"
+                 : action === "SKIP_FORKS"  ? "fork"
+                 : action === "SKIP_PRIVATE" ? "private"
+                 : null;
+    if (!target) return;
+    if (!confirm(`Mark all ${target} repos as ${action.startsWith("KEEP")?"KEEP":"SKIP"}?`)) return;
+    REPOS.forEach(r => {
+      if (r.locked) return;
+      if (target === "public"  && r.visibility === "public"  && !r.is_fork) state[r.name].verdict = "KEEP";
+      if (target === "fork"    && r.is_fork)                          state[r.name].verdict = "SKIP";
+      if (target === "private" && r.visibility === "private" && !r.is_fork) state[r.name].verdict = "SKIP";
+    });
+    render();
+  }
+  if (t.id === "copy-btn") {
+    const ta = document.getElementById("export");
+    ta.select();
+    document.execCommand("copy");
+    t.textContent = "COPIED ✓";
+    setTimeout(()=>t.textContent="COPY JSON", 1500);
+  }
+  if (t.id === "reset-btn") {
+    if (!confirm("Reset all non-locked verdicts to PENDING?")) return;
+    REPOS.forEach(r => { if (!r.locked) state[r.name] = {verdict:"PENDING", entity:"unknown", edited_desc:null}; });
+    render();
+  }
+});
+
+document.addEventListener("change", e => {
+  if (e.target.matches("[data-entity]")) {
+    const div = e.target.closest(".row");
+    state[div.dataset.id].entity = e.target.value;
+    updateExport();
+  }
+});
+document.addEventListener("input", e => {
+  if (e.target.matches(".edit-area textarea")) {
+    const div = e.target.closest(".row");
+    state[div.dataset.id].edited_desc = e.target.value.trim();
+    updateExport();
+  }
+});
+
+function applyFilter() {
+  const f = document.querySelector("[data-filter].active")?.dataset.filter || "ALL";
+  const v = document.querySelector("[data-vis].active")?.dataset.vis || "ALL";
+  document.querySelectorAll(".row").forEach(div => {
+    const id = div.dataset.id;
+    const r = REPOS.find(x => x.name === id);
+    const verdict = state[id].verdict;
+    const verdictOk = (f === "ALL" || verdict === f);
+    const visOk = (v === "ALL" || r.visibility === v);
+    div.classList.toggle("hidden", !(verdictOk && visOk));
+  });
+}
+
+function updateExport() {
+  const out = {
+    generated_at: new Date().toISOString(),
+    summary: {KEEP:0, SKIP:0, REWRITE:0, PENDING:0},
+    verdicts: REPOS
+      .filter(r => !r.locked)
+      .map(r => {
+        const s = state[r.name];
+        out.summary[s.verdict]++;
+        return {
+          name: r.name,
+          url: r.url,
+          verdict: s.verdict,
+          entity: s.entity,
+          description_for_portfolio: s.verdict === "REWRITE" && s.edited_desc ? s.edited_desc : r.description
+        };
+      })
+  };
+  document.getElementById("export").value = JSON.stringify(out, null, 2);
+}
+
+render();
+</script>
+</body>
+</html>
