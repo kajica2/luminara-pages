@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kai Đurić — Trumpet, DJ, Producer, and the engineer of his own tools</title>
+<meta name="description" content="Profile of Kai Đurić: 30 years of trumpet, DJ and production work; 60 Hugging Face Spaces for music practice; the agent-team-bus on GitHub.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);
+ font-family:'Outfit',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
+ font-size:15px;line-height:1.62;font-weight:400;
+ -webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3,h4{margin:0;font-weight:600;letter-spacing:-0.018em;line-height:1.15}
+p{margin:0 0 10px}
+a{color:inherit}
+code,.mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:400}
+:root{
+ --bg:#07090d; --surface:#0c1117; --line:#1a2330; --line-soft:#141c28;
+ --ink:#e7f6ff; --ink-2:#a4b6c9; --ink-3:#7a8aa0;
+ --accent:#f59e0b; --accent-deep:#fbbf24; --accent-soft:rgba(245,158,11,.12);
+ --accent-45:rgba(245,158,11,.42); --accent-22:rgba(245,158,11,.24);
+ --d1:#f59e0b; --d2:#2dd4bf; --d3:#a855f7; --lb2:#2dd4bf; --bar-text:#07090d;
+ --r:16px; --sh:0 0 0 1px rgba(26,35,48,.55); --sh-lg:0 10px 30px -10px rgba(0,0,0,.9);
+ --nav-h:60px;
+}
+.wrap{max-width:1024px;margin:0 auto;padding:0 24px}
+@media (max-width:768px){.wrap{padding:0 18px}}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:50;background:rgba(250,250,248,.86);
+ backdrop-filter:saturate(160%) blur(14px);-webkit-backdrop-filter:saturate(160%) blur(14px);
+ border-bottom:1px solid var(--line)}
+.nav-in{height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px;letter-spacing:-.01em;
+ text-decoration:none;white-space:nowrap}
+.brand .mk{width:26px;height:26px;border-radius:8px;background:var(--accent-soft);
+ color:var(--accent-deep);display:grid;place-items:center}
+.nav-links{display:flex;gap:22px;font-size:13.5px;color:var(--ink-2)}
+.nav-links a{text-decoration:none;padding:4px 0;position:relative;transition:color .18s}
+.nav-links a:hover{color:var(--ink)}
+.nav-links a::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:1.5px;
+ background:var(--accent);transition:right .22s ease}
+.nav-links a:hover::after{right:0}
+@media (max-width:860px){.nav-links{display:none}}
+
+
+/* hero */
+.hero{padding:64px 0 44px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:-30% -10% auto -10%;height:520px;
+ background:radial-gradient(ellipse at 22% 0%,var(--accent-soft),transparent 62%);
+ pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:end;position:relative}
+@media (max-width:860px){.hero-grid{grid-template-columns:1fr;gap:28px}}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.09em;
+ text-transform:uppercase;color:var(--accent-deep);font-weight:600;margin-bottom:16px}
+.eyebrow svg{width:14px;height:14px}
+h1{font-size:clamp(38px,7vw,60px);font-weight:600;letter-spacing:-0.035em;margin-bottom:14px}
+h1 .dim{color:var(--ink-3);font-weight:300}
+.lede{font-size:17px;color:var(--ink-2);max-width:600px;line-height:1.6}
+.lede b{color:var(--ink);font-weight:600}
+.hero-side{display:flex;flex-direction:column;gap:2px;text-align:right}
+.hero-side .row{display:flex;justify-content:flex-end;align-items:baseline;gap:10px;
+ padding:9px 0;border-bottom:1px solid var(--line-soft);font-size:13.5px;color:var(--ink-2)}
+.hero-side .row:last-child{border-bottom:0}
+.hero-side .n{font-family:'JetBrains Mono',monospace;font-size:20px;color:var(--ink);font-weight:500}
+.wave-wrap{color:var(--accent);margin-top:40px;opacity:.85}
+.wave{width:100%;height:104px;display:block}
+@media (max-width:768px){.wave{height:64px}}
+.wave-anim{animation:drift 26s linear infinite alternate}
+@keyframes drift{from{transform:translateY(0)}to{transform:translateY(-7px)}}
+@media (prefers-reduced-motion:reduce){.wave-anim{animation:none}}
+
+/* sections */
+section{padding:52px 0;border-top:1px solid var(--line)}
+.sec-head{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;margin-bottom:30px}
+.sec-ico{width:38px;height:38px;border-radius:11px;background:var(--accent-soft);color:var(--accent-deep);
+ display:grid;place-items:center;flex:none}
+.sec-ico svg{width:19px;height:19px}
+h2{font-size:25px;letter-spacing:-.025em;margin-bottom:6px}
+.sec-sub{color:var(--ink-2);font-size:14.5px;max-width:720px}
+.eyebrow-s{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.1em;
+ text-transform:uppercase;color:var(--ink-3);margin-bottom:8px;display:block}
+
+/* cards */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+ padding:22px;box-shadow:var(--sh);transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-2px);box-shadow:var(--sh-lg)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.grid2>*,.grid3>*{min-width:0}
+@media (max-width:820px){.grid2{grid-template-columns:1fr}}
+.grid3{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:18px}
+.arch-blocks{min-width:0}
+@media (max-width:900px){.grid3{grid-template-columns:1fr}}
+
+/* kv card */
+.kv{display:grid;grid-template-columns:132px 1fr;gap:0}
+.kv > div{padding:9px 0;border-bottom:1px dashed var(--line);font-size:13.5px}
+.kv > div:nth-last-child(-n+2){border-bottom:0}
+.kv .k{color:var(--ink-3);font-weight:500}
+.kv .v{color:var(--ink)}
+@media (max-width:520px){.kv{grid-template-columns:1fr}
+ .kv > div:nth-last-child(-n+2){border-bottom:1px dashed var(--line)}
+ .kv > div:last-child{border-bottom:0}
+ .kv .k{padding-bottom:0;border-bottom:0}
+ .kv .v{padding-top:1px}}
+
+/* bench */
+.bench-row{display:grid;grid-template-columns:176px 1fr 44px;gap:14px;align-items:center;padding:6px 0}
+.bench-row .label{font-size:13.5px;color:var(--ink-2)}
+.bar-bg{height:16px;background:var(--line-soft);border-radius:6px;overflow:hidden}
+.bar-fill{display:block;height:100%;border-radius:6px;background:var(--d1);transition:width .5s ease}
+.bar-fill.t-vis{background:var(--d2)}
+.bar-fill.t-agent{background:var(--d3)}
+.bar-fill.t-gradio{background:var(--d2)}
+.bar-fill.t-docker{background:var(--ink-3)}
+.bar-fill.t-orig{background:var(--d1)}
+.bar-fill.t-mix{background:var(--d2)}
+.bar-fill.t-long{background:var(--d3)}
+.bar-fill.t-static{background:var(--d1)}
+.bench-row .val{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--ink);text-align:right}
+
+/* language split */
+.langbar{display:flex;height:26px;border-radius:8px;overflow:hidden;border:1px solid var(--line)}
+.langbar div{display:grid;place-items:center;font-family:'JetBrains Mono',monospace;font-size:11.5px;
+ color:var(--bar-text);letter-spacing:.02em}
+.lb-py{background:var(--d1)}
+.lb-html{background:var(--lb2)}
+.lb-dock{background:var(--ink-3)}
+.lang-legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;font-size:12.5px;color:var(--ink-2)}
+.lang-legend span{display:inline-flex;align-items:center;gap:7px}
+.sw{width:10px;height:10px;border-radius:3px;display:inline-block}
+
+/* arch row */
+.arch-row{display:grid;grid-template-columns:118px 1fr;gap:20px;align-items:start;
+ padding:14px 0;border-bottom:1px solid var(--line-soft)}
+.arch-row:last-child{border-bottom:0}
+.arch-tier{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.08em;
+ text-transform:uppercase;color:var(--ink-3);padding-top:6px}
+.arch-blocks{display:flex;flex-wrap:wrap;gap:9px}
+.ab{display:inline-flex;align-items:center;gap:8px;max-width:100%;overflow-wrap:anywhere;background:var(--surface);border:1px solid var(--line);
+ border-radius:10px;padding:7px 12px;font-size:13px;box-shadow:var(--sh);
+ transition:transform .18s,box-shadow .18s,border-color .18s}
+.ab:hover{transform:translateY(-2px);box-shadow:var(--sh-lg);border-color:var(--accent-45)}
+.ab .b{width:7px;height:7px;border-radius:50%;background:var(--ink-3);flex:none}
+.ab.live .b{background:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.ab.key .b{background:var(--accent)}
+.ab.stub{border-style:dashed;background:transparent;box-shadow:none;color:var(--ink-2)}
+.ab.key{border-color:var(--accent-45);background:var(--accent-soft);flex-direction:column;align-items:flex-start;gap:2px;padding:8px 13px}
+.ab.key .desc-mini{font-size:11.5px;line-height:1.45}
+.ab.nowrap{white-space:nowrap}
+.ab.nowrap .nb{overflow-wrap:normal;display:inline-flex;align-items:center;gap:6px}
+.ab.nowrap .nb svg{width:15px;height:15px}
+.ab .desc-mini{color:var(--ink-3);font-size:12px;overflow-wrap:anywhere}
+
+/* code block */
+.code{background:#0e141c;color:#dbe7f3;border:1px solid #1a2330;border-radius:12px;padding:18px 20px;overflow-x:auto;
+ font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.75;white-space:pre}
+.code .k{color:#fbbf24}.code .s{color:#2dd4bf}.code .c{color:#7a8aa0}.code .n{color:#8ab4f8}
+.code .d{color:#a855f7}
+
+/* table */
+.tscroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:440px}
+th{text-align:left;font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);
+ font-weight:600;padding:0 12px 9px 0;border-bottom:1px solid var(--line)}
+td{padding:10px 12px 10px 0;border-bottom:1px solid var(--line-soft);color:var(--ink-2);vertical-align:top}
+td:first-child{color:var(--ink);font-weight:500}
+tr:last-child td{border-bottom:0}
+td .mono{font-size:12.5px;color:var(--ink)}
+
+/* timeline */
+.timeline{position:relative;padding-left:4px}
+.timeline::before{content:"";position:absolute;left:19px;top:8px;bottom:14px;width:2px;
+ background:linear-gradient(180deg,var(--accent),var(--accent-45) 62%,var(--line))}
+.step{position:relative;padding-left:52px;margin-bottom:19px}
+.step:last-child{margin-bottom:0}
+.step-icon{position:absolute;left:4px;top:0;width:32px;height:32px;border-radius:50%;
+ background:var(--surface);border:2px solid var(--accent);display:grid;place-items:center;color:var(--accent-deep)}
+.step-icon svg{width:14px;height:14px}
+.step-when{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--accent-deep);
+ letter-spacing:.04em;margin-bottom:3px}
+.step-title{font-weight:600;font-size:15.5px;margin-bottom:3px}
+.step-desc{font-size:13.5px;color:var(--ink-2);max-width:600px;margin-bottom:0}
+.step-tags{display:flex;gap:7px;margin-top:8px;flex-wrap:wrap}
+.tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.03em;
+ background:var(--accent-soft);color:var(--accent-deep);border-radius:6px;padding:2.5px 8px}
+.tag.ghost{background:transparent;color:var(--ink-3);border:1px solid var(--line)}
+
+/* runtime rail */
+.rail-row{display:grid;grid-template-columns:minmax(0,320px) 1fr 52px;gap:18px;align-items:center;padding:5px 0}
+.rail-row>*{min-width:0}
+.rail-name{font-size:13px;color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rail-track{position:relative}
+.rail-track{height:16px;background:var(--line-soft);border-radius:5px;overflow:hidden}
+.rail-fill{display:block;height:100%;border-radius:5px;background:var(--d1);transition:width .6s ease;min-width:3px}
+.rail-fill.k-mix{background:var(--d2)}
+.rail-fill.k-long{background:var(--d3)}
+.rail-val{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-3);text-align:right}
+.legend{display:flex;gap:20px;flex-wrap:wrap;margin-top:16px;font-size:12.5px;color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+
+/* month chart */
+.m-chart{display:flex;align-items:stretch;gap:10px;height:186px;padding-top:10px}
+.m-col{flex:1;display:grid;grid-template-rows:1fr auto auto;gap:5px;align-items:end;min-width:0}
+.m-bar-wrap{grid-row:1;width:100%;display:flex;align-items:flex-end;align-self:stretch}
+.m-bar{width:100%;background:var(--accent);border-radius:5px 5px 0 0;min-height:2px;
+ transition:height .6s ease}
+.m-bar-wrap .m-bar:only-child{opacity:1}
+.m-col .m-lbl{grid-row:2;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-3);
+ white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;text-align:center}
+.m-col .m-yr{color:var(--accent-deep);font-size:9.5px}
+.m-col .m-val{grid-row:3;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink);height:15px;text-align:center}
+.m-col.zero .m-bar{background:var(--line)}
+
+/* day strip */
+.d-chart{display:flex;align-items:stretch;gap:14px;height:150px;padding-top:8px}
+.d-col{flex:1;display:grid;grid-template-rows:1fr auto auto;gap:5px;align-items:end;min-width:0}
+.d-bar-wrap{grid-row:1;width:100%;display:flex;align-items:flex-end;align-self:stretch}
+.d-bar{width:100%;background:var(--accent-45);border-radius:4px 4px 0 0;min-height:2px}
+.d-col.hot .d-bar{background:var(--accent)}
+.d-lbl{grid-row:2;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-3);white-space:nowrap;text-align:center}
+.d-val{grid-row:3;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink);text-align:center}
+
+/* chips */
+.chips{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.chips>*{min-width:0}
+@media (max-width:900px){.chips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.chips{grid-template-columns:1fr}}
+.chip{display:flex;align-items:center;gap:8px;text-decoration:none;background:var(--surface);
+ border:1px solid var(--line);border-radius:9px;padding:7px 10px;font-size:12px;
+ box-shadow:var(--sh);transition:transform .16s,box-shadow .16s,border-color .16s,opacity .2s}
+.chip:hover{transform:translateY(-2px);box-shadow:var(--sh-lg);border-color:var(--accent-45)}
+.chip .dot{width:6px;height:6px;border-radius:50%;flex:none}
+.chip.t-music .dot{background:var(--d1)}
+.chip.t-vis .dot{background:var(--d2)}
+.chip.t-agent .dot{background:var(--d3)}
+.chip{min-width:0}
+.chip-name{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-2);
+ overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.chip:hover .chip-name{color:var(--ink)}
+.chip.hide{display:none}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.fbtn{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.03em;background:transparent;
+ border:1px solid var(--line);color:var(--ink-2);border-radius:8px;padding:6px 12px;cursor:pointer;
+ transition:all .18s}
+.fbtn:hover{border-color:var(--accent-45);color:var(--ink)}
+.fbtn.on{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+
+/* callout */
+.callout{display:flex;gap:13px;background:var(--accent-soft);border:1px solid var(--accent-22);
+ border-radius:12px;padding:15px 17px}
+.callout .ic{color:var(--accent-deep);flex:none;margin-top:1px}
+.callout .tx{font-size:13.5px;color:var(--ink-2)}
+.callout .tx b{color:var(--ink);font-weight:600}
+
+/* links */
+.links{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media (max-width:820px){.links{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:480px){.links{grid-template-columns:1fr}}
+.lk{display:flex;align-items:center;gap:10px;text-decoration:none;background:var(--surface);
+ border:1px solid var(--line);border-radius:11px;padding:11px 13px;box-shadow:var(--sh);
+ transition:transform .18s,box-shadow .18s,border-color .18s}
+.lk:hover{transform:translateY(-2px);box-shadow:var(--sh-lg);border-color:var(--accent-45)}
+.lk .ii{width:30px;height:30px;border-radius:9px;background:var(--line-soft);color:var(--ink-2);
+ display:grid;place-items:center;flex:none;transition:background .18s,color .18s}
+.lk:hover .ii{background:var(--accent-soft);color:var(--accent-deep)}
+.lk .tx{min-width:0}
+.lk .tx b{display:block;font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lk .tx span{font-size:11.5px;color:var(--ink-3);font-family:'JetBrains Mono',monospace}
+
+/* footer */
+footer{padding:36px 0 56px;border-top:1px solid var(--line);color:var(--ink-3);font-size:12.5px}
+footer a{color:var(--ink-2)}
+.foot-grid{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.foot-note{max-width:640px;line-height:1.7}
+.foot-tag{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.06em;
+ text-transform:uppercase;color:var(--ink-3);white-space:nowrap}
+
+/* ---- theme overrides ---- */
+.theme-lum h1,.theme-lum h2{text-transform:uppercase;letter-spacing:.13em}
+.theme-lum h1{font-weight:500;font-size:clamp(32px,6vw,54px)}
+.theme-lum h2{font-size:23px}
+.theme-lum .eyebrow,.theme-lum .eyebrow-s{color:var(--accent-deep)}
+.theme-lum .brand .mk{background:var(--accent-soft);color:var(--accent-deep)}
+.theme-lum .sec-ico,.theme-lum .callout .ic{background:var(--accent-soft);color:var(--accent-deep)}
+.theme-lum .hero::before{background:radial-gradient(ellipse at 22% 0%,rgba(45,212,191,.10),transparent 62%)}
+.theme-lum .wave-wrap{color:var(--accent)}
+.theme-lum .tag{background:var(--accent-soft);color:var(--accent-deep)}
+.theme-lum .tag.ghost{background:transparent;color:var(--ink-3);border-color:var(--line)}
+.theme-lum .step-icon{background:var(--surface);border-color:var(--accent);color:var(--accent-deep)}
+.theme-lum .callout{background:rgba(245,158,11,.06);border-color:rgba(245,158,11,.22)}
+.theme-lum .ab,.theme-lum .chip,.theme-lum .lk{background:var(--surface);border-color:var(--line)}
+.theme-lum .ab:hover,.theme-lum .chip:hover,.theme-lum .lk:hover{border-color:var(--accent)}
+.theme-lum .ab.live{background:rgba(245,158,11,.10);border-color:rgba(245,158,11,.42)}
+.theme-lum .fbtn.on{background:var(--accent);border-color:var(--accent);color:#07090d}
+.theme-lum .fbtn:hover{border-color:var(--accent);color:var(--ink)}
+.theme-lum .nav{background:rgba(7,9,13,.86)}
+.theme-lum .lk .ii{background:var(--line-soft);color:var(--ink-2)}
+.theme-lum .lk:hover .ii{background:var(--accent-soft);color:var(--accent-deep)}
+.theme-lum .timeline::before{background:linear-gradient(180deg,var(--accent),var(--d2) 62%,var(--line))}
+.theme-lum .sec-sub,.theme-lum .lede{color:var(--ink-2)}
+
+/* ---- responsive overrides (last, so they win) ---- */
+@media (max-width:620px){
+ .bench-row{grid-template-columns:112px 1fr 34px;gap:9px}
+ .bench-row .label{font-size:12.5px}
+ .arch-row{grid-template-columns:1fr;gap:6px}
+ .arch-tier{padding-top:0}
+ .kv{grid-template-columns:1fr}
+ .kv > div{border-bottom:0;padding:2px 0}
+ .kv .k{padding-top:12px;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase}
+ .kv .v{padding-top:0;padding-bottom:8px}
+ .kv .v:last-child{padding-bottom:0}
+ .step{padding-left:44px}
+ .timeline::before{left:16px}
+ .step-icon{left:0;width:34px;height:34px}
+ .m-chart{gap:5px;height:150px}
+ .d-chart{gap:8px;height:120px}
+ .m-col .m-lbl,.d-lbl{font-size:9.5px}
+ .links{grid-template-columns:1fr 1fr}
+}
+@media (max-width:480px){
+ .rail-row{grid-template-columns:1fr 46px;row-gap:3px;padding:7px 0}
+ .rail-track{grid-column:1/-1;order:3}
+ .rail-name{font-size:12.5px}
+ .links{grid-template-columns:1fr}
+ .sec-head{grid-template-columns:1fr}
+ .sec-ico{width:32px;height:32px}
+ h2{font-size:22px}
+}
+</style>
+</head>
+<body class="theme-lum"><nav class="nav"><div class="wrap nav-in">
+<a class="brand" href="#overview"><span class="mk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><path d="M2 12h2l2-7 3 14 3-11 3 8 2-4h5"/></svg></span>Kai Đurić</a>
+<div class="nav-links"><a href="#overview">Overview</a><a href="#github">GitHub</a><a href="#spaces">Spaces</a><a href="#music">Music</a><a href="#practice">Practice</a><a href="#links">Links</a></div>
+</div></nav><header class="hero" id="overview"><div class="wrap">
+<div class="hero-grid">
+  <div>
+    <span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>Belgrade &rarr; Hong Kong</span>
+    <h1>Kai Đurić</h1>
+    <p class="lede">Trumpet player, performance DJ and producer &mdash; and the engineer who builds his own tools.
+      <b>Thirty years of records and live sets</b>, then <b>60 machine-learning spaces</b> for musicians to practise with,
+      and a <b>WebSocket bus</b> that puts five AI harnesses on the same wire.</p>
+  </div>
+  <div class="hero-side">
+    <div class="row"><span>Performing &amp; producing since</span><span class="n">1998</span></div>
+    <div class="row"><span>Hugging Face Spaces shipped</span><span class="n">60</span></div>
+    <div class="row"><span>Public GitHub repositories</span><span class="n">1</span></div>
+    <div class="row"><span>Credited tracks, 2:10&ndash;15:10</span><span class="n">25</span></div>
+  </div>
+</div>
+<div class="wave-wrap wave-anim"><svg class="wave" viewBox="0 0 740 120" preserveAspectRatio="none" aria-hidden="true"><rect x="0.0" y="47.4" width="4" height="25.2" rx="2" fill="currentColor" opacity="0.32"/><rect x="9.4" y="44.0" width="4" height="32.1" rx="2" fill="currentColor" opacity="0.38"/><rect x="18.8" y="53.2" width="4" height="13.6" rx="2" fill="currentColor" opacity="0.22"/><rect x="28.2" y="51.6" width="4" height="16.9" rx="2" fill="currentColor" opacity="0.25"/><rect x="37.6" y="42.9" width="4" height="34.2" rx="2" fill="currentColor" opacity="0.40"/><rect x="47.0" y="43.4" width="4" height="33.3" rx="2" fill="currentColor" opacity="0.39"/><rect x="56.4" y="41.1" width="4" height="37.9" rx="2" fill="currentColor" opacity="0.43"/><rect x="65.8" y="38.1" width="4" height="43.7" rx="2" fill="currentColor" opacity="0.49"/><rect x="75.2" y="56.6" width="4" height="6.7" rx="2" fill="currentColor" opacity="0.16"/><rect x="84.6" y="35.2" width="4" height="49.5" rx="2" fill="currentColor" opacity="0.54"/><rect x="94.0" y="32.5" width="4" height="55.0" rx="2" fill="currentColor" opacity="0.59"/><rect x="103.4" y="33.8" width="4" height="52.5" rx="2" fill="currentColor" opacity="0.56"/><rect x="112.8" y="34.4" width="4" height="51.3" rx="2" fill="currentColor" opacity="0.55"/><rect x="122.2" y="50.6" width="4" height="18.7" rx="2" fill="currentColor" opacity="0.26"/><rect x="131.6" y="53.0" width="4" height="14.0" rx="2" fill="currentColor" opacity="0.22"/><rect x="141.0" y="51.5" width="4" height="17.0" rx="2" fill="currentColor" opacity="0.25"/><rect x="150.4" y="50.4" width="4" height="19.1" rx="2" fill="currentColor" opacity="0.27"/><rect x="159.8" y="48.8" width="4" height="22.4" rx="2" fill="currentColor" opacity="0.30"/><rect x="169.2" y="41.5" width="4" height="37.0" rx="2" fill="currentColor" opacity="0.43"/><rect x="178.6" y="32.5" width="4" height="55.0" rx="2" fill="currentColor" opacity="0.59"/><rect x="188.0" y="16.0" width="4" height="87.9" rx="2" fill="currentColor" opacity="0.76"/><rect x="197.4" y="25.9" width="4" height="68.1" rx="2" fill="currentColor" opacity="0.70"/><rect x="206.8" y="56.6" width="4" height="6.8" rx="2" fill="currentColor" opacity="0.16"/><rect x="216.2" y="45.6" width="4" height="28.9" rx="2" fill="currentColor" opacity="0.35"/><rect x="225.6" y="40.5" width="4" height="39.1" rx="2" fill="currentColor" opacity="0.44"/><rect x="235.0" y="30.2" width="4" height="59.6" rx="2" fill="currentColor" opacity="0.63"/><rect x="244.4" y="38.8" width="4" height="42.4" rx="2" fill="currentColor" opacity="0.47"/><rect x="253.8" y="52.5" width="4" height="15.0" rx="2" fill="currentColor" opacity="0.23"/><rect x="263.2" y="39.4" width="4" height="41.1" rx="2" fill="currentColor" opacity="0.46"/><rect x="272.6" y="27.9" width="4" height="64.2" rx="2" fill="currentColor" opacity="0.67"/><rect x="282.0" y="41.2" width="4" height="37.6" rx="2" fill="currentColor" opacity="0.43"/><rect x="291.4" y="52.6" width="4" height="14.8" rx="2" fill="currentColor" opacity="0.23"/><rect x="300.8" y="49.7" width="4" height="20.6" rx="2" fill="currentColor" opacity="0.28"/><rect x="310.2" y="19.5" width="4" height="80.9" rx="2" fill="currentColor" opacity="0.76"/><rect x="319.6" y="8.7" width="4" height="102.6" rx="2" fill="currentColor" opacity="0.76"/><rect x="329.0" y="31.2" width="4" height="57.6" rx="2" fill="currentColor" opacity="0.61"/><rect x="338.4" y="45.8" width="4" height="28.4" rx="2" fill="currentColor" opacity="0.35"/><rect x="347.8" y="50.7" width="4" height="18.7" rx="2" fill="currentColor" opacity="0.26"/><rect x="357.2" y="49.0" width="4" height="22.1" rx="2" fill="currentColor" opacity="0.29"/><rect x="366.6" y="47.6" width="4" height="24.8" rx="2" fill="currentColor" opacity="0.32"/><rect x="376.0" y="54.6" width="4" height="10.7" rx="2" fill="currentColor" opacity="0.19"/><rect x="385.4" y="47.1" width="4" height="25.9" rx="2" fill="currentColor" opacity="0.33"/><rect x="394.8" y="22.6" width="4" height="74.9" rx="2" fill="currentColor" opacity="0.76"/><rect x="404.2" y="22.3" width="4" height="75.4" rx="2" fill="currentColor" opacity="0.76"/><rect x="413.6" y="27.5" width="4" height="65.0" rx="2" fill="currentColor" opacity="0.68"/><rect x="423.0" y="33.3" width="4" height="53.4" rx="2" fill="currentColor" opacity="0.57"/><rect x="432.4" y="51.1" width="4" height="17.7" rx="2" fill="currentColor" opacity="0.25"/><rect x="441.8" y="23.5" width="4" height="73.0" rx="2" fill="currentColor" opacity="0.75"/><rect x="451.2" y="29.9" width="4" height="60.2" rx="2" fill="currentColor" opacity="0.63"/><rect x="460.6" y="38.7" width="4" height="42.6" rx="2" fill="currentColor" opacity="0.48"/><rect x="470.0" y="36.5" width="4" height="46.9" rx="2" fill="currentColor" opacity="0.51"/><rect x="479.4" y="46.3" width="4" height="27.4" rx="2" fill="currentColor" opacity="0.34"/><rect x="488.8" y="50.9" width="4" height="18.2" rx="2" fill="currentColor" opacity="0.26"/><rect x="498.2" y="37.1" width="4" height="45.8" rx="2" fill="currentColor" opacity="0.51"/><rect x="507.6" y="42.6" width="4" height="34.8" rx="2" fill="currentColor" opacity="0.41"/><rect x="517.0" y="44.5" width="4" height="31.0" rx="2" fill="currentColor" opacity="0.37"/><rect x="526.4" y="31.1" width="4" height="57.8" rx="2" fill="currentColor" opacity="0.61"/><rect x="535.8" y="25.8" width="4" height="68.3" rx="2" fill="currentColor" opacity="0.71"/><rect x="545.2" y="18.2" width="4" height="83.5" rx="2" fill="currentColor" opacity="0.76"/><rect x="554.6" y="34.1" width="4" height="51.8" rx="2" fill="currentColor" opacity="0.56"/><rect x="564.0" y="52.7" width="4" height="14.7" rx="2" fill="currentColor" opacity="0.23"/><rect x="573.4" y="48.4" width="4" height="23.1" rx="2" fill="currentColor" opacity="0.30"/><rect x="582.8" y="52.6" width="4" height="14.7" rx="2" fill="currentColor" opacity="0.23"/><rect x="592.2" y="45.7" width="4" height="28.6" rx="2" fill="currentColor" opacity="0.35"/><rect x="601.6" y="46.6" width="4" height="26.8" rx="2" fill="currentColor" opacity="0.34"/><rect x="611.0" y="49.0" width="4" height="22.0" rx="2" fill="currentColor" opacity="0.29"/><rect x="620.4" y="33.7" width="4" height="52.7" rx="2" fill="currentColor" opacity="0.57"/><rect x="629.8" y="26.7" width="4" height="66.7" rx="2" fill="currentColor" opacity="0.69"/><rect x="639.2" y="44.0" width="4" height="32.0" rx="2" fill="currentColor" opacity="0.38"/><rect x="648.6" y="56.0" width="4" height="8.1" rx="2" fill="currentColor" opacity="0.17"/><rect x="658.0" y="47.0" width="4" height="26.1" rx="2" fill="currentColor" opacity="0.33"/><rect x="667.4" y="32.3" width="4" height="55.3" rx="2" fill="currentColor" opacity="0.59"/><rect x="676.8" y="31.5" width="4" height="56.9" rx="2" fill="currentColor" opacity="0.60"/><rect x="686.2" y="48.0" width="4" height="24.1" rx="2" fill="currentColor" opacity="0.31"/><rect x="695.6" y="53.3" width="4" height="13.3" rx="2" fill="currentColor" opacity="0.21"/><rect x="705.0" y="49.3" width="4" height="21.4" rx="2" fill="currentColor" opacity="0.29"/><rect x="714.4" y="53.6" width="4" height="12.7" rx="2" fill="currentColor" opacity="0.21"/><rect x="723.8" y="56.0" width="4" height="8.1" rx="2" fill="currentColor" opacity="0.17"/></svg></div>
+</div></header><section><div class="wrap">
+<div class="sec-head">
+  <div class="sec-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><path d="m12 2 9 5-9 5-9-5 9-5z"/><path d="m3 12 9 5 9-5"/><path d="m3 17 9 5 9-5"/></svg></div>
+  <div><span class="eyebrow-s">01 &mdash; The shape of the work</span>
+  <h2>Three crafts, one pair of hands</h2>
+  <p class="sec-sub">A career that never split cleanly. The trumpet came first, the design studio came with the move to Hong Kong, and the code is what came after &mdash; tools built for the practice that the first two demand.</p></div>
+</div>
+<div class="card"><div class="arch-row"><span class="arch-tier">Sound</span><div style="display:flex;gap:12px;align-items:flex-start"><span style="color:var(--accent-deep);margin-top:2px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span><span style="font-size:14px;color:var(--ink-2);max-width:660px">Trumpet, smooth jazz and soulful house. Nine own releases across four labels, remixed by Mark Di Meo, DJ Fudge and Klash Rivera &mdash; plus club dates at DuMaurier International and the Toronto Beaches Jazz Festival.</span></div></div>
+<div class="arch-row"><span class="arch-tier">Image</span><div style="display:flex;gap:12px;align-items:flex-start"><span style="color:var(--accent-deep);margin-top:2px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg></span><span style="font-size:14px;color:var(--ink-2);max-width:660px">Applied artist and graphic designer. Member of ULUPUDS, the Applied Artists &amp; Designers of Serbia &mdash; first solo show <em>&ldquo;When Belgrade was funky&rdquo;</em>, Belgrade, November 2024.</span></div></div>
+<div class="arch-row"><span class="arch-tier">Code</span><div style="display:flex;gap:12px;align-items:flex-start"><span style="color:var(--accent-deep);margin-top:2px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span><span style="font-size:14px;color:var(--ink-2);max-width:660px">Sixty Hugging Face Spaces: practice engines for trumpet etudes, audio-to-MIDI transcription, swarm orchestration. On GitHub, the agent-team-bus that lets five AI harnesses talk over one relay.</span></div></div></div>
+</div></section><section id="github"><div class="wrap">
+<div class="sec-head">
+  <div class="sec-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></div>
+  <div><span class="eyebrow-s">02 &mdash; GitHub</span>
+  <h2>One repository, and what it tries to be</h2>
+  <p class="sec-sub">The public account <span class="mono">github.com/kaidjuric</span> was opened on 4 July 2024. It carries a single project &mdash; and that project is a way for different AI agents to speak to each other.</p></div>
+</div>
+
+<div class="card" style="margin-bottom:18px">
+  <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px">
+    <a class="ab key nowrap" href="https://github.com/kaidjuric/agent-team-bus" target="_blank" rel="noopener">
+      <span class="b"></span><span class="nb">kaidjuric/agent-team-bus<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
+    <span class="tag ghost">Python</span><span class="tag ghost">1 commit</span>
+    <span class="tag ghost">created 25 Aug 2026</span><span class="tag ghost">no licence</span>
+  </div>
+  <p style="font-size:14px;color:var(--ink-2);max-width:760px">&ldquo;Multi-harness AI team bus: shared protocol, adapter stubs, orchestrator relay. v1 wires Hermes + Claude Code + Codex + Ollama + 1 TBD.&rdquo;</p>
+  <div style="margin-top:18px"><div class="langbar"><div class="lb-py" style="width:67.8%">Python 67.8%</div><div class="lb-html" style="width:30.4%">HTML 30.4%</div><div class="lb-dock" style="width:1.8%"></div></div><div class="lang-legend"><span><i class="sw" style="background:var(--d1)"></i>Python &mdash; 23,259 B</span><span><i class="sw" style="background:var(--d2)"></i>HTML &mdash; 10,431 B</span><span><i class="sw" style="background:var(--ink-3)"></i>Dockerfile &mdash; 622 B</span></div></div>
+</div>
+
+<div class="grid2" style="margin-bottom:18px">
+  <div class="card">
+    <span class="eyebrow-s">Topology</span>
+    <h3 style="font-size:17px;margin-bottom:14px">Five harnesses, one relay</h3>
+    <div class="arch-row"><span class="arch-tier">Harnesses</span><div class="arch-blocks"><span class="ab live"><span class="b"></span>Hermes <span class="desc-mini">working now</span></span><span class="ab stub"><span class="b"></span>Claude Code <span class="desc-mini">wire to claude -p</span></span><span class="ab stub"><span class="b"></span>Codex <span class="desc-mini">wire to codex -q --json</span></span><span class="ab stub"><span class="b"></span>Ollama <span class="desc-mini">wire to /api/chat</span></span><span class="ab stub"><span class="b"></span>Harness 5 <span class="desc-mini">not yet chosen</span></span></div></div>
+<div class="arch-row"><span class="arch-tier">Wire</span><div class="arch-blocks"><span class="ab key"><span class="b"></span>WebSocket <span class="desc-mini">JSON frames, one thread per run</span></span></div></div>
+<div class="arch-row"><span class="arch-tier">Relay</span><div class="arch-blocks"><span class="ab key"><span class="b"></span>kaidjuric/orchestrator <span class="desc-mini">FastAPI + WebSocket on :7860</span></span></div></div>
+<div class="arch-row"><span class="arch-tier">Ledger</span><div class="arch-blocks"><span class="ab key"><span class="b"></span>kaidjuric/agent-team-ledger <span class="desc-mini">append-only NDJSON, per day</span></span></div></div>
+<div class="arch-row"><span class="arch-tier">Surface</span><div class="arch-blocks"><span class="ab key"><span class="b"></span>PWA status board <span class="desc-mini">add to Home Screen on iPhone / iPad</span></span></div></div>
+    <div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--line-soft)">
+      <span class="eyebrow-s" style="margin-bottom:10px">Why this shape</span>
+      <ul style="margin:0;padding:0;list-style:none;display:grid;gap:11px">
+        <li style="display:flex;gap:10px;font-size:13.5px;color:var(--ink-2)"><span style="color:var(--accent-deep);flex:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49M7.76 16.24a6 6 0 0 1 0-8.49M19.07 4.93a10 10 0 0 1 0 14.14M4.93 19.07a10 10 0 0 1 0-14.14"/></svg></span><span><b style="color:var(--ink);font-weight:500">One relay, fan-out server.</b> Each harness speaks WebSocket; no harness has to know the others&rsquo; transport.</span></li>
+        <li style="display:flex;gap:10px;font-size:13.5px;color:var(--ink-2)"><span style="color:var(--accent-deep);flex:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><path d="m12 2 9 5-9 5-9-5 9-5z"/><path d="m3 12 9 5 9-5"/><path d="m3 17 9 5 9-5"/></svg></span><span><b style="color:var(--ink);font-weight:500">A dataset for the ledger.</b> Public, append-only, queryable from anywhere &mdash; the board can read history without going through the orchestrator.</span></li>
+        <li style="display:flex;gap:10px;font-size:13.5px;color:var(--ink-2)"><span style="color:var(--accent-deep);flex:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><polygon points="6 3 20 12 6 21 6 3"/></svg></span><span><b style="color:var(--ink);font-weight:500">PWA, not native.</b> One HTML file, installable on iOS, Android and iPad. No app store, no Capacitor or Tauri build.</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="card">
+    <span class="eyebrow-s">Wire format</span>
+    <h3 style="font-size:17px;margin-bottom:14px">One JSON shape for everything</h3>
+    <div class="code"><span class="c">// every frame on the bus, in full</span>
+<span class="k">&#123;</span>
+  <span class="k">"v"</span>:       <span class="s">"0.1"</span>,
+  <span class="k">"id"</span>:      <span class="s">"msg_&lt;uuid4&gt;"</span>,
+  <span class="k">"ts"</span>:      <span class="s">"2026-08-25T14:30:00Z"</span>,
+  <span class="k">"from"</span>:    <span class="s">"hermes"</span>,
+  <span class="k">"to"</span>:      <span class="n">["all"]</span>,
+  <span class="k">"kind"</span>:    <span class="s">"chat"</span>,
+  <span class="k">"thread"</span>:  <span class="s">"run_2026-08-25"</span>,
+  <span class="k">"body"</span>:    <span class="n">&#123; &#125;</span>
+<span class="k">&#125;</span></div>
+    <p style="font-size:13px;color:var(--ink-3);margin-top:12px">PROTOCOL.md &mdash; v0.1, 5.8 KB. Required fields, message kinds and an auth plan.</p>
+    <div class="tscroll"><table style="margin-top:18px">
+      <thead><tr><th>kind</th><th>direction</th><th>body</th></tr></thead>
+      <tbody><tr><td class="mono">hello</td><td>harness &rarr; server</td><td class="mono" style="color:var(--ink-3);font-size:12px">{harness, version, model, capabilities[]}</td></tr><tr><td class="mono">welcome</td><td>server &rarr; harness</td><td class="mono" style="color:var(--ink-3);font-size:12px">{harness, peers[], since}</td></tr><tr><td class="mono">chat</td><td>harness &harr; harness</td><td class="mono" style="color:var(--ink-3);font-size:12px">{text} or {parts[] }</td></tr><tr><td class="mono">task</td><td>orchestrator &rarr; harness</td><td class="mono" style="color:var(--ink-3);font-size:12px">{goal, inputs{}, expected_outputs[]}</td></tr><tr><td class="mono">result</td><td>harness &rarr; orchestrator</td><td class="mono" style="color:var(--ink-3);font-size:12px">{task_id, status, outputs{}, error?}</td></tr></tbody>
+    </table></div>
+    <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--line-soft)">
+      <span class="eyebrow-s" style="margin-bottom:12px">Adding a harness</span>
+      <ol style="margin:0;padding:0;list-style:none;display:grid;gap:10px">
+        <li style="display:flex;gap:10px;font-size:13px;color:var(--ink-2)"><span class="mono" style="color:var(--accent-deep);flex:none">01</span><span>Copy <span class="mono">adapters/harness_5.py</span> to <span class="mono">adapters/&lt;name&gt;.py</span>.</span></li>
+        <li style="display:flex;gap:10px;font-size:13px;color:var(--ink-2)"><span class="mono" style="color:var(--accent-deep);flex:none">02</span><span>Edit <span class="mono">HARNESS_ID</span>, the <span class="mono">hello</span> body and <span class="mono">execute_task()</span>.</span></li>
+        <li style="display:flex;gap:10px;font-size:13px;color:var(--ink-2)"><span class="mono" style="color:var(--accent-deep);flex:none">03</span><span>Run it: <span class="mono">python adapters/&lt;name&gt;.py</span>.</span></li>
+        <li style="display:flex;gap:10px;font-size:13px;color:var(--ink-2)"><span class="mono" style="color:var(--accent-deep);flex:none">04</span><span>The orchestrator registers it automatically &mdash; and the PWA shows it.</span></li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<div class="callout" style="margin-bottom:18px">
+  <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg></span>
+  <span class="tx"><b>The bus is public and unauthenticated.</b> The README says it twice: <em>&ldquo;None in v0.1. The bus is public. Do not send secrets in messages.&rdquo;</em> Token auth, a server-side allowlist and persistent peer identity are all queued for v0.2 &mdash; and the live status board at <span class="mono">kaidjuric-orchestrator.hf.space</span> is open to anyone with the address.</span>
+</div>
+
+<div class="card">
+  <span class="eyebrow-s">Repository anatomy</span>
+  <div class="kv" style="margin-top:12px">
+    <div class="k">Commit</div><div class="v mono">4535a49 &mdash; &ldquo;feat: agent team bus v0.1&rdquo;, 25 Aug 2026</div>
+    <div class="k">Tree</div><div class="v mono">PROTOCOL.md &middot; README.md &middot; adapters/ &middot; orchestrator/</div>
+    <div class="k">Adapters</div><div class="v">hermes.py (live) &middot; claude_code.py &middot; codex.py &middot; ollama_local.py &middot; harness_5.py</div>
+    <div class="k">Orchestrator</div><div class="v">Dockerfile &middot; server.py &middot; requirements.txt &middot; static/ (PWA)</div>
+    <div class="k">Repo size</div><div class="v">17 KB &middot; 0 stars &middot; 0 forks &middot; 0 open issues</div>
+    <div class="k">Status board</div><div class="v"><a href="https://kaidjuric-orchestrator.hf.space" target="_blank" rel="noopener" style="color:var(--accent-deep)">kaidjuric-orchestrator.hf.space</a> &mdash; one HTML file, installable on iOS</div>
+  </div>
+</div>
+</div></section><section id="spaces"><div class="wrap">
+<div class="sec-head">
+  <div class="sec-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2M9 2v2M15 20v2M9 20v2M2 15h2M2 9h2M20 15h2M20 9h2"/></svg></div>
+  <div><span class="eyebrow-s">03 &mdash; Hugging Face</span>
+  <h2>Sixty spaces in eleven months</h2>
+  <p class="sec-sub">The real weight of the work lives on Hugging Face, not GitHub: sixty Spaces under <span class="mono">huggingface.co/kaidjuric</span>, built between October 2025 and September 2026. Most are single-file web apps; a few are full Docker services with real models behind them.</p></div>
+</div>
+
+<div class="grid2" style="margin-bottom:18px;align-items:start">
+  <div class="card">
+    <span class="eyebrow-s">By theme</span>
+    <h3 style="font-size:17px;margin:2px 0 16px">What he actually builds</h3>
+    <div class="bench-row"><span class="label">Music &amp; audio practice</span><span class="bar-bg"><span class="bar-fill t-music" data-anim="w" data-final="100.0%" style="width:100.0%"></span></span><span class="val">26</span></div>
+<div class="bench-row"><span class="label">Visual, video &amp; design</span><span class="bar-bg"><span class="bar-fill t-vis" data-anim="w" data-final="76.9%" style="width:76.9%"></span></span><span class="val">20</span></div>
+<div class="bench-row"><span class="label">Agents &amp; orchestration</span><span class="bar-bg"><span class="bar-fill t-agent" data-anim="w" data-final="53.8%" style="width:53.8%"></span></span><span class="val">14</span></div>
+    <p style="font-size:12.5px;color:var(--ink-3);margin-top:14px">Themes assigned from each Space&rsquo;s own title and card description. The largest cluster is practice material for horn players.</p>
+  </div>
+  <div class="card">
+    <span class="eyebrow-s">By SDK</span>
+    <h3 style="font-size:17px;margin:2px 0 16px">How they are hosted</h3>
+    <div class="bench-row"><span class="label">static</span><span class="bar-bg"><span class="bar-fill t-static" data-anim="w" data-final="100.0%" style="width:100.0%"></span></span><span class="val">38</span></div>
+<div class="bench-row"><span class="label">gradio</span><span class="bar-bg"><span class="bar-fill t-gradio" data-anim="w" data-final="42.1%" style="width:42.1%"></span></span><span class="val">16</span></div>
+<div class="bench-row"><span class="label">docker</span><span class="bar-bg"><span class="bar-fill t-docker" data-anim="w" data-final="15.8%" style="width:15.8%"></span></span><span class="val">6</span></div>
+    <p style="font-size:12.5px;color:var(--ink-3);margin-top:14px">38 static, 16 Gradio, 6 Docker. The static ones are front-ends; the Docker ones carry the models.</p>
+  </div>
+</div>
+
+<div class="card" style="margin-bottom:18px">
+  <div class="grid2" style="gap:40px;align-items:start">
+    <div>
+      <span class="eyebrow-s">Build cadence</span>
+      <h3 style="font-size:17px;margin:2px 0 18px">Quiet, then loud</h3>
+      <div class="m-chart"><div class="m-col"><div class="m-bar-wrap"><div class="m-bar" data-anim="h" data-final="2.3%" style="height:2.3%" title="Oct: 1"></div></div><span class="m-lbl">Oct</span><span class="m-val">1</span></div>
+<div class="m-col"><div class="m-bar-wrap"><div class="m-bar" data-anim="h" data-final="0.0%" style="height:0.0%" title="Nov: 0"></div></div><span class="m-lbl">Nov</span><span class="m-val"></span></div>
+<div class="m-col"><div class="m-bar-wrap"><div class="m-bar" data-anim="h" data-final="0.0%" style="height:0.0%" title="Dec: 0"></div></div><span class="m-lbl">Dec</span><span class="m-val"></span></div>
+<div class="m-col"><div class="m-bar-wrap"><div class="m-bar" data-anim="h" data-final="0.0%" style="height:0.0%" title="Jan: 0"></div></div><span class="m-lbl">Jan</span><span class="m-val"></span></div>
+<div class="m-col"><div class="m-bar-wrap"><div class="m-bar" data-anim="h" data-final="0.0%" style="height:0.0%" title="Feb: 0"></div></div><span class="m-lbl">Feb</span><span class="m-val"></span></div>
+<div class="m-col"><div class="m-bar-wrap"><div class="m-bar" data-anim="h" data-final="0.0%" style="height:0.0%" title="Mar: 0"></div></div><span class="m-lbl">Mar</span><span class="m-val"></span></div>
+<div class="m-col"><div class="m-bar-wrap"><div class="m-bar" data-anim="h" data-final="0.0%" style="height:0.0%" title="Apr: 0"></div></div><span class="m-lbl">Apr</span><span class="m-val"></span></div>
+<div class="m-col"><div class="m-bar-wrap"><div class="m-bar" data-anim="h" data-final="0.0%" style="height:0.0%" title="May: 0"></div></div><span class="m-lbl">May</span><span class="m-val"></span></div>
+<div class="m-col"><div class="m-bar-wrap"><div class="m-bar" data-anim="h" data-final="0.0%" style="height:0.0%" title="Jun: 0"></div></div><span class="m-lbl">Jun</span><span class="m-val"></span></div>
+<div class="m-col"><div class="m-bar-wrap"><div class="m-bar" data-anim="h" data-final="2.3%" style="height:2.3%" title="Jul: 1"></div></div><span class="m-lbl">Jul</span><span class="m-val">1</span></div>
+<div class="m-col"><div class="m-bar-wrap"><div class="m-bar" data-anim="h" data-final="100.0%" style="height:100.0%" title="Aug: 43"></div></div><span class="m-lbl">Aug</span><span class="m-val">43</span></div>
+<div class="m-col"><div class="m-bar-wrap"><div class="m-bar" data-anim="h" data-final="34.9%" style="height:34.9%" title="Sep: 15"></div></div><span class="m-lbl">Sep</span><span class="m-val">15</span></div></div>
+      <p style="font-size:12.5px;color:var(--ink-3);margin-top:14px">Spaces created per month, <b>October 2025 &rarr; September 2026</b>. Two of them before July &mdash; then fifty-eight in the last three months.</p>
+    </div>
+    <div>
+      <span class="eyebrow-s">August 2026, day by day</span>
+      <h3 style="font-size:17px;margin:2px 0 18px">Eighteen in a single afternoon</h3>
+      <div class="d-chart"><div class="d-col "><div class="d-bar-wrap"><div class="d-bar" data-anim="h" data-final="38.9%" style="height:38.9%"></div></div><span class="d-lbl">Aug 8</span><span class="d-val">7</span></div>
+<div class="d-col "><div class="d-bar-wrap"><div class="d-bar" data-anim="h" data-final="11.1%" style="height:11.1%"></div></div><span class="d-lbl">Aug 9</span><span class="d-val">2</span></div>
+<div class="d-col "><div class="d-bar-wrap"><div class="d-bar" data-anim="h" data-final="11.1%" style="height:11.1%"></div></div><span class="d-lbl">Aug 13</span><span class="d-val">2</span></div>
+<div class="d-col "><div class="d-bar-wrap"><div class="d-bar" data-anim="h" data-final="5.6%" style="height:5.6%"></div></div><span class="d-lbl">Aug 16</span><span class="d-val">1</span></div>
+<div class="d-col hot"><div class="d-bar-wrap"><div class="d-bar" data-anim="h" data-final="100.0%" style="height:100.0%"></div></div><span class="d-lbl">Aug 19</span><span class="d-val">18</span></div>
+<div class="d-col "><div class="d-bar-wrap"><div class="d-bar" data-anim="h" data-final="22.2%" style="height:22.2%"></div></div><span class="d-lbl">Aug 24</span><span class="d-val">4</span></div>
+<div class="d-col "><div class="d-bar-wrap"><div class="d-bar" data-anim="h" data-final="50.0%" style="height:50.0%"></div></div><span class="d-lbl">Aug 25</span><span class="d-val">9</span></div></div>
+      <p style="font-size:13.5px;color:var(--ink-2);margin-top:16px">Forty-three of the sixty Spaces were created in the three weeks from 8 August. On <b>19 August alone</b>, eighteen went out &mdash; transcription, practice engines, chart tools, a Calabi-Yau viewer, a PNG-to-SVG vectoriser. It reads less like a roadmap than a working session.</p>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <span class="eyebrow-s">Every Space</span>
+  <h3 style="font-size:17px;margin:2px 0 16px">The full fleet</h3>
+  <div class="filters" id="filters">
+    <button class="fbtn on" data-f="all">all &middot; 60</button>
+    <button class="fbtn" data-f="music">music &middot; 26</button>
+    <button class="fbtn" data-f="vis">visual &middot; 20</button>
+    <button class="fbtn" data-f="agent">agents &middot; 14</button>
+  </div>
+  <div class="chips" id="chips">
+<a class="chip t-agent" href="https://huggingface.co/spaces/kaidjuric/t3-turbo-stack-starter" target="_blank" rel="noopener" title="t3-turbo-stack-starter"><span class="dot"></span><span class="chip-name">t3-turbo-stack-starter</span></a>
+<a class="chip t-agent" href="https://huggingface.co/spaces/kaidjuric/agent6" target="_blank" rel="noopener" title="agent6"><span class="dot"></span><span class="chip-name">agent6</span></a>
+<a class="chip t-vis" href="https://huggingface.co/spaces/kaidjuric/zero-panels-p1-liquid" target="_blank" rel="noopener" title="zero-panels-p1-liquid"><span class="dot"></span><span class="chip-name">zero-panels-p1-liquid</span></a>
+<a class="chip t-vis" href="https://huggingface.co/spaces/kaidjuric/zero-panels-p2-anime" target="_blank" rel="noopener" title="zero-panels-p2-anime"><span class="dot"></span><span class="chip-name">zero-panels-p2-anime</span></a>
+<a class="chip t-vis" href="https://huggingface.co/spaces/kaidjuric/zero-panels-p3-hero" target="_blank" rel="noopener" title="zero-panels-p3-hero"><span class="dot"></span><span class="chip-name">zero-panels-p3-hero</span></a>
+<a class="chip t-vis" href="https://huggingface.co/spaces/kaidjuric/zero-panels-p4-nature" target="_blank" rel="noopener" title="zero-panels-p4-nature"><span class="dot"></span><span class="chip-name">zero-panels-p4-nature</span></a>
+<a class="chip t-vis" href="https://huggingface.co/spaces/kaidjuric/zero-panels-p5-portrait" target="_blank" rel="noopener" title="zero-panels-p5-portrait"><span class="dot"></span><span class="chip-name">zero-panels-p5-portrait</span></a>
+<a class="chip t-vis" href="https://huggingface.co/spaces/kaidjuric/zero-panels-hub" target="_blank" rel="noopener" title="zero-panels-hub"><span class="dot"></span><span class="chip-name">zero-panels-hub</span></a>
+<a class="chip t-music" href="https://huggingface.co/spaces/kaidjuric/mtm-resource-sweep" target="_blank" rel="noopener" title="mtm-resource-sweep"><span class="dot"></span><span class="chip-name">mtm-resource-sweep</span></a>
+<a class="chip t-vis" href="https://huggingface.co/spaces/kaidjuric/cogvideox-5b-text-to-video" target="_blank" rel="noopener" title="cogvideox-5b-text-to-video"><span class="dot"></span><span class="chip-name">cogvideox-5b-text-to-video</span></a>
+<a class="chip t-agent" href="https://huggingface.co/spaces/kaidjuric/daily-pipeline-director-cut" target="_blank" rel="noopener" title="daily-pipeline-director-cut"><span class="dot"></span><span class="chip-name">daily-pipeline-director-cut</span></a>
+<a class="chip t-music" href="https://huggingface.co/spaces/kaidjuric/harmonic-study-engine" target="_blank" rel="noopener" title="harmonic-study-engine"><span class="dot"></span><span class="chip-name">harmonic-study-engine</span></a>
+<a class="chip t-agent" href="https://huggingface.co/spaces/kaidjuric/gradio-pipeline-directory" target="_blank" rel="noopener" title="gradio-pipeline-directory"><span class="dot"></span><span class="chip-name">gradio-pipeline-directory</span></a>
+<a class="chip t-music" href="https://huggingface.co/spaces/kaidjuric/mtm-cycle-6" target="_blank" rel="noopener" title="mtm-cycle-6"><span class="dot"></span><span class="chip-name">mtm-cycle-6</span></a>
+<a class="chip t-music" href="https://huggingface.co/spaces/kaidjuric/muscriptor-amt-space" target="_blank" rel="noopener" title="muscriptor-amt-space"><span class="dot"></span><span class="chip-name">muscriptor-amt-space</span></a>
+<a class="chip t-music" href="https://huggingface.co/spaces/kaidjuric/magenta-dsp-procedural" target="_blank" rel="noopener" title="magenta-dsp-procedural"><span class="dot"></span><span class="chip-name">magenta-dsp-procedural</span></a>
+<a class="chip t-music" href="https://huggingface.co/spaces/kaidjuric/sirenic-engine" target="_blank" rel="noopener" title="sirenic-engine"><span class="dot"></span><span class="chip-name">sirenic-engine</span></a>
+<a class="chip t-music" href="https://huggingface.co/spaces/kaidjuric/reprise-evidence" target="_blank" rel="noopener" title="reprise-evidence"><span class="dot"></span><span class="chip-name">reprise-evidence</span></a>
+<a class="chip t-music" href="https://huggingface.co/spaces/kaidjuric/muscriptor-vercel" target="_blank" rel="noopener" title="muscriptor-vercel"><span class="dot"></span><span class="chip-name">muscriptor-vercel</span></a>
+<a class="chip t-music" href="https://huggingface.co/spaces/kaidjuric/floating-recorder" target="_blank" rel="noopener" title="floating-recorder"><span class="dot"></span><span class="chip-name">floating-recorder</span></a>
+<a class="chip t-vis" href="https://huggingface.co/spaces/kaidjuric/video-hub" target="_blank" rel="noopener" title="video-hub"><span class="dot"></span><span class="chip-name">video-hub</span></a>
+<a class="chip t-vis" href="https://huggingface.co/spaces/kaidjuric/calabi-yau-viewer" target="_blank" rel="noopener" title="calabi-yau-viewer"><span class="dot"></span><span class="chip-name">calabi-yau-viewer</span></a>
+<a class="chip t-music" href="https://huggingface.co/spaces/kaidjuric/focus-sting" target="_blank" rel="noopener" title="focus-sting"><span class="dot"></span><span class="chip-name">focus-sting</span></a>
+<a class="chip t-music" href="https://huggingface.co/spaces/kaidjuric/chordloom-launch" target="_blank" rel="noopener" title="chordloom-launch"><span class="dot"></span><span class="chip-name">chordloom-launch</span></a>
+<a class="chip t-music" href="https://huggingface.co/spaces/kaidjuric/agentic-audio-to-score" target="_blank" rel="noopener" title="agentic-audio-to-score"><span class="dot"></span><span class="chip-name">agentic-audio-to-score</span></a>
+<a class="chip t-music" href="https://huggingface.co/spaces/kaidjuric/wedge" target="_blank" rel="noopener" title="wedge"><span class="dot"></span><span class="chip-name">wedge</span></a>
+<a class="chip t-vis" href="https://huggingface.co/spaces/kaidjuric/refael-mp4-maker" target="_blank" rel="noopener" title="refael-mp4-maker"><span class="dot"></span><span class="chip-name">refael-mp4-maker</span></a>
+<a class="chip t-music" href="https://huggingface.co/spaces/kaidjuric/jazzflow-launch" target="_blank" rel="noopener" title="jazzflow-launch"><span class="dot"></span><span class="chip-name">jazzflow-launch</span></a>
+<a class="chip t-music" href="https://huggingface.co/spaces/kaidjuric/roo-score" target="_blank" rel="noopener" title="roo-score"><span class="dot"></span><span class="chip-name">roo-score</span></a>
+<a class="chip t-music" href="https://huggingface.co/spaces/kaidjuric/horn-practice-room" target="_blank" rel="noopener" title="horn-practice-room"><span class="dot"></span><span class="chip-name">horn-practice-room</span></a>
+<a class="chip t-vis" href="https://huggingface.co/spaces/kaidjuric/funnellens-launch" target="_blank" rel="noopener" title="funnellens-launch"><span class="dot"></span><span class="chip-name">funnellens-launch</span></a>
+<a class="chip t-music" href="https://huggingface.co/spaces/kaidjuric/freq-lab" target="_blank" rel="noopener" title="freq-lab"><span class="dot"></span><span class="chip-name">freq-lab</span></a>
+<a class="chip t-vis" href="https://huggingface.co/spaces/kaidjuric/luminous-brand-style-guide" target="_blank" rel="noopener" title="luminous-brand-style-guide"><span class="dot"></span><span class="chip-name">luminous-brand-style-guide</span></a>
+<a class="chip t-agent" href="https://huggingface.co/spaces/kaidjuric/auto-scan-tools-gradio-tabs" target="_blank" rel="noopener" title="auto-scan-tools-gradio-tabs"><span class="dot"></span><span class="chip-name">auto-scan-tools-gradio-tabs</span></a>
+<a class="chip t-agent" href="https://huggingface.co/spaces/kaidjuric/agi-background-working-system" target="_blank" rel="noopener" title="agi-background-working-system"><span class="dot"></span><span class="chip-name">agi-background-working-system</span></a>
+<a class="chip t-agent" href="https://huggingface.co/spaces/kaidjuric/motion-graphic-designer-agi-system" target="_blank" rel="noopener" title="motion-graphic-designer-agi-system"><span class="dot"></span><span class="chip-name">motion-graphic-designer-agi-system</span></a>
+<a class="chip t-music" href="https://huggingface.co/spaces/kaidjuric/muscriptor-studio" target="_blank" rel="noopener" title="muscriptor-studio"><span class="dot"></span><span class="chip-name">muscriptor-studio</span></a>
+<a class="chip t-agent" href="https://huggingface.co/spaces/kaidjuric/applied-computing-components-system" target="_blank" rel="noopener" title="applied-computing-components-system"><span class="dot"></span><span class="chip-name">applied-computing-components-system</span></a>
+<a class="chip t-music" href="https://huggingface.co/spaces/kaidjuric/muscriptor-video" target="_blank" rel="noopener" title="muscriptor-video"><span class="dot"></span><span class="chip-name">muscriptor-video</span></a>
+<a class="chip t-music" href="https://huggingface.co/spaces/kaidjuric/bob-mover-jazz-lexicon" target="_blank" rel="noopener" title="bob-mover-jazz-lexicon"><span class="dot"></span><span class="chip-name">bob-mover-jazz-lexicon</span></a>
+<a class="chip t-agent" href="https://huggingface.co/spaces/kaidjuric/png-creator" target="_blank" rel="noopener" title="png-creator"><span class="dot"></span><span class="chip-name">png-creator</span></a>
+<a class="chip t-agent" href="https://huggingface.co/spaces/kaidjuric/association" target="_blank" rel="noopener" title="association"><span class="dot"></span><span class="chip-name">association</span></a>
+<a class="chip t-agent" href="https://huggingface.co/spaces/kaidjuric/orchestrator" target="_blank" rel="noopener" title="orchestrator"><span class="dot"></span><span class="chip-name">orchestrator</span></a>
+<a class="chip t-vis" href="https://huggingface.co/spaces/kaidjuric/local-media-studio" target="_blank" rel="noopener" title="local-media-studio"><span class="dot"></span><span class="chip-name">local-media-studio</span></a>
+<a class="chip t-agent" href="https://huggingface.co/spaces/kaidjuric/orchestrator-v2" target="_blank" rel="noopener" title="orchestrator-v2"><span class="dot"></span><span class="chip-name">orchestrator-v2</span></a>
+<a class="chip t-vis" href="https://huggingface.co/spaces/kaidjuric/sainted-word-records-motion-agi-v3-brazil-sales-gigi" target="_blank" rel="noopener" title="sainted-word-records-motion-agi-v3-brazil-sales-gigi"><span class="dot"></span><span class="chip-name">sainted-word-records-motion-agi-v3-brazil-sales-gigi</span></a>
+<a class="chip t-vis" href="https://huggingface.co/spaces/kaidjuric/png-to-svg-converter-advanced-vectorization-system" target="_blank" rel="noopener" title="png-to-svg-converter-advanced-vectorization-system"><span class="dot"></span><span class="chip-name">png-to-svg-converter-advanced-vectorization-system</span></a>
+<a class="chip t-vis" href="https://huggingface.co/spaces/kaidjuric/trello-3d-shape-extruder" target="_blank" rel="noopener" title="trello-3d-shape-extruder"><span class="dot"></span><span class="chip-name">trello-3d-shape-extruder</span></a>
+<a class="chip t-vis" href="https://huggingface.co/spaces/kaidjuric/kai-djuric-personal-site" target="_blank" rel="noopener" title="kai-djuric-personal-site"><span class="dot"></span><span class="chip-name">kai-djuric-personal-site</span></a>
+<a class="chip t-music" href="https://huggingface.co/spaces/kaidjuric/the-stream-a-sensory-atlas-of-jazz-conception" target="_blank" rel="noopener" title="the-stream-a-sensory-atlas-of-jazz-conception"><span class="dot"></span><span class="chip-name">the-stream-a-sensory-atlas-of-jazz-conception</span></a>
+<a class="chip t-music" href="https://huggingface.co/spaces/kaidjuric/practice-book-generator-hear-first-then-see" target="_blank" rel="noopener" title="practice-book-generator-hear-first-then-see"><span class="dot"></span><span class="chip-name">practice-book-generator-hear-first-then-see</span></a>
+<a class="chip t-agent" href="https://huggingface.co/spaces/kaidjuric/persona-library-explainer-for-project-planners" target="_blank" rel="noopener" title="persona-library-explainer-for-project-planners"><span class="dot"></span><span class="chip-name">persona-library-explainer-for-project-planners</span></a>
+<a class="chip t-vis" href="https://huggingface.co/spaces/kaidjuric/kajica2-framer-deep" target="_blank" rel="noopener" title="kajica2-framer-deep"><span class="dot"></span><span class="chip-name">kajica2-framer-deep</span></a>
+<a class="chip t-agent" href="https://huggingface.co/spaces/kaidjuric/kai-the-universal-brain-for-ai-coding-agents" target="_blank" rel="noopener" title="kai-the-universal-brain-for-ai-coding-agents"><span class="dot"></span><span class="chip-name">kai-the-universal-brain-for-ai-coding-agents</span></a>
+<a class="chip t-vis" href="https://huggingface.co/spaces/kaidjuric/kai-djuric-musician-dj-producer" target="_blank" rel="noopener" title="kai-djuric-musician-dj-producer"><span class="dot"></span><span class="chip-name">kai-djuric-musician-dj-producer</span></a>
+<a class="chip t-vis" href="https://huggingface.co/spaces/kaidjuric/kai-djuric-sainted-records" target="_blank" rel="noopener" title="kai-djuric-sainted-records"><span class="dot"></span><span class="chip-name">kai-djuric-sainted-records</span></a>
+<a class="chip t-music" href="https://huggingface.co/spaces/kaidjuric/harmonic-study-engine-space-edition-spa" target="_blank" rel="noopener" title="harmonic-study-engine-space-edition-spa"><span class="dot"></span><span class="chip-name">harmonic-study-engine-space-edition-spa</span></a>
+<a class="chip t-music" href="https://huggingface.co/spaces/kaidjuric/freq-lab-frequency-generator-single-file" target="_blank" rel="noopener" title="freq-lab-frequency-generator-single-file"><span class="dot"></span><span class="chip-name">freq-lab-frequency-generator-single-file</span></a>
+<a class="chip t-music" href="https://huggingface.co/spaces/kaidjuric/text-to-music" target="_blank" rel="noopener" title="text-to-music"><span class="dot"></span><span class="chip-name">text-to-music</span></a>
+<a class="chip t-music" href="https://huggingface.co/spaces/kaidjuric/harmonic-study-engine-2-0" target="_blank" rel="noopener" title="harmonic-study-engine-2-0"><span class="dot"></span><span class="chip-name">harmonic-study-engine-2-0</span></a>
+  </div>
+</div>
+</div></section><section id="music"><div class="wrap">
+<div class="sec-head">
+  <div class="sec-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg></div>
+  <div><span class="eyebrow-s">04 &mdash; The catalogue</span>
+  <h2>Nine releases, and two very different kinds of music</h2>
+  <p class="sec-sub">As <em>Kai Djuric</em>: soulful and jazzy house for the club floor, and then &mdash; once, in 2018 &mdash; twenty-nine minutes of ambient sound healing. Both sit in the same discography.</p></div>
+</div>
+
+<div class="grid2" style="margin-bottom:18px">
+  <div class="card">
+    <span class="eyebrow-s">Release timeline</span>
+    <h3 style="font-size:17px;margin:2px 0 20px">2017 &rarr; 2026</h3>
+    <div class="timeline"><div class="step"><div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/></svg></div><div class="step-meta"><div class="step-when">20 Jan 2017</div><div class="step-title">Endless Dreams &mdash; EP</div><div class="step-desc">6 tracks. The writing underneath everything: <em>Serenity</em>, <em>Birds</em>, <em>I just wanna love you</em>.</div><div class="step-tags"><span class="tag">Independent</span><span class="tag ghost">EP</span></div></div></div>
+<div class="step"><div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/></svg></div><div class="step-meta"><div class="step-when">14 Apr 2017</div><div class="step-title">Endless Dreams (The Remixes) &mdash; EP</div><div class="step-desc">5 remix versions. Mark Di Meo takes the track to 7:03; with Gerardo Smedile it runs 7:19.</div><div class="step-tags"><span class="tag">Soulstice Music</span><span class="tag ghost">EP</span></div></div></div>
+<div class="step"><div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/></svg></div><div class="step-meta"><div class="step-when">28 Jul 2017</div><div class="step-title">Calma Apparente (Luca Lala Mix) &mdash; Single</div><div class="step-desc">A single carried entirely by one reworking &mdash; 7:08.</div><div class="step-tags"><span class="tag">2EllE Records</span><span class="tag ghost">Single</span></div></div></div>
+<div class="step"><div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/></svg></div><div class="step-meta"><div class="step-when">19 Oct 2017</div><div class="step-title">Eastern Sun &mdash; Single</div><div class="step-desc">3:34. Self-released.</div><div class="step-tags"><span class="tag">Kai Djuric</span><span class="tag ghost">Single</span></div></div></div>
+<div class="step"><div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/></svg></div><div class="step-meta"><div class="step-when">19 Jan 2018</div><div class="step-title">Be Free &mdash; Single</div><div class="step-desc">3:42. Self-released.</div><div class="step-tags"><span class="tag">Kai Djuric</span><span class="tag ghost">Single</span></div></div></div>
+<div class="step"><div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/></svg></div><div class="step-meta"><div class="step-when">16 Jul 2018</div><div class="step-title">New Moon Soundhealing &mdash; EP</div><div class="step-desc"><em>New Moon</em> (15:10) and <em>Dawning</em> (13:46). Twenty-nine minutes of music across two tracks.</div><div class="step-tags"><span class="tag">Kai Djuric</span><span class="tag ghost">EP</span></div></div></div>
+<div class="step"><div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/></svg></div><div class="step-meta"><div class="step-when">17 Dec 2018</div><div class="step-title">Almost Blue (The Remixes) [feat. Phil D] &mdash; EP</div><div class="step-desc">Four versions of one Phil D co-write: Mark Di Meo, DJ Fudge, Klash Rivera, and an instrumental.</div><div class="step-tags"><span class="tag">Soulstice Music</span><span class="tag ghost">EP</span></div></div></div>
+<div class="step"><div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/></svg></div><div class="step-meta"><div class="step-when">22 Aug 2019</div><div class="step-title">Take Me &mdash; Original Mix</div><div class="step-desc">6:49. Lands on <em>Finest House Compilation, Vol. 2</em> the following month.</div><div class="step-tags"><span class="tag">w/ Klash Rivera &amp; Fernando Blu</span><span class="tag ghost">Single</span></div></div></div>
+<div class="step"><div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/></svg></div><div class="step-meta"><div class="step-when">05 Mar 2020</div><div class="step-title">Circle Club 10th Anniversary Compilation</div><div class="step-desc">25 tracks alongside Louie Vega, Mark Di Meo, DJ Spen, Kenny Carpenter and Rightside.</div><div class="step-tags"><span class="tag">Soulstice Music</span><span class="tag ghost">Compilation</span></div></div></div>
+<div class="step"><div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/></svg></div><div class="step-meta"><div class="step-when">04 Aug 2025</div><div class="step-title">Misha In The Clouds &mdash; EP</div><div class="step-desc">Mikhail Meleshikhin&rsquo;s album. Kai on <em>Stairs</em>, <em>Withdrawing</em> and <em>Lawns</em>.</div><div class="step-tags"><span class="tag">Upstairs Productions</span><span class="tag ghost">Feature</span></div></div></div>
+<div class="step"><div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/></svg></div><div class="step-meta"><div class="step-when">04 Sep 2026</div><div class="step-title">From herts&#39; Land &mdash; Single</div><div class="step-desc">2:29. The shortest thing he has released.</div><div class="step-tags"><span class="tag">happy together</span><span class="tag ghost">Single</span></div></div></div></div>
+  </div>
+
+  <div class="card" style="display:flex;flex-direction:column">
+    <span class="eyebrow-s">Network</span>
+    <h3 style="font-size:17px;margin:2px 0 16px">Who he works with</h3>
+    <div class="arch-row"><span class="arch-tier">Remixers</span><div class="arch-blocks"><span class="ab"><span class="b"></span>Mark Di Meo &middot; 6 versions</span><span class="ab"><span class="b"></span>DJ Fudge &middot; 3</span><span class="ab"><span class="b"></span>Klash Rivera &middot; 2</span><span class="ab"><span class="b"></span>Gerardo Smedile &middot; 1</span><span class="ab"><span class="b"></span>Luca Lala &middot; 1</span></div></div><div class="arch-row"><span class="arch-tier">Co-writers &amp; guests</span><div class="arch-blocks"><span class="ab"><span class="b"></span>Phil D</span><span class="ab"><span class="b"></span>Mikhail Meleshikhin</span><span class="ab"><span class="b"></span>Sleeze170</span><span class="ab"><span class="b"></span>Milo&scaron; Mamula</span><span class="ab"><span class="b"></span>Vukan Potežica</span><span class="ab"><span class="b"></span>Fernando Blu</span></div></div><div class="arch-row"><span class="arch-tier">Labels</span><div class="arch-blocks"><span class="ab"><span class="b"></span>Soulstice Music</span><span class="ab"><span class="b"></span>2EllE Records</span><span class="ab"><span class="b"></span>Upstairs Productions</span><span class="ab"><span class="b"></span>happy together</span><span class="ab"><span class="b"></span>Self-released</span></div></div>
+    <p style="font-size:13.5px;color:var(--ink-2);margin-top:16px">A live session recorded at a home studio in Hong Kong in 2018 &mdash; <em>My Funny Valentine</em> with Levi Terrell and Vera Arnot &mdash; is the one document that shows where the trumpet actually sits: <b>on top of other people&rsquo;s playing, not instead of it</b>.</p>
+
+    <div style="margin-top:26px;padding-top:22px;border-top:1px solid var(--line-soft)">
+      <span class="eyebrow-s">Catalogue mix</span>
+      <h3 style="font-size:17px;margin:2px 0 16px">Eight originals, twelve remixes, two long-form</h3>
+      <div class="bench-row"><span class="label">Original</span><span class="bar-bg"><span class="bar-fill t-orig" style="width:66.7%"></span></span><span class="val">8</span></div>
+<div class="bench-row"><span class="label">Remix / reworking</span><span class="bar-bg"><span class="bar-fill t-mix" style="width:100.0%"></span></span><span class="val">12</span></div>
+<div class="bench-row"><span class="label">Long-form</span><span class="bar-bg"><span class="bar-fill t-long" style="width:16.7%"></span></span><span class="val">2</span></div>
+      <p style="font-size:12.5px;color:var(--ink-3);margin-top:12px">Twenty-two tracks in total. Twelve of them exist because somebody else reworked his &mdash; Mark Di Meo alone takes five of them over the length of a single evening.</p>
+    </div>
+
+    <div style="margin-top:auto;padding-top:26px;border-top:1px solid var(--line-soft)">
+      <span class="eyebrow-s">Where it played</span>
+      <ul style="margin:14px 0 0;padding:0;list-style:none;display:grid;gap:12px">
+        <li style="display:flex;gap:11px;font-size:13.5px;color:var(--ink-2);align-items:flex-start"><span style="color:var(--accent-deep);flex:none;margin-top:2px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49M7.76 16.24a6 6 0 0 1 0-8.49M19.07 4.93a10 10 0 0 1 0 14.14M4.93 19.07a10 10 0 0 1 0-14.14"/></svg></span><span><b style="color:var(--ink);font-weight:500">DuMaurier International</b> &mdash; large-format venue</span></li>
+        <li style="display:flex;gap:11px;font-size:13.5px;color:var(--ink-2);align-items:flex-start"><span style="color:var(--accent-deep);flex:none;margin-top:2px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><path d="M2 12h2l2-7 3 14 3-11 3 8 2-4h5"/></svg></span><span><b style="color:var(--ink);font-weight:500">Toronto Beaches Jazz Festival</b></span></li>
+        <li style="display:flex;gap:11px;font-size:13.5px;color:var(--ink-2);align-items:flex-start"><span style="color:var(--accent-deep);flex:none;margin-top:2px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><polygon points="6 3 20 12 6 21 6 3"/></svg></span><span><b style="color:var(--ink);font-weight:500">My Funny Valentine</b> &mdash; home studio, Hong Kong, 2018. With Levi Terrell and Vera Arnot.</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <span class="eyebrow-s">Runtime spectrum</span>
+  <h3 style="font-size:17px;margin:2px 0 6px">Twenty-two tracks, 2:29 to 15:10</h3>
+  <p style="font-size:13px;color:var(--ink-3);margin-bottom:20px">Every track on his own releases, sorted by length. Twenty of them are club edits; the last two are the 2018 ambient pair, and the jump says everything about that EP.</p>
+  <div class="rail-row"><span class="rail-name">From herts&#39; Land</span><span class="rail-track"><span class="rail-fill k-orig" data-anim="w" data-final="16.37%" style="width:16.37%"></span></span><span class="rail-val">2:29</span></div>
+<div class="rail-row"><span class="rail-name">Serenity</span><span class="rail-track"><span class="rail-fill k-orig" data-anim="w" data-final="21.54%" style="width:21.54%"></span></span><span class="rail-val">3:16</span></div>
+<div class="rail-row"><span class="rail-name">Eastern Sun</span><span class="rail-track"><span class="rail-fill k-orig" data-anim="w" data-final="23.52%" style="width:23.52%"></span></span><span class="rail-val">3:34</span></div>
+<div class="rail-row"><span class="rail-name">I just wanna love you</span><span class="rail-track"><span class="rail-fill k-orig" data-anim="w" data-final="24.40%" style="width:24.40%"></span></span><span class="rail-val">3:42</span></div>
+<div class="rail-row"><span class="rail-name">Be Free</span><span class="rail-track"><span class="rail-fill k-orig" data-anim="w" data-final="24.40%" style="width:24.40%"></span></span><span class="rail-val">3:42</span></div>
+<div class="rail-row"><span class="rail-name">Endless Dreams (Mark Di Meo Remix)</span><span class="rail-track"><span class="rail-fill k-mix" data-anim="w" data-final="28.13%" style="width:28.13%"></span></span><span class="rail-val">4:16</span></div>
+<div class="rail-row"><span class="rail-name">Endless Dreams (Dream Remix)</span><span class="rail-track"><span class="rail-fill k-mix" data-anim="w" data-final="28.13%" style="width:28.13%"></span></span><span class="rail-val">4:16</span></div>
+<div class="rail-row"><span class="rail-name">Endless Dreams</span><span class="rail-track"><span class="rail-fill k-orig" data-anim="w" data-final="28.24%" style="width:28.24%"></span></span><span class="rail-val">4:17</span></div>
+<div class="rail-row"><span class="rail-name">Birds</span><span class="rail-track"><span class="rail-fill k-orig" data-anim="w" data-final="29.34%" style="width:29.34%"></span></span><span class="rail-val">4:27</span></div>
+<div class="rail-row"><span class="rail-name">Endless Dreams (Mark Di Meo Drum Remix)</span><span class="rail-track"><span class="rail-fill k-mix" data-anim="w" data-final="30.77%" style="width:30.77%"></span></span><span class="rail-val">4:40</span></div>
+<div class="rail-row"><span class="rail-name">Almost Blue (DJ Fudge Remix)</span><span class="rail-track"><span class="rail-fill k-mix" data-anim="w" data-final="34.07%" style="width:34.07%"></span></span><span class="rail-val">5:10</span></div>
+<div class="rail-row"><span class="rail-name">Endless Dreams (DJ Fudge Remix) — remixes EP</span><span class="rail-track"><span class="rail-fill k-mix" data-anim="w" data-final="35.60%" style="width:35.60%"></span></span><span class="rail-val">5:24</span></div>
+<div class="rail-row"><span class="rail-name">Endless Dreams (DJ Fudge Remix)</span><span class="rail-track"><span class="rail-fill k-mix" data-anim="w" data-final="36.04%" style="width:36.04%"></span></span><span class="rail-val">5:28</span></div>
+<div class="rail-row"><span class="rail-name">Almost Blue (Klash Rivera Remix)</span><span class="rail-track"><span class="rail-fill k-mix" data-anim="w" data-final="38.90%" style="width:38.90%"></span></span><span class="rail-val">5:54</span></div>
+<div class="rail-row"><span class="rail-name">Almost Blue (Mark Di Meo Remix)</span><span class="rail-track"><span class="rail-fill k-mix" data-anim="w" data-final="42.09%" style="width:42.09%"></span></span><span class="rail-val">6:23</span></div>
+<div class="rail-row"><span class="rail-name">Almost Blue (Mark Di Meo Instrumental)</span><span class="rail-track"><span class="rail-fill k-mix" data-anim="w" data-final="42.09%" style="width:42.09%"></span></span><span class="rail-val">6:23</span></div>
+<div class="rail-row"><span class="rail-name">Take Me</span><span class="rail-track"><span class="rail-fill k-orig" data-anim="w" data-final="44.95%" style="width:44.95%"></span></span><span class="rail-val">6:49</span></div>
+<div class="rail-row"><span class="rail-name">Endless Dreams (Mark Di Meo Remix) — remixes EP</span><span class="rail-track"><span class="rail-fill k-mix" data-anim="w" data-final="46.48%" style="width:46.48%"></span></span><span class="rail-val">7:03</span></div>
+<div class="rail-row"><span class="rail-name">Calma Apparente (Luca Lala Mix)</span><span class="rail-track"><span class="rail-fill k-mix" data-anim="w" data-final="47.03%" style="width:47.03%"></span></span><span class="rail-val">7:08</span></div>
+<div class="rail-row"><span class="rail-name">Endless Dreams (Mark Di Meo &amp; Gerardo Smedile Isolator Mix)</span><span class="rail-track"><span class="rail-fill k-mix" data-anim="w" data-final="48.24%" style="width:48.24%"></span></span><span class="rail-val">7:19</span></div>
+<div class="rail-row"><span class="rail-name">Dawning</span><span class="rail-track"><span class="rail-fill k-long" data-anim="w" data-final="90.77%" style="width:90.77%"></span></span><span class="rail-val">13:46</span></div>
+<div class="rail-row"><span class="rail-name">New Moon</span><span class="rail-track"><span class="rail-fill k-long" data-anim="w" data-final="100.00%" style="width:100.00%"></span></span><span class="rail-val">15:10</span></div>
+  <div class="legend">
+    <span><i class="sw" style="background:var(--d1)"></i>Original</span>
+    <span><i class="sw" style="background:var(--d2)"></i>Remix / reworking</span>
+    <span><i class="sw" style="background:var(--d3)"></i>Long-form</span>
+  </div>
+</div>
+</div></section><section id="practice"><div class="wrap">
+<div class="sec-head">
+  <div class="sec-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+  <div><span class="eyebrow-s">05 &mdash; Practice &amp; business</span>
+  <h2>The day job, and the other day job</h2>
+  <p class="sec-sub">Two companies, one association membership, one gallery, and a performing career that has not stopped since 1998. The code sits on top of all of it rather than beside it.</p></div>
+</div>
+<div class="card"><div class="kv"><div class="k">Trumpet / DJ</div><div class="v"><b style="font-weight:500">Feb 1998 &rarr; present</b> &mdash; Hong Kong, Toronto, New York, Belgrade. Organises entertainment, builds custom playlists, performs, writes and produces.</div><div class="k">Media Bright</div><div class="v"><b style="font-weight:500">Managing Director, Nov 1998 &rarr; present</b> &mdash; new media and technology company, Hong Kong.</div><div class="k">Wave Music Limited</div><div class="v"><b style="font-weight:500">CEO, Jun 2014 &rarr; present</b> &mdash; self-owned, founded 2015, Hong Kong. 1&ndash;10 employees.</div><div class="k">ULUPUDS</div><div class="v"><b style="font-weight:500">Member</b> &mdash; Association of Applied Artists and Designers of Serbia. New-member show, Galerija SULUJ, Belgrade, 4 March 2024.</div><div class="k">First solo show</div><div class="v"><b style="font-weight:500">Nov 2024</b> &mdash; <em>&ldquo;When Belgrade was funky&rdquo;</em> &mdash; graphic design, illustration, installations, print and photography.</div><div class="k">Live</div><div class="v"><b style="font-weight:500">Selected</b> &mdash; DuMaurier International &middot; Toronto Beaches Jazz Festival &middot; home-studio jams in Hong Kong.</div></div></div>
+</div></section><section id="links"><div class="wrap">
+<div class="sec-head">
+  <div class="sec-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><path d="M7 17 17 7M9 7h8v8"/></svg></div>
+  <div><span class="eyebrow-s">06 &mdash; Elsewhere</span>
+  <h2>Everywhere this lives</h2>
+  <p class="sec-sub">Fourteen doors into the same person. The GitHub account and the Hugging Face fleet are the newest rooms in the building; the record labels are the oldest.</p></div>
+</div>
+<div class="links"><a class="lk" href="https://github.com/kaidjuric" target="_blank" rel="noopener"><span class="ii"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></span><span class="tx"><b>GitHub</b><span>github.com/kaidjuric</span></span></a><a class="lk" href="https://github.com/kaidjuric/agent-team-bus" target="_blank" rel="noopener"><span class="ii"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span><span class="tx"><b>agent-team-bus</b><span>the one public repo</span></span></a><a class="lk" href="https://kaidjuric-orchestrator.hf.space" target="_blank" rel="noopener"><span class="ii"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49M7.76 16.24a6 6 0 0 1 0-8.49M19.07 4.93a10 10 0 0 1 0 14.14M4.93 19.07a10 10 0 0 1 0-14.14"/></svg></span><span class="tx"><b>Live bus board</b><span>kaidjuric-orchestrator.hf.space</span></span></a><a class="lk" href="https://huggingface.co/kaidjuric" target="_blank" rel="noopener"><span class="ii"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2M9 2v2M15 20v2M9 20v2M2 15h2M2 9h2M20 15h2M20 9h2"/></svg></span><span class="tx"><b>Hugging Face</b><span>huggingface.co/kaidjuric</span></span></a><a class="lk" href="https://kaidjuric.ca/" target="_blank" rel="noopener"><span class="ii"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg></span><span class="tx"><b>Personal site</b><span>kaidjuric.ca</span></span></a><a class="lk" href="https://music.apple.com/us/artist/kai-djuric/1198543408" target="_blank" rel="noopener"><span class="ii"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><polygon points="6 3 20 12 6 21 6 3"/></svg></span><span class="tx"><b>Apple Music</b><span>artist page</span></span></a><a class="lk" href="https://www.deezer.com/en/artist/11794695" target="_blank" rel="noopener"><span class="ii"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg></span><span class="tx"><b>Deezer</b><span>artist page</span></span></a><a class="lk" href="https://kaidjuric.bandcamp.com/" target="_blank" rel="noopener"><span class="ii"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span><span class="tx"><b>Bandcamp</b><span>kaiDjuric</span></span></a><a class="lk" href="https://www.beatport.com/artist/kai-djuric/607593" target="_blank" rel="noopener"><span class="ii"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49M7.76 16.24a6 6 0 0 1 0-8.49M19.07 4.93a10 10 0 0 1 0 14.14M4.93 19.07a10 10 0 0 1 0-14.14"/></svg></span><span class="tx"><b>Beatport</b><span>artist page</span></span></a><a class="lk" href="https://www.traxsource.com/artist/377465/kai-djuric" target="_blank" rel="noopener"><span class="ii"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg></span><span class="tx"><b>Traxsource</b><span>artist page</span></span></a><a class="lk" href="https://x.com/KaiDjuric" target="_blank" rel="noopener"><span class="ii"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="tx"><b>X</b><span>@KaiDjuric</span></span></a><a class="lk" href="https://www.youtube.com/@KaiDjuric" target="_blank" rel="noopener"><span class="ii"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><polygon points="6 3 20 12 6 21 6 3"/></svg></span><span class="tx"><b>YouTube</b><span>@KaiDjuric</span></span></a><a class="lk" href="https://www.linkedin.com/in/kaidjuric" target="_blank" rel="noopener"><span class="ii"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="tx"><b>LinkedIn</b><span>in/kaidjuric</span></span></a><a class="lk" href="https://www.ulupuds.org.rs/" target="_blank" rel="noopener"><span class="ii"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" ><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg></span><span class="tx"><b>ULUPUDS</b><span>ulupuds.org.rs</span></span></a></div>
+</div></section><footer><div class="wrap foot-grid">
+  <div class="foot-note">
+    <p style="margin:0 0 14px"><a href="https://luminara-pages.vercel.app/" style="color:var(--accent-deep);text-decoration:none;border-bottom:1px solid var(--accent-22);">&larr; LUMINARA pages index</a></p>
+    <p style="margin-bottom:8px"><b style="color:var(--ink-2);font-weight:600">Sources.</b> GitHub REST API (profile, repository, languages, commit tree, README, PROTOCOL.md) &middot; Hugging Face API (Spaces, models, datasets) &middot; Apple Music API &middot; Deezer API &middot; Traxsource &middot; Beatport &middot; LinkedIn &middot; X &middot; Bandcamp.</p>
+    <p style="margin:0">The personal site <span class="mono">kaidjuric.ca</span> currently serves an expired TLS certificate, so its portfolio dates come from search-indexed copies of the pages. A Hugging Face README reveals the local path <span class="mono">/Users/kajicadjuric/</span> &mdash; <em>Kajica</em> being the full given name behind <em>Kai</em>.</p>
+  </div>
+  <div class="foot-tag">Compiled 18 Oct 2026</div>
+</div></footer><script>
+(function(){
+  var chips=document.querySelectorAll('#chips .chip');
+  document.querySelectorAll('#filters .fbtn').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('#filters .fbtn').forEach(function(o){o.classList.remove('on')});
+      b.classList.add('on');
+      var f=b.getAttribute('data-f');
+      chips.forEach(function(c){
+        c.classList.toggle('hide', !(f==='all' || c.classList.contains('t-'+f)));
+      });
+    });
+  });
+
+  var bars=document.querySelectorAll('[data-anim]');
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function show(el){
+    var prop = el.getAttribute('data-anim')==='w' ? 'width' : 'height';
+    el.style[prop]=el.getAttribute('data-final');
+  }
+  function hide(el){
+    var prop = el.getAttribute('data-anim')==='w' ? 'width' : 'height';
+    el.style[prop]='0px';
+  }
+  function reveal(el){ show(el); }
+
+  if(reduce || !('IntersectionObserver' in window)){
+    bars.forEach(show);
+  } else {
+    var pending=new Set(bars);
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting && pending.has(e.target)){
+          reveal(e.target); pending.delete(e.target); io.unobserve(e.target);
+        }
+      });
+    },{threshold:0.15, rootMargin:'0px 0px -8% 0px'});
+    bars.forEach(function(b){hide(b); io.observe(b)});
+    // safety net: nothing stays invisible
+    setTimeout(function(){ pending.forEach(show); pending.clear(); }, 1800);
+  }
+})();
+</script></body></html>
